@@ -1,5 +1,6 @@
 package it.cosenonjaviste.core;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -14,7 +15,10 @@ import it.cosenonjaviste.model.NoteLoaderService;
 import it.cosenonjaviste.model.NoteSaverService;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -31,10 +35,13 @@ public class NoteViewModelTest {
 
     @InjectMocks NoteViewModel viewModel;
 
+    @Before
+    public void setUp() {
+        when(noteLoaderService.load()).thenReturn(new Note("title", "text"));
+    }
+
     @Test
     public void testLoadData() {
-        when(noteLoaderService.load()).thenReturn(new Note("title", "text"));
-
         NoteModel model = viewModel.initAndResume(view);
 
         assertThat(model.getTitle().get()).isEqualTo("title");
@@ -42,9 +49,23 @@ public class NoteViewModelTest {
     }
 
     @Test
-    public void testSaveData() {
-        when(noteLoaderService.load()).thenReturn(new Note("title", "text"));
+    public void testValidation() {
+        NoteModel model = viewModel.initAndResume(view);
 
+        model.getTitle().set("");
+        model.getText().set("");
+
+        viewModel.save();
+
+        assertThat(model.getTitleError().get()).isEqualTo(R.string.mandatory_field);
+        assertThat(model.getTextError().get()).isEqualTo(R.string.mandatory_field);
+
+        verify(noteSaverService, never()).save(any());
+        verify(view, never()).showMessage(anyInt());
+    }
+
+    @Test
+    public void testSaveData() {
         NoteModel model = viewModel.initAndResume(view);
 
         model.getTitle().set("newTitle");

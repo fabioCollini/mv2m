@@ -41,7 +41,9 @@ public class NoteViewModel extends ViewModel<NoteModel, NoteView> {
 
     public void save() {
         NoteModel model = getModel();
-        if (checkMandatory(model.getTitle(), model.getTitleError()) && checkMandatory(model.getText(), model.getTextError())) {
+        boolean titleValid = checkMandatory(model.getTitle(), model.getTitleError());
+        boolean textValid = checkMandatory(model.getText(), model.getTextError());
+        if (titleValid && textValid) {
             model.getNote().setTitle(model.getTitle().get());
             model.getNote().setText(model.getText().get());
             noteSaverService.save(model.getNote());
