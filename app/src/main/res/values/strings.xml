@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="binded" type="id" />
+
+    <string name="app_name">Demo MVVM</string>
+    <string name="mandatory_field">Campo obbligatorio</string>
+    <string name="note_saved">Nota salvata</string>
+    <string name="error_saving_note">Errore salvataggio nota</string>
+    <string name="save">Save</string>
+    <string name="title">Title</string>
+    <string name="text">Text</string>
+
+</resources>

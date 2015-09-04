@@ -1,0 +1,215 @@
+repositories {
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.7'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1x'
+    }
+}
+
+apply plugin: 'com.android.application'
+
+apply plugin: 'com.android.databinding'
+
+apply plugin: 'me.tatarka.retrolambda'
+
+apply plugin: 'com.neenbedankt.android-apt'
+
+apply plugin: "jacoco"
+
+apply plugin: 'com.github.kt3k.coveralls'
+
+retrolambda {
+    oldJdk '/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home'
+//    oldJdk '/usr/lib/jvm/jdk1.7.0'
+}
+
+jacoco {
+    toolVersion = "0.7.5.201505241946"
+
+}
+
+coveralls.jacocoReportPath = 'build/reports/jacoco/jacocoUnitTestReport/jacocoUnitTestReport.xml'
+
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    jacoco {
+        version = '0.7.5.201505241946'
+    }
+
+    compileSdkVersion 22
+    buildToolsVersion '23.0.0'
+
+    defaultConfig {
+        applicationId "it.cosenonjaviste"
+        minSdkVersion 14
+        targetSdkVersion 22
+        versionCode 11
+        versionName "2.0"
+        buildConfigField "String", "CONSUMER_KEY", project.oauth_consumerKey
+        buildConfigField "String", "CONSUMER_SECRET", project.oauth_consumerSecret
+        buildConfigField "String", "ACCESS_TOKEN", project.oauth_accessToken
+        buildConfigField "String", "ACCESS_TOKEN_SECRET", project.oauth_accessTokenSecret
+        buildConfigField "String", "MAILJET_USERNAME", project.mailjet_userName
+        buildConfigField "String", "MAILJET_PASSWORD", project.mailJetPassword
+        testInstrumentationRunner "it.cosenonjaviste.androidtest.utils.AndroidJacocoTestRunner"
+    }
+    buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'LICENSE.txt'
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile project(':ViewModelLib')
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'com.android.support:cardview-v7:22.2.1'
+    compile 'com.squareup.picasso:picasso:2.5.0'
+    compile 'com.android.support:recyclerview-v7:22.2.1'
+    compile 'com.android.support:design:22.2.1'
+    compile 'io.reactivex:rxandroid:1.0.1'
+    compile 'com.google.dagger:dagger:2.0.1'
+    compile 'org.glassfish:javax.annotation:10.0-b28'
+    apt 'com.google.dagger:dagger-compiler:2.0.1'
+    compile 'com.hannesdorfmann.parcelableplease:annotation:1.0.1'
+    apt 'com.hannesdorfmann.parcelableplease:processor:1.0.1'
+
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'org.twitter4j:twitter4j-core:4.0.2'
+    compile 'com.annimon:stream:1.0.3'
+
+//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.9.5'
+    testCompile 'org.assertj:assertj-core:1.7.0'
+
+    androidTestApt 'com.google.dagger:dagger-compiler:2.0.1'
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
+    androidTestCompile('com.google.dexmaker:dexmaker-mockito:1.2') {
+        exclude group: 'org.hamcrest', module: 'hamcrest-core'
+    }
+    androidTestCompile 'com.squareup.spoon:spoon-client:1.0.5'
+    androidTestCompile 'com.android.support.test:runner:0.3'
+    androidTestCompile 'com.android.support.test:rules:0.3'
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2') {
+        exclude group: 'javax.inject', module: 'javax.inject'
+        exclude group: 'com.squareup', module: 'javawriter'
+    }
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2') {
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+        exclude group: 'com.android.support.test.espresso', module: 'espresso-core'
+    }
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2'
+    androidTestCompile 'com.squareup.okhttp:mockwebserver:2.4.0'
+}
+
+// Define coverage source.
+// If you have rs/aidl etc... add them here.
+def coverageSourceDirs = [
+        'src/main/java',
+        'src/gen'
+]
+
+task jacocoUnitTestReport(type: JacocoReport) {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
+    classDirectories = fileTree(
+            dir: './build/intermediates/classes/debug',
+            excludes: ['**/R.class',
+                       '**/R$*.class',
+                       '**/BR.class',
+                       '**/BuildConfig.class',
+                       'it/cosenonjaviste/databinding/**/*.class',
+                       'com/android/**/*.class',
+                       'android/**/*.class',
+                       '**/*_MembersInjector.class',
+                       '**/*_Factory.class',
+                       '**/*_Provide*.class',
+                       '**/*ParcelablePlease.class',
+                       'it/cosenonjaviste/ui/**/*.class',
+            ])
+    sourceDirectories = files(coverageSourceDirs)
+    executionData = files('build/jacoco/testDebugUnitTest.exec')
+    // Bit hacky but fixes https://code.google.com/p/android/issues/detail?id=69174.
+    // We iterate through the compiled .class tree and rename $$ to $.
+    doFirst {
+        new File('app/build/intermediates/classes/').eachFileRecurse { file ->
+            if (file.name.contains('$$')) {
+                file.renameTo(file.path.replace('$$', '$'))
+            }
+        }
+    }
+}
+
+task mergeTestCodeCoverageResults(type: JacocoMerge) {
+    description = 'Merge test code coverage results from junit and instrumentation test'
+    destinationFile = file("build/outputs/code-coverage/merged-coverage.exec")
+    doFirst {delete destinationFile}
+    executionData = files('build/outputs/code-coverage/connected/coverage.ec', 'build/jacoco/testDebugUnitTest.exec')
+}
+
+task jacocoTestReport(type: JacocoReport) {
+    group = "Reporting"
+    description = "Generates Jacoco coverage reports"
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+    classDirectories = fileTree(
+            dir: 'build/intermediates/classes/debug',
+            excludes: ['**/R.class',
+                       '**/R$*.class',
+                       '**/BR.class',
+                       '**/BuildConfig.class',
+                       'it/cosenonjaviste/databinding/**/*.class',
+                       'com/android/**/*.class',
+                       'android/**/*.class',
+                       '**/*_MembersInjector.class',
+                       '**/*_Factory.class',
+                       '**/*_Provide*.class',
+                       '**/*ParcelablePlease.class'
+            ])
+    sourceDirectories = files(coverageSourceDirs)
+    additionalSourceDirs = files(coverageSourceDirs)
+    executionData = files('build/outputs/code-coverage/connected/coverage.ec')
+    // Bit hacky but fixes https://code.google.com/p/android/issues/detail?id=69174.
+    // We iterate through the compiled .class tree and rename $$ to $.
+    doFirst {
+        new File('app/build/intermediates/classes/').eachFileRecurse { file ->
+            if (file.name.contains('$$')) {
+                file.renameTo(file.path.replace('$$', '$'))
+            }
+        }
+    }
+}

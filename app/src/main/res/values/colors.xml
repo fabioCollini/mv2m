@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="cnj_border">#FFe18125</color>    
+	<color name="cnj_selection">#55e18125</color>
+	<color name="colorPrimary">#fb6648</color>
+	<color name="textColorPrimary">#FFF</color>
+</resources>
