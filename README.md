@@ -1,5 +1,5 @@
-# CoseNonJavisteAndroidApp
-Android app of blog cosenonjaviste.it
+# Databinding MVVM
+Demo project
 
-[![Build Status](https://travis-ci.org/commit-non-javisti/CoseNonJavisteAndroidApp.svg?branch=master)](https://travis-ci.org/commit-non-javisti/CoseNonJavisteAndroidApp)
-[![Coverage Status](https://coveralls.io/repos/commit-non-javisti/CoseNonJavisteAndroidApp/badge.svg?branch=master)](https://coveralls.io/r/commit-non-javisti/CoseNonJavisteAndroidApp?branch=master)
+[![Build Status](https://travis-ci.org/fabioCollini/DemoMVVM.svg?branch=master)](https://travis-ci.org/fabioCollini/DemoMVVM)
+[![Coverage Status](https://coveralls.io/repos/fabioCollini/DemoMVVM/badge.svg?branch=master)](https://coveralls.io/r/fabioCollini/DemoMVVM?branch=master)
