@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyByte;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
@@ -47,13 +48,19 @@ public class ParcelableTester {
     @NonNull public static Parcel createParcel() {
         Parcel parcel = Mockito.mock(Parcel.class);
 
-        LinkedList<Object> parcelData = new LinkedList<>();
+        final LinkedList<Object> parcelData = new LinkedList<>();
 
-        Answer writeAnswer = invocation -> {
-            parcelData.add(invocation.getArguments()[0]);
-            return null;
+        Answer writeAnswer = new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                parcelData.add(invocation.getArguments()[0]);
+                return null;
+            }
         };
-        Answer<Object> readAnswer = invocation -> parcelData.removeFirst();
+        Answer<Object> readAnswer = new Answer<Object>() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                return parcelData.removeFirst();
+            }
+        };
 
         doAnswer(writeAnswer).when(parcel).writeInt(anyInt());
         when(parcel.readInt()).thenAnswer(readAnswer);
@@ -67,34 +74,48 @@ public class ParcelableTester {
         doAnswer(writeAnswer).when(parcel).writeByte(anyByte());
         when(parcel.readByte()).thenAnswer(readAnswer);
 
-        doAnswer(invocation -> {
-            List<Parcelable> list = (List<Parcelable>) invocation.getArguments()[0];
-            writeList(parcelData, invocation, list);
-            return null;
-        }).when(parcel).writeList(any());
-        doAnswer(invocation -> {
-            List<Parcelable> list = (List<Parcelable>) invocation.getArguments()[0];
-            readList(parcelData, invocation, list);
-            return null;
-        }).when(parcel).readList(any(), any());
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                List<Parcelable> list = (List<Parcelable>) invocation.getArguments()[0];
+                writeList(parcelData, invocation, list);
+                return null;
+            }
+        }).when(parcel).writeList(anyList());
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                List<Parcelable> list = (List<Parcelable>) invocation.getArguments()[0];
+                readList(parcelData, invocation, list);
+                return null;
+            }
+        }).when(parcel).readList(anyList(), any(ClassLoader.class));
 
-        doAnswer(invocation -> {
-            Parcelable[] parcelables = (Parcelable[]) invocation.getArguments()[0];
-            writeList(parcelData, invocation, parcelables == null ? null : Arrays.asList(parcelables));
-            return null;
-        }).when(parcel).writeParcelableArray(any(), anyInt());
-        doAnswer(invocation -> {
-            List<Parcelable> list = new ArrayList<>();
-            readList(parcelData, invocation, list);
-            return list.toArray(new Parcelable[list.size()]);
-        }).when(parcel).readParcelableArray(any());
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Parcelable[] parcelables = (Parcelable[]) invocation.getArguments()[0];
+                writeList(parcelData, invocation, parcelables == null ? null : Arrays.asList(parcelables));
+                return null;
+            }
+        }).when(parcel).writeParcelableArray(any(Parcelable[].class), anyInt());
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                List<Parcelable> list = new ArrayList<>();
+                readList(parcelData, invocation, list);
+                return list.toArray(new Parcelable[list.size()]);
+            }
+        }).when(parcel).readParcelableArray(any(ClassLoader.class));
 
-        doAnswer(invocation -> {
-            Parcelable parcelable = (Parcelable) invocation.getArguments()[0];
-            writeParcelable(parcelData, parcelable, (Parcel) invocation.getMock());
-            return null;
-        }).when(parcel).writeParcelable(any(), anyInt());
-        when(parcel.readParcelable(any())).thenAnswer(invocation -> readParcelable(parcelData, (Parcel) invocation.getMock()));
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Parcelable parcelable = (Parcelable) invocation.getArguments()[0];
+                writeParcelable(parcelData, parcelable, (Parcel) invocation.getMock());
+                return null;
+            }
+        }).when(parcel).writeParcelable(any(Parcelable.class), anyInt());
+        when(parcel.readParcelable(any(ClassLoader.class))).thenAnswer(new Answer<Object>() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                return readParcelable(parcelData, (Parcel) invocation.getMock());
+            }
+        });
 
         return parcel;
     }

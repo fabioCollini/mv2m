@@ -60,7 +60,7 @@ public class NoteViewModelTest {
         assertThat(model.getTitleError().get()).isEqualTo(R.string.mandatory_field);
         assertThat(model.getTextError().get()).isEqualTo(R.string.mandatory_field);
 
-        verify(noteSaverService, never()).save(any());
+        verify(noteSaverService, never()).save(any(Note.class));
         verify(view, never()).showMessage(anyInt());
     }
 

@@ -55,8 +55,12 @@ public class DataBindingConverters {
     }
 
     @BindingAdapter({"app:onClick"})
-    public static void bindOnClick(View view, Runnable listener) {
-        view.setOnClickListener(v -> listener.run());
+    public static void bindOnClick(View view, final Runnable listener) {
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                listener.run();
+            }
+        });
     }
 
     @BindingAdapter({"app:url"})

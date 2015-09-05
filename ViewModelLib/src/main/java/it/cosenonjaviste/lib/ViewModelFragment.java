@@ -11,7 +11,11 @@ public abstract class ViewModelFragment<VM extends ViewModel<?, ?>> extends Frag
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
-        viewModel = ViewModelRetainedFragment.getOrCreate(this, state, getFragmentTag(), this::createViewModel);
+        viewModel = ViewModelRetainedFragment.getOrCreate(this, state, getFragmentTag(), new ViewModelManager.Factory<VM>() {
+            @Override public VM create() {
+                return createViewModel();
+            }
+        });
     }
 
     protected String getFragmentTag() {
