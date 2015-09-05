@@ -3,14 +3,10 @@ package it.cosenonjaviste.ui.bind;
 import android.databinding.BindingAdapter;
 import android.support.design.widget.TextInputLayout;
 import android.text.Html;
-import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import it.cosenonjaviste.R;
 import it.cosenonjaviste.core.utils.ObservableString;
@@ -51,15 +47,6 @@ public class DataBindingConverters {
     @BindingAdapter({"app:visible"})
     public static void bindVisible(View view, boolean b) {
         view.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
-    }
-
-    @BindingAdapter({"app:imageUrl"})
-    public static void loadImage(ImageView view, String url) {
-        if (!TextUtils.isEmpty(url)) {
-            Picasso.with(view.getContext()).load(url).into(view);
-        } else {
-            view.setImageDrawable(null);
-        }
     }
 
     @BindingAdapter({"app:textHtml"})
