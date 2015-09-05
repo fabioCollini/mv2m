@@ -10,5 +10,6 @@
     <string name="save">Save</string>
     <string name="title">Title</string>
     <string name="text">Text</string>
+    <string name="loading">Caricamento in corso...</string>
 
 </resources>

@@ -7,7 +7,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.concurrent.Executor;
 
 import it.cosenonjaviste.R;
 import it.cosenonjaviste.model.Note;
@@ -30,6 +33,12 @@ public class NoteViewModelTest {
     @Mock NoteLoaderService noteLoaderService;
 
     @Mock NoteSaverService noteSaverService;
+
+    @Spy Executor executor = new Executor() {
+        @Override public void execute(Runnable command) {
+            command.run();
+        }
+    };
 
     @Captor ArgumentCaptor<Note> captor;
 

@@ -4,6 +4,9 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import it.cosenonjaviste.R;
 import it.cosenonjaviste.core.NoteView;
 import it.cosenonjaviste.core.NoteViewModel;
@@ -18,13 +21,29 @@ public class NoteActivity extends ViewModelActivity<NoteViewModel> implements No
     private NoteDetailBinding binding;
 
     @Override protected NoteViewModel createViewModel() {
-        return new NoteViewModel(new NoteLoaderService() {
-            @Override public Note load() {
-                return new Note("aaaa", "bbb");
-            }
-        }, new NoteSaverService() {
+        return new NoteViewModel(
+                Executors.newCachedThreadPool(),
+                new Executor() {
+                    @Override public void execute(Runnable command) {
+                        runOnUiThread(command);
+                    }
+                },
+                new NoteLoaderService() {
+                    @Override public Note load() {
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        return new Note("aaaa", "bbb");
+                    }
+                }, new NoteSaverService() {
             @Override public void save(Note note) {
-
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

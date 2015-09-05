@@ -3,6 +3,8 @@ package it.cosenonjaviste.core;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableInt;
 
+import java.util.concurrent.Executor;
+
 import it.cosenonjaviste.R;
 import it.cosenonjaviste.core.utils.ObservableString;
 import it.cosenonjaviste.lib.ViewModel;
@@ -12,6 +14,8 @@ import it.cosenonjaviste.model.NoteSaverService;
 
 public class NoteViewModel extends ViewModel<NoteModel, NoteView> {
 
+    private final Executor backgroundExecutor;
+    private final Executor uiExecutor;
     private NoteLoaderService noteLoaderService;
 
     private NoteSaverService noteSaverService;
@@ -20,7 +24,9 @@ public class NoteViewModel extends ViewModel<NoteModel, NoteView> {
 
     private ObservableBoolean sending = new ObservableBoolean();
 
-    public NoteViewModel(NoteLoaderService noteLoaderService, NoteSaverService noteSaverService) {
+    public NoteViewModel(Executor backgroundExecutor, Executor uiExecutor, NoteLoaderService noteLoaderService, NoteSaverService noteSaverService) {
+        this.backgroundExecutor = backgroundExecutor;
+        this.uiExecutor = uiExecutor;
         this.noteLoaderService = noteLoaderService;
         this.noteSaverService = noteSaverService;
     }
@@ -30,24 +36,43 @@ public class NoteViewModel extends ViewModel<NoteModel, NoteView> {
     }
 
     @Override public void resume() {
-        NoteModel model = getModel();
-        if (!loading.get() && model.getNote() == null) {
-            Note note = noteLoaderService.load();
-            model.setNote(note);
-            model.getTitle().set(note.getTitle());
-            model.getText().set(note.getText());
+        if (!loading.get() && getModel().getNote() == null) {
+            loading.set(true);
+            backgroundExecutor.execute(new Runnable() {
+                @Override public void run() {
+                    final Note note = noteLoaderService.load();
+                    uiExecutor.execute(new Runnable() {
+                        @Override public void run() {
+                            getModel().setNote(note);
+                            getModel().getTitle().set(note.getTitle());
+                            getModel().getText().set(note.getText());
+                            loading.set(false);
+                        }
+                    });
+                }
+            });
         }
     }
 
     public void save() {
-        NoteModel model = getModel();
-        boolean titleValid = checkMandatory(model.getTitle(), model.getTitleError());
-        boolean textValid = checkMandatory(model.getText(), model.getTextError());
+        boolean titleValid = checkMandatory(getModel().getTitle(), getModel().getTitleError());
+        boolean textValid = checkMandatory(getModel().getText(), getModel().getTextError());
         if (titleValid && textValid) {
-            model.getNote().setTitle(model.getTitle().get());
-            model.getNote().setText(model.getText().get());
-            noteSaverService.save(model.getNote());
-            getView().showMessage(R.string.note_saved);
+            Note note = getModel().getNote();
+            note.setTitle(getModel().getTitle().get());
+            note.setText(getModel().getText().get());
+            sending.set(true);
+            backgroundExecutor.execute(new Runnable() {
+                @Override public void run() {
+                    noteSaverService.save(getModel().getNote());
+                    uiExecutor.execute(new Runnable() {
+                        @Override public void run() {
+                            getView().showMessage(R.string.note_saved);
+                            sending.set(false);
+                        }
+                    });
+                }
+            });
         }
     }
 
