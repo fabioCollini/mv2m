@@ -8,12 +8,14 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.io.IOException;
 import java.util.concurrent.Executor;
 
 import it.cosenonjaviste.R;
 import it.cosenonjaviste.model.Note;
 import it.cosenonjaviste.model.NoteLoaderService;
 import it.cosenonjaviste.model.NoteSaverService;
+import retrofit.RetrofitError;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyInt;
@@ -55,6 +57,16 @@ public class NoteViewModelTest {
     }
 
     @Test
+    public void testErrorLoadingData() {
+        when(noteLoaderService.load())
+                .thenThrow(RetrofitError.networkError("url", new IOException()));
+
+        viewModel.initAndResume(view);
+
+        verify(view).showMessage(eq(R.string.error_loading_note));
+    }
+
+    @Test
     public void testValidation() {
         NoteModel model = viewModel.initAndResume(view);
 
@@ -82,5 +94,20 @@ public class NoteViewModelTest {
         verify(noteSaverService).save(eq(123L), eq("newTitle"), eq("newText"));
 
         verify(view).showMessage(eq(R.string.note_saved));
+    }
+
+    @Test
+    public void testErrorSavingData() {
+        when(noteSaverService.save(eq(123L), eq("newTitle"), eq("newText")))
+                .thenThrow(RetrofitError.networkError("url", new IOException()));
+
+        NoteModel model = viewModel.initAndResume(view);
+
+        model.getTitle().set("newTitle");
+        model.getText().set("newText");
+
+        viewModel.save();
+
+        verify(view).showMessage(eq(R.string.error_saving_note));
     }
 }

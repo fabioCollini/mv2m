@@ -41,15 +41,28 @@ public class NoteViewModel extends ViewModel<NoteModel, NoteView> {
             loading.set(true);
             backgroundExecutor.execute(new Runnable() {
                 @Override public void run() {
-                    final Note note = noteLoaderService.load();
-                    uiExecutor.execute(new Runnable() {
-                        @Override public void run() {
-                            getModel().setNote(note);
-                            getModel().getTitle().set(note.getTitle());
-                            getModel().getText().set(note.getText());
-                            loading.set(false);
-                        }
-                    });
+                    loadData();
+                }
+            });
+        }
+    }
+
+    private void loadData() {
+        try {
+            final Note note = noteLoaderService.load();
+            uiExecutor.execute(new Runnable() {
+                @Override public void run() {
+                    getModel().setNote(note);
+                    getModel().getTitle().set(note.getTitle());
+                    getModel().getText().set(note.getText());
+                    loading.set(false);
+                }
+            });
+        } catch (Exception e) {
+            uiExecutor.execute(new Runnable() {
+                @Override public void run() {
+                    getView().showMessage(R.string.error_loading_note);
+                    loading.set(false);
                 }
             });
         }
