@@ -11,6 +11,7 @@ import it.cosenonjaviste.lib.ViewModel;
 import it.cosenonjaviste.model.Note;
 import it.cosenonjaviste.model.NoteLoaderService;
 import it.cosenonjaviste.model.NoteSaverService;
+import retrofit.RetrofitError;
 
 public class NoteViewModel extends ViewModel<NoteModel, NoteView> {
 
@@ -58,22 +59,30 @@ public class NoteViewModel extends ViewModel<NoteModel, NoteView> {
         boolean titleValid = checkMandatory(getModel().getTitle(), getModel().getTitleError());
         boolean textValid = checkMandatory(getModel().getText(), getModel().getTextError());
         if (titleValid && textValid) {
-            Note note = getModel().getNote();
+            final Note note = getModel().getNote();
             note.setTitle(getModel().getTitle().get());
             note.setText(getModel().getText().get());
             sending.set(true);
             backgroundExecutor.execute(new Runnable() {
                 @Override public void run() {
-                    noteSaverService.save(getModel().getNote());
-                    uiExecutor.execute(new Runnable() {
-                        @Override public void run() {
-                            getView().showMessage(R.string.note_saved);
-                            sending.set(false);
-                        }
-                    });
+                    try {
+                        noteSaverService.save(note.getId(), note.getTitle(), note.getText());
+                        hideSendProgressAndShoMessage(R.string.note_saved);
+                    } catch (RetrofitError e) {
+                        hideSendProgressAndShoMessage(R.string.error_saving_note);
+                    }
                 }
             });
         }
+    }
+
+    private void hideSendProgressAndShoMessage(final int message) {
+        uiExecutor.execute(new Runnable() {
+            @Override public void run() {
+                getView().showMessage(message);
+                sending.set(false);
+            }
+        });
     }
 
     private boolean checkMandatory(ObservableString bindableString, ObservableInt error) {

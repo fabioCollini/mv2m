@@ -7,6 +7,8 @@ import com.hannesdorfmann.parcelableplease.annotation.ParcelablePlease;
 
 @ParcelablePlease
 public class Note implements Parcelable {
+    long id;
+
     String title;
 
     String text;
@@ -14,9 +16,14 @@ public class Note implements Parcelable {
     Note() {
     }
 
-    public Note(String title, String text) {
+    public Note(long id, String title, String text) {
+        this.id = id;
         this.title = title;
         this.text = text;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getTitle() {

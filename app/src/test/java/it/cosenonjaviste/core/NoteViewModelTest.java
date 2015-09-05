@@ -3,8 +3,6 @@ package it.cosenonjaviste.core;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -18,8 +16,9 @@ import it.cosenonjaviste.model.NoteLoaderService;
 import it.cosenonjaviste.model.NoteSaverService;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -40,13 +39,11 @@ public class NoteViewModelTest {
         }
     };
 
-    @Captor ArgumentCaptor<Note> captor;
-
     @InjectMocks NoteViewModel viewModel;
 
     @Before
     public void setUp() {
-        when(noteLoaderService.load()).thenReturn(new Note("title", "text"));
+        when(noteLoaderService.load()).thenReturn(new Note(123, "title", "text"));
     }
 
     @Test
@@ -69,7 +66,7 @@ public class NoteViewModelTest {
         assertThat(model.getTitleError().get()).isEqualTo(R.string.mandatory_field);
         assertThat(model.getTextError().get()).isEqualTo(R.string.mandatory_field);
 
-        verify(noteSaverService, never()).save(any(Note.class));
+        verify(noteSaverService, never()).save(anyLong(), anyString(), anyString());
         verify(view, never()).showMessage(anyInt());
     }
 
@@ -82,8 +79,7 @@ public class NoteViewModelTest {
 
         viewModel.save();
 
-        verify(noteSaverService).save(captor.capture());
-        assertThat(captor.getValue()).isEqualToComparingFieldByField(new Note("newTitle", "newText"));
+        verify(noteSaverService).save(eq(123L), eq("newTitle"), eq("newText"));
 
         verify(view).showMessage(eq(R.string.note_saved));
     }

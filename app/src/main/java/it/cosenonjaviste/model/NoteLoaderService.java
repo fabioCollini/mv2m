@@ -1,5 +1,7 @@
 package it.cosenonjaviste.model;
 
+import retrofit.http.GET;
+
 public interface NoteLoaderService {
-    Note load();
+    @GET("/data.json") Note load();
 }
