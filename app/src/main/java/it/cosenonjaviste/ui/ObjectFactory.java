@@ -3,9 +3,9 @@ package it.cosenonjaviste.ui;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import it.cosenonjaviste.BuildConfig;
@@ -19,7 +19,7 @@ public class ObjectFactory {
 
     private static NoteSaverService noteSaverService;
 
-    private static ExecutorService executorService;
+    private static Executor backgroundExecutor;
 
     private static Executor uiExecutor;
 
@@ -47,11 +47,11 @@ public class ObjectFactory {
         return restAdapter.create(serviceClass);
     }
 
-    @NonNull public static ExecutorService backgroundExecutor() {
-        if (executorService == null) {
-            executorService = Executors.newCachedThreadPool();
+    @NonNull public static Executor backgroundExecutor() {
+        if (backgroundExecutor == null) {
+            backgroundExecutor = Executors.newCachedThreadPool();
         }
-        return executorService;
+        return backgroundExecutor;
     }
 
     @NonNull public static Executor uiExecutor() {
@@ -63,5 +63,20 @@ public class ObjectFactory {
             };
         }
         return uiExecutor;
+    }
+
+    @VisibleForTesting
+    public static void setNoteLoaderService(NoteLoaderService noteLoaderService) {
+        ObjectFactory.noteLoaderService = noteLoaderService;
+    }
+
+    @VisibleForTesting
+    public static void setNoteSaverService(NoteSaverService noteSaverService) {
+        ObjectFactory.noteSaverService = noteSaverService;
+    }
+
+    @VisibleForTesting
+    public static void setBackgroundExecutor(Executor backgroundExecutor) {
+        ObjectFactory.backgroundExecutor = backgroundExecutor;
     }
 }

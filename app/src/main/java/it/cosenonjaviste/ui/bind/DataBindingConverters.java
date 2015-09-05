@@ -2,11 +2,8 @@ package it.cosenonjaviste.ui.bind;
 
 import android.databinding.BindingAdapter;
 import android.support.design.widget.TextInputLayout;
-import android.text.Html;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import it.cosenonjaviste.R;
 import it.cosenonjaviste.core.utils.ObservableString;
@@ -49,11 +46,6 @@ public class DataBindingConverters {
         view.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
     }
 
-    @BindingAdapter({"app:textHtml"})
-    public static void bindHtmlText(TextView view, String text) {
-        view.setText(Html.fromHtml(text));
-    }
-
     @BindingAdapter({"app:onClick"})
     public static void bindOnClick(View view, final Runnable listener) {
         view.setOnClickListener(new View.OnClickListener() {
@@ -61,10 +53,5 @@ public class DataBindingConverters {
                 listener.run();
             }
         });
-    }
-
-    @BindingAdapter({"app:url"})
-    public static void bindOnClick(WebView view, String url) {
-        view.loadUrl(url);
     }
 }

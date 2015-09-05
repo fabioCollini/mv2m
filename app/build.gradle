@@ -133,23 +133,11 @@ task jacocoUnitTestReport(type: JacocoReport) {
                        'it/cosenonjaviste/databinding/**/*.class',
                        'com/android/**/*.class',
                        'android/**/*.class',
-                       '**/*_MembersInjector.class',
-                       '**/*_Factory.class',
-                       '**/*_Provide*.class',
                        '**/*ParcelablePlease.class',
                        'it/cosenonjaviste/ui/**/*.class',
             ])
     sourceDirectories = files(coverageSourceDirs)
     executionData = files('build/jacoco/testDebugUnitTest.exec')
-    // Bit hacky but fixes https://code.google.com/p/android/issues/detail?id=69174.
-    // We iterate through the compiled .class tree and rename $$ to $.
-    doFirst {
-        new File('app/build/intermediates/classes/').eachFileRecurse { file ->
-            if (file.name.contains('$$')) {
-                file.renameTo(file.path.replace('$$', '$'))
-            }
-        }
-    }
 }
 
 task mergeTestCodeCoverageResults(type: JacocoMerge) {
@@ -175,21 +163,9 @@ task jacocoTestReport(type: JacocoReport) {
                        'it/cosenonjaviste/databinding/**/*.class',
                        'com/android/**/*.class',
                        'android/**/*.class',
-                       '**/*_MembersInjector.class',
-                       '**/*_Factory.class',
-                       '**/*_Provide*.class',
                        '**/*ParcelablePlease.class'
             ])
     sourceDirectories = files(coverageSourceDirs)
     additionalSourceDirs = files(coverageSourceDirs)
     executionData = files('build/outputs/code-coverage/connected/coverage.ec')
-    // Bit hacky but fixes https://code.google.com/p/android/issues/detail?id=69174.
-    // We iterate through the compiled .class tree and rename $$ to $.
-    doFirst {
-        new File('app/build/intermediates/classes/').eachFileRecurse { file ->
-            if (file.name.contains('$$')) {
-                file.renameTo(file.path.replace('$$', '$'))
-            }
-        }
-    }
 }
