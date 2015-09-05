@@ -21,9 +21,9 @@ public class NoteViewModel extends ViewModel<NoteModel, NoteView> {
 
     private NoteSaverService noteSaverService;
 
-    private ObservableBoolean loading = new ObservableBoolean();
+    public final ObservableBoolean loading = new ObservableBoolean();
 
-    private ObservableBoolean sending = new ObservableBoolean();
+    public final ObservableBoolean sending = new ObservableBoolean();
 
     public NoteViewModel(Executor backgroundExecutor, Executor uiExecutor, NoteLoaderService noteLoaderService, NoteSaverService noteSaverService) {
         this.backgroundExecutor = backgroundExecutor;
@@ -102,13 +102,5 @@ public class NoteViewModel extends ViewModel<NoteModel, NoteView> {
         boolean empty = bindableString.isEmpty();
         error.set(empty ? R.string.mandatory_field : 0);
         return !empty;
-    }
-
-    public ObservableBoolean getLoading() {
-        return loading;
-    }
-
-    public ObservableBoolean getSending() {
-        return sending;
     }
 }
