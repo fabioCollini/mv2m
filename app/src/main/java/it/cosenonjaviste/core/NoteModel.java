@@ -4,12 +4,9 @@ import android.databinding.ObservableInt;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.hannesdorfmann.parcelableplease.annotation.ParcelablePlease;
-
 import it.cosenonjaviste.core.utils.ObservableString;
 import it.cosenonjaviste.model.Note;
 
-@ParcelablePlease
 public class NoteModel implements Parcelable {
 
     Note note;
@@ -21,6 +18,17 @@ public class NoteModel implements Parcelable {
     ObservableInt titleError = new ObservableInt();
 
     ObservableInt textError = new ObservableInt();
+
+    public NoteModel() {
+    }
+
+    protected NoteModel(Parcel in) {
+        note = in.readParcelable(Note.class.getClassLoader());
+        title = in.readParcelable(ObservableString.class.getClassLoader());
+        text = in.readParcelable(ObservableString.class.getClassLoader());
+        titleError = in.readParcelable(ObservableInt.class.getClassLoader());
+        textError = in.readParcelable(ObservableInt.class.getClassLoader());
+    }
 
     public Note getNote() {
         return note;
@@ -46,21 +54,27 @@ public class NoteModel implements Parcelable {
         return textError;
     }
 
-    @Override public int describeContents() {
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(note, flags);
+        dest.writeParcelable(title, flags);
+        dest.writeParcelable(text, flags);
+        dest.writeParcelable(titleError, flags);
+        dest.writeParcelable(textError, flags);
+    }
+
+    @Override
+    public int describeContents() {
         return 0;
     }
 
-    @Override public void writeToParcel(Parcel dest, int flags) {
-        NoteModelParcelablePlease.writeToParcel(this, dest, flags);
-    }
-
     public static final Creator<NoteModel> CREATOR = new Creator<NoteModel>() {
-        public NoteModel createFromParcel(Parcel source) {
-            NoteModel target = new NoteModel();
-            NoteModelParcelablePlease.readFromParcel(target, source);
-            return target;
+        @Override
+        public NoteModel createFromParcel(Parcel in) {
+            return new NoteModel(in);
         }
 
+        @Override
         public NoteModel[] newArray(int size) {
             return new NoteModel[size];
         }

@@ -3,9 +3,6 @@ package it.cosenonjaviste.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.hannesdorfmann.parcelableplease.annotation.ParcelablePlease;
-
-@ParcelablePlease
 public class Note implements Parcelable {
     long id;
 
@@ -20,6 +17,12 @@ public class Note implements Parcelable {
         this.id = id;
         this.title = title;
         this.text = text;
+    }
+
+    protected Note(Parcel in) {
+        id = in.readLong();
+        title = in.readString();
+        text = in.readString();
     }
 
     public long getId() {
@@ -42,21 +45,25 @@ public class Note implements Parcelable {
         this.text = text;
     }
 
-    @Override public int describeContents() {
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(title);
+        dest.writeString(text);
+    }
+
+    @Override
+    public int describeContents() {
         return 0;
     }
 
-    @Override public void writeToParcel(Parcel dest, int flags) {
-        NoteParcelablePlease.writeToParcel(this, dest, flags);
-    }
-
     public static final Creator<Note> CREATOR = new Creator<Note>() {
-        public Note createFromParcel(Parcel source) {
-            Note target = new Note();
-            NoteParcelablePlease.readFromParcel(target, source);
-            return target;
+        @Override
+        public Note createFromParcel(Parcel in) {
+            return new Note(in);
         }
 
+        @Override
         public Note[] newArray(int size) {
             return new Note[size];
         }
