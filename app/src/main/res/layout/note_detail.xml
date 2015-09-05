@@ -32,10 +32,30 @@
                 android:text="@string/loading"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:visible="@{viewModel.model.error}">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/error_loading_note"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/retry"
+                app:onClick="@{viewModel.reloadData}"/>
+        </LinearLayout>
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:visible="@{!viewModel.loading}">
+            app:visible="@{!viewModel.loading &amp;&amp; !viewModel.model.error}">
 
             <LinearLayout
                 android:layout_width="match_parent"

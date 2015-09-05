@@ -1,5 +1,6 @@
 package it.cosenonjaviste.core;
 
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableInt;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -9,15 +10,17 @@ import it.cosenonjaviste.model.Note;
 
 public class NoteModel implements Parcelable {
 
-    Note note;
+    private Note note;
 
-    ObservableString title = new ObservableString();
+    private ObservableBoolean error = new ObservableBoolean();
 
-    ObservableString text = new ObservableString();
+    private ObservableString title = new ObservableString();
 
-    ObservableInt titleError = new ObservableInt();
+    private ObservableString text = new ObservableString();
 
-    ObservableInt textError = new ObservableInt();
+    private ObservableInt titleError = new ObservableInt();
+
+    private ObservableInt textError = new ObservableInt();
 
     public NoteModel() {
     }
@@ -36,6 +39,10 @@ public class NoteModel implements Parcelable {
 
     public void setNote(Note note) {
         this.note = note;
+    }
+
+    public ObservableBoolean getError() {
+        return error;
     }
 
     public ObservableString getTitle() {
@@ -79,4 +86,8 @@ public class NoteModel implements Parcelable {
             return new NoteModel[size];
         }
     };
+
+    public boolean isLoaded() {
+        return note != null || error.get();
+    }
 }

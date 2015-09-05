@@ -1,6 +1,5 @@
 package it.cosenonjaviste.ui;
 
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.Before;
@@ -8,19 +7,23 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.io.IOException;
 import java.util.concurrent.Executor;
 
 import it.cosenonjaviste.R;
 import it.cosenonjaviste.model.Note;
 import it.cosenonjaviste.model.NoteLoaderService;
 import it.cosenonjaviste.model.NoteSaverService;
+import retrofit.RetrofitError;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -57,12 +60,28 @@ public class NoteActivityTest {
     }
 
     @Test
+    public void testReloadAfterError() {
+        when(noteLoaderService.load())
+                .thenThrow(RetrofitError.networkError("url", new IOException()))
+                .thenReturn(new Note(123, "aaa", "bbb"));
+
+        rule.launchActivity(null);
+
+        onView(withText(R.string.retry)).perform(click());
+
+        onView(withText(R.string.retry)).check(matches(not(isDisplayed())));
+
+        onView(withText("aaa")).check(matches(isDisplayed()));
+        onView(withText("bbb")).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void testTitleValidation() {
         rule.launchActivity(null);
 
         compileFormAndSave("", "newText");
 
-        onView(withText(R.string.mandatory_field)).check(matches(ViewMatchers.isDisplayed()));
+        onView(withText(R.string.mandatory_field)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -71,7 +90,7 @@ public class NoteActivityTest {
 
         compileFormAndSave("newTitle", "");
 
-        onView(withText(R.string.mandatory_field)).check(matches(ViewMatchers.isDisplayed()));
+        onView(withText(R.string.mandatory_field)).check(matches(isDisplayed()));
     }
 
     private void compileFormAndSave(String title, String text) {

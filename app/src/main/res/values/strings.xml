@@ -12,5 +12,6 @@
     <string name="title">Title</string>
     <string name="text">Text</string>
     <string name="loading">Caricamento in corso...</string>
+    <string name="retry">Riprova</string>
 
 </resources>

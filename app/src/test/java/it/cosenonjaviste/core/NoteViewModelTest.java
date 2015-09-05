@@ -61,9 +61,26 @@ public class NoteViewModelTest {
         when(noteLoaderService.load())
                 .thenThrow(RetrofitError.networkError("url", new IOException()));
 
-        viewModel.initAndResume(view);
+        NoteModel model = viewModel.initAndResume(view);
 
-        verify(view).showMessage(eq(R.string.error_loading_note));
+        verify(view, never()).showMessage(anyInt());
+        assertThat(model.getError().get()).isTrue();
+    }
+
+    @Test
+    public void testReloadAfterError() {
+        when(noteLoaderService.load())
+                .thenThrow(RetrofitError.networkError("url", new IOException()))
+                .thenReturn(new Note(123, "title", "text"));
+
+        NoteModel model = viewModel.initAndResume(view);
+
+        assertThat(model.getError().get()).isTrue();
+
+        viewModel.reloadData();
+
+        assertThat(model.getError().get()).isFalse();
+        assertThat(model.getTitle().get()).isEqualTo("title");
     }
 
     @Test
