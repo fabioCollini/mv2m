@@ -7,7 +7,6 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.7'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1x'
     }
 }
@@ -15,8 +14,6 @@ buildscript {
 apply plugin: 'com.android.application'
 
 apply plugin: 'com.android.databinding'
-
-apply plugin: 'com.neenbedankt.android-apt'
 
 apply plugin: "jacoco"
 
@@ -83,7 +80,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
     compile 'com.hannesdorfmann.parcelableplease:annotation:1.0.1'
-    apt 'com.hannesdorfmann.parcelableplease:processor:1.0.1'
+    compile 'com.hannesdorfmann.parcelableplease:processor:1.0.1'
 
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.annimon:stream:1.0.3'
