@@ -4,11 +4,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Note implements Parcelable {
-    long id;
+    private long id;
 
-    String title;
+    private String title;
 
-    String text;
+    private String text;
 
     Note() {
     }
