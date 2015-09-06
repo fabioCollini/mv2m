@@ -61,6 +61,13 @@ public class NoteModel implements Parcelable {
         return textError;
     }
 
+    public void update(Note note) {
+        this.note = note;
+        title.set(note.getTitle());
+        text.set(note.getText());
+        error.set(false);
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(note, flags);
