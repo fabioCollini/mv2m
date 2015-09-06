@@ -10,7 +10,7 @@ import it.cosenonjaviste.model.Note;
 
 public class NoteModel implements Parcelable {
 
-    private Note note;
+    private long noteId;
 
     private ObservableBoolean error = new ObservableBoolean();
 
@@ -26,19 +26,11 @@ public class NoteModel implements Parcelable {
     }
 
     protected NoteModel(Parcel in) {
-        note = in.readParcelable(Note.class.getClassLoader());
+        noteId = in.readLong();
         title = in.readParcelable(ObservableString.class.getClassLoader());
         text = in.readParcelable(ObservableString.class.getClassLoader());
         titleError = in.readParcelable(ObservableInt.class.getClassLoader());
         textError = in.readParcelable(ObservableInt.class.getClassLoader());
-    }
-
-    public Note getNote() {
-        return note;
-    }
-
-    public void setNote(Note note) {
-        this.note = note;
     }
 
     public ObservableBoolean getError() {
@@ -62,7 +54,7 @@ public class NoteModel implements Parcelable {
     }
 
     public void update(Note note) {
-        this.note = note;
+        noteId = note.getId();
         title.set(note.getTitle());
         text.set(note.getText());
         error.set(false);
@@ -70,7 +62,7 @@ public class NoteModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(note, flags);
+        dest.writeLong(noteId);
         dest.writeParcelable(title, flags);
         dest.writeParcelable(text, flags);
         dest.writeParcelable(titleError, flags);
@@ -95,6 +87,10 @@ public class NoteModel implements Parcelable {
     };
 
     public boolean isLoaded() {
-        return note != null || error.get();
+        return noteId != 0 || error.get();
+    }
+
+    public long getNoteId() {
+        return noteId;
     }
 }

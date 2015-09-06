@@ -37,14 +37,6 @@ public class Note implements Parcelable {
         return text;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);

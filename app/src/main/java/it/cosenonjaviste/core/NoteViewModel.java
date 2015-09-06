@@ -74,14 +74,11 @@ public class NoteViewModel extends ViewModel<NoteModel, NoteView> {
         boolean titleValid = checkMandatory(getModel().getTitle(), getModel().getTitleError());
         boolean textValid = checkMandatory(getModel().getText(), getModel().getTextError());
         if (titleValid && textValid) {
-            final Note note = getModel().getNote();
-            note.setTitle(getModel().getTitle().get());
-            note.setText(getModel().getText().get());
             sending.set(true);
             backgroundExecutor.execute(new Runnable() {
                 @Override public void run() {
                     try {
-                        noteSaverService.save(note.getId(), note.getTitle(), note.getText());
+                        noteSaverService.save(getModel().getNoteId(), getModel().getTitle().get(), getModel().getText().get());
                         hideSendProgressAndShoMessage(R.string.note_saved);
                     } catch (RetrofitError e) {
                         hideSendProgressAndShoMessage(R.string.error_saving_note);
