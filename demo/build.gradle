@@ -125,11 +125,11 @@ task jacocoUnitTestReport(type: JacocoReport) {
                        '**/R$*.class',
                        '**/BR.class',
                        '**/BuildConfig.class',
-                       'it/cosenonjaviste/databinding/**/*.class',
+                       'it/cosenonjaviste/demomv2m/databinding/**/*.class',
                        'com/android/**/*.class',
                        'android/**/*.class',
                        '**/*ParcelablePlease.class',
-                       'it/cosenonjaviste/ui/**/*.class',
+                       'it/cosenonjaviste/demomv2m/ui/**/*.class',
             ])
     sourceDirectories = files(coverageSourceDirs)
     executionData = files('build/jacoco/testDebugUnitTest.exec')
@@ -155,7 +155,7 @@ task jacocoTestReport(type: JacocoReport) {
                        '**/R$*.class',
                        '**/BR.class',
                        '**/BuildConfig.class',
-                       'it/cosenonjaviste/databinding/**/*.class',
+                       'it/cosenonjaviste/demomv2m/databinding/**/*.class',
                        'com/android/**/*.class',
                        'android/**/*.class',
                        '**/*ParcelablePlease.class'
