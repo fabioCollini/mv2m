@@ -5,7 +5,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.fabioCollini.mv2m'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 22
     buildToolsVersion "23.0.0"
 
     defaultConfig {
