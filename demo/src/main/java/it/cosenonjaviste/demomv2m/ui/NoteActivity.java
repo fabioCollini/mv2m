@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 
 import it.cosenonjaviste.demomv2m.R;
-import it.cosenonjaviste.demomv2m.core.NoteView;
-import it.cosenonjaviste.demomv2m.core.NoteViewModel;
+import it.cosenonjaviste.demomv2m.core.detail.NoteView;
+import it.cosenonjaviste.demomv2m.core.detail.NoteViewModel;
 import it.cosenonjaviste.demomv2m.databinding.NoteDetailBinding;
 import it.cosenonjaviste.mv2m.ViewModelActivity;
 

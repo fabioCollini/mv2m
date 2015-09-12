@@ -1,4 +1,4 @@
-package it.cosenonjaviste.demomv2m.core;
+package it.cosenonjaviste.demomv2m.core.detail;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.concurrent.Executor;
 
 import it.cosenonjaviste.demomv2m.R;
+import it.cosenonjaviste.demomv2m.core.TestExecutor;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 import it.cosenonjaviste.demomv2m.model.NoteSaverService;
@@ -35,11 +36,7 @@ public class NoteViewModelTest {
 
     @Mock NoteSaverService noteSaverService;
 
-    @Spy Executor executor = new Executor() {
-        @Override public void execute(Runnable command) {
-            command.run();
-        }
-    };
+    @Spy Executor executor = new TestExecutor();
 
     @InjectMocks NoteViewModel viewModel;
 

@@ -1,7 +1,8 @@
-package it.cosenonjaviste.demomv2m.core;
+package it.cosenonjaviste.demomv2m.core.detail;
 
 import org.junit.Test;
 
+import it.cosenonjaviste.demomv2m.core.ParcelableTester;
 import it.cosenonjaviste.demomv2m.model.Note;
 
 public class NoteModelTest {

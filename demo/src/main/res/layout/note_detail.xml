@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="it.cosenonjaviste.demomv2m.core.NoteViewModel"/>
+            type="it.cosenonjaviste.demomv2m.core.detail.NoteViewModel"/>
     </data>
 
     <FrameLayout

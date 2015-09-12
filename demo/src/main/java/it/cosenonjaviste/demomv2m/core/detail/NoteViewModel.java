@@ -1,4 +1,4 @@
-package it.cosenonjaviste.demomv2m.core;
+package it.cosenonjaviste.demomv2m.core.detail;
 
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableInt;
