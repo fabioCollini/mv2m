@@ -5,16 +5,15 @@ import android.support.test.rule.ActivityTestRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.io.IOException;
-import java.util.concurrent.Executor;
 
 import it.cosenonjaviste.demomv2m.R;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 import it.cosenonjaviste.demomv2m.model.NoteSaverService;
 import it.cosenonjaviste.demomv2m.ui.ObjectFactory;
+import it.cosenonjaviste.demomv2m.ui.TestObjectFactory;
 import retrofit.RetrofitError;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -37,16 +36,9 @@ public class NoteActivityTest {
 
     @Before
     public void setUp() throws Exception {
-        noteLoaderService = Mockito.mock(NoteLoaderService.class);
-        noteSaverService = Mockito.mock(NoteSaverService.class);
-
-        ObjectFactory.setNoteLoaderService(noteLoaderService);
-        ObjectFactory.setNoteSaverService(noteSaverService);
-        ObjectFactory.setBackgroundExecutor(new Executor() {
-            @Override public void execute(Runnable command) {
-                command.run();
-            }
-        });
+        ObjectFactory.setSingleton(new TestObjectFactory());
+        noteLoaderService = ObjectFactory.singleton().noteLoaderService();
+        noteSaverService = ObjectFactory.singleton().noteSaverService();
 
         when(noteLoaderService.load()).thenReturn(new Note(123, "title", "text"));
     }

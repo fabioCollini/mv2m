@@ -17,10 +17,10 @@ public class NoteActivity extends ViewModelActivity<NoteViewModel> implements No
 
     @Override protected NoteViewModel createViewModel() {
         return new NoteViewModel(
-                ObjectFactory.backgroundExecutor(),
-                ObjectFactory.uiExecutor(),
-                ObjectFactory.noteLoaderService(),
-                ObjectFactory.noteSaverService());
+                ObjectFactory.singleton().backgroundExecutor(),
+                ObjectFactory.singleton().uiExecutor(),
+                ObjectFactory.singleton().noteLoaderService(),
+                ObjectFactory.singleton().noteSaverService());
     }
 
     @Override protected void onCreate(Bundle state) {

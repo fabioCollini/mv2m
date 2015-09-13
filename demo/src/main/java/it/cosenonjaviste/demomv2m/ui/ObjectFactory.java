@@ -15,22 +15,36 @@ import retrofit.RestAdapter;
 
 public class ObjectFactory {
 
-    private static NoteLoaderService noteLoaderService;
+    protected NoteLoaderService noteLoaderService;
 
-    private static NoteSaverService noteSaverService;
+    protected NoteSaverService noteSaverService;
 
-    private static Executor backgroundExecutor;
+    protected Executor backgroundExecutor;
 
-    private static Executor uiExecutor;
+    protected Executor uiExecutor;
 
-    @NonNull public static NoteSaverService noteSaverService() {
+    private static ObjectFactory singleton;
+
+    public static ObjectFactory singleton() {
+        if (singleton == null) {
+            singleton = new ObjectFactory();
+        }
+        return singleton;
+    }
+
+    @VisibleForTesting
+    public static void setSingleton(ObjectFactory singleton) {
+        ObjectFactory.singleton = singleton;
+    }
+
+    @NonNull public NoteSaverService noteSaverService() {
         if (noteSaverService == null) {
             noteSaverService = createService(NoteSaverService.class);
         }
         return noteSaverService;
     }
 
-    @NonNull public static NoteLoaderService noteLoaderService() {
+    @NonNull public NoteLoaderService noteLoaderService() {
         if (noteLoaderService == null) {
             noteLoaderService = createService(NoteLoaderService.class);
         }
@@ -47,14 +61,14 @@ public class ObjectFactory {
         return restAdapter.create(serviceClass);
     }
 
-    @NonNull public static Executor backgroundExecutor() {
+    @NonNull public Executor backgroundExecutor() {
         if (backgroundExecutor == null) {
             backgroundExecutor = Executors.newCachedThreadPool();
         }
         return backgroundExecutor;
     }
 
-    @NonNull public static Executor uiExecutor() {
+    @NonNull public Executor uiExecutor() {
         if (uiExecutor == null) {
             uiExecutor = new Executor() {
                 @Override public void execute(Runnable command) {
@@ -63,20 +77,5 @@ public class ObjectFactory {
             };
         }
         return uiExecutor;
-    }
-
-    @VisibleForTesting
-    public static void setNoteLoaderService(NoteLoaderService noteLoaderService) {
-        ObjectFactory.noteLoaderService = noteLoaderService;
-    }
-
-    @VisibleForTesting
-    public static void setNoteSaverService(NoteSaverService noteSaverService) {
-        ObjectFactory.noteSaverService = noteSaverService;
-    }
-
-    @VisibleForTesting
-    public static void setBackgroundExecutor(Executor backgroundExecutor) {
-        ObjectFactory.backgroundExecutor = backgroundExecutor;
     }
 }
