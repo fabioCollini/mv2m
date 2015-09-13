@@ -1,4 +1,4 @@
-package it.cosenonjaviste.demomv2m.ui;
+package it.cosenonjaviste.demomv2m.ui.detail;
 
 import android.support.test.rule.ActivityTestRule;
 
@@ -14,7 +14,7 @@ import it.cosenonjaviste.demomv2m.R;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 import it.cosenonjaviste.demomv2m.model.NoteSaverService;
-import it.cosenonjaviste.demomv2m.ui.detail.NoteActivity;
+import it.cosenonjaviste.demomv2m.ui.ObjectFactory;
 import retrofit.RetrofitError;
 
 import static android.support.test.espresso.Espresso.onView;
