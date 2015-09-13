@@ -1,4 +1,4 @@
-package it.cosenonjaviste.demomv2m.ui.utils;
+package it.cosenonjaviste.demomv2m.ui.bind;
 
 import android.text.Editable;
 import android.text.TextWatcher;

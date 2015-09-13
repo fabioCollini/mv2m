@@ -1,4 +1,4 @@
-package it.cosenonjaviste.demomv2m.ui;
+package it.cosenonjaviste.demomv2m.ui.detail;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import it.cosenonjaviste.demomv2m.R;
 import it.cosenonjaviste.demomv2m.core.detail.NoteView;
 import it.cosenonjaviste.demomv2m.core.detail.NoteViewModel;
 import it.cosenonjaviste.demomv2m.databinding.NoteDetailBinding;
+import it.cosenonjaviste.demomv2m.ui.ObjectFactory;
 import it.cosenonjaviste.mv2m.ViewModelActivity;
 
 public class NoteActivity extends ViewModelActivity<NoteViewModel> implements NoteView {

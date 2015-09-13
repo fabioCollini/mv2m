@@ -7,7 +7,6 @@ import android.widget.EditText;
 
 import it.cosenonjaviste.demomv2m.R;
 import it.cosenonjaviste.demomv2m.core.utils.ObservableString;
-import it.cosenonjaviste.demomv2m.ui.utils.TextWatcherAdapter;
 
 public class DataBindingConverters {
 

@@ -14,6 +14,7 @@ import it.cosenonjaviste.demomv2m.R;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 import it.cosenonjaviste.demomv2m.model.NoteSaverService;
+import it.cosenonjaviste.demomv2m.ui.detail.NoteActivity;
 import retrofit.RetrofitError;
 
 import static android.support.test.espresso.Espresso.onView;
