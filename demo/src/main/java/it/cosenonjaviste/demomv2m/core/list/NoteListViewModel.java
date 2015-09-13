@@ -26,14 +26,27 @@ public class NoteListViewModel extends ViewModel<NoteListModel, NoteListView> {
     }
 
     @Override public void resume() {
+        reloadData();
+    }
+
+    public void reloadData() {
+        getModel().getLoading().set(true);
         backgroundExecutor.execute(new Runnable() {
             @Override public void run() {
-                final List<Note> notes = service.loadItems();
-                uiExecutor.execute(new Runnable() {
-                    @Override public void run() {
-                        getModel().getItems().addAll(notes);
-                    }
-                });
+                try {
+                    final List<Note> notes = service.loadItems();
+                    uiExecutor.execute(new Runnable() {
+                        @Override public void run() {
+                            NoteListViewModel.this.getModel().loadedData(notes);
+                        }
+                    });
+                } catch (Exception e) {
+                    uiExecutor.execute(new Runnable() {
+                        @Override public void run() {
+                            getModel().getError().set(true);
+                        }
+                    });
+                }
             }
         });
     }
