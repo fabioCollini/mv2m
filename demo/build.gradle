@@ -51,7 +51,7 @@ android {
         buildConfigField "String", "ACCESS_TOKEN_SECRET", project.oauth_accessTokenSecret
         buildConfigField "String", "MAILJET_USERNAME", project.mailjet_userName
         buildConfigField "String", "MAILJET_PASSWORD", project.mailJetPassword
-        testInstrumentationRunner "it.cosenonjaviste.demomv2m.utils.AndroidJacocoTestRunner"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
@@ -95,14 +95,11 @@ dependencies {
     androidTestCompile('com.google.dexmaker:dexmaker-mockito:1.2') {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
     }
-    androidTestCompile 'com.android.support.test:runner:0.3'
-    androidTestCompile 'com.android.support.test:rules:0.3'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2') {
-        exclude group: 'javax.inject', module: 'javax.inject'
-        exclude group: 'com.squareup', module: 'javawriter'
-    }
-    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2'
-    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2'
+    androidTestCompile 'com.android.support.test:runner:0.4'
+    androidTestCompile 'com.android.support.test:rules:0.4'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.1'
 }
 
 // Define coverage source.
