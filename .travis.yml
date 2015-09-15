@@ -27,12 +27,12 @@ before_script:
     - export "JAVA_OPTS=-Xmx1024m"
     - export "JAVA7_HOME=/usr/lib/jvm/java-7-oracle"
     - export "JAVA8_HOME=/usr/lib/jvm/java-8-oracle"
-#    - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI --skin WVGA800
-#    - ./gradlew :demo:assembleDebug
-#    - emulator -avd test -no-skin -no-audio -no-window &
-#    - android-wait-for-emulator
-#    - adb shell input keyevent 82 &
+    - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI --skin WVGA800
+    - ./gradlew :demo:assembleDebug
+    - emulator -avd test -no-skin -no-audio -no-window &
+    - android-wait-for-emulator
+    - adb shell input keyevent 82 &
 
 script:
-    - ./gradlew :demo:test :demo:jacocoUnitTestReport :demo:coveralls --stacktrace
-#    - ./gradlew :demo:test :demo:connectedAndroidTest :demo:jacocoTestReport :demo:jacocoUnitTestReport :demo:coveralls --stacktrace
+#    - ./gradlew :demo:test :demo:jacocoUnitTestReport :demo:coveralls --stacktrace
+    - ./gradlew :demo:test :demo:connectedAndroidTest :demo:jacocoTestReport :demo:jacocoUnitTestReport :demo:coveralls --stacktrace
