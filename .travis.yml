@@ -19,6 +19,7 @@ android:
     - platform-tools
     - build-tools-23.0.0
     - android-22
+    - android-23
     - extra-google-m2repository
     - extra-android-m2repository
     - sys-img-armeabi-v7a-android-19
