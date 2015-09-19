@@ -13,7 +13,9 @@ public class ActivityNavigator implements Navigator {
     private Activity activity;
 
     public static void startActivity(Activity activity, Class<?> cls, Parcelable noteModel) {
-        activity.startActivity(new Intent(activity, cls).putExtra(ViewModelManager.MODEL, noteModel));
+        if (activity != null) {
+            activity.startActivity(new Intent(activity, cls).putExtra(ViewModelManager.MODEL, noteModel));
+        }
     }
 
     @Override public void openDetail(NoteModel model) {

@@ -14,7 +14,7 @@ import it.cosenonjaviste.demomv2m.model.NoteSaverService;
 import it.cosenonjaviste.mv2m.ViewModel;
 import retrofit.RetrofitError;
 
-public class NoteViewModel extends ViewModel<NoteModel, NoteView> {
+public class NoteViewModel extends ViewModel<NoteModel> {
 
     private final Executor backgroundExecutor;
     private final Executor uiExecutor;
@@ -34,6 +34,7 @@ public class NoteViewModel extends ViewModel<NoteModel, NoteView> {
         this.noteLoaderService = noteLoaderService;
         this.noteSaverService = noteSaverService;
         this.messageManager = messageManager;
+        registerActivityAware(messageManager);
     }
 
     @Override public void resume() {

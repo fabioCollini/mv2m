@@ -30,8 +30,6 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class NoteViewModelTest {
 
-    @Mock NoteView view;
-
     @Mock NoteLoaderService noteLoaderService;
 
     @Mock NoteSaverService noteSaverService;
@@ -49,7 +47,7 @@ public class NoteViewModelTest {
 
     @Test
     public void testLoadData() {
-        NoteModel model = viewModel.initAndResume(new NoteModel("123"), view);
+        NoteModel model = viewModel.initAndResume(new NoteModel("123"));
 
         assertThat(model.getTitle().get()).isEqualTo("title");
         assertThat(model.getText().get()).isEqualTo("text");
@@ -60,9 +58,9 @@ public class NoteViewModelTest {
         when(noteLoaderService.load(anyString()))
                 .thenThrow(RetrofitError.networkError("url", new IOException()));
 
-        NoteModel model = viewModel.initAndResume(new NoteModel("123"), view);
+        NoteModel model = viewModel.initAndResume(new NoteModel("123"));
 
-        verify(view, never()).showMessage(anyInt());
+        verify(messageManager, never()).showMessage(anyInt());
         assertThat(model.getError().get()).isTrue();
     }
 
@@ -72,7 +70,7 @@ public class NoteViewModelTest {
                 .thenThrow(RetrofitError.networkError("url", new IOException()))
                 .thenReturn(new Note("123", "title", "text"));
 
-        NoteModel model = viewModel.initAndResume(new NoteModel("123"), view);
+        NoteModel model = viewModel.initAndResume(new NoteModel("123"));
 
         assertThat(model.getError().get()).isTrue();
 
@@ -84,7 +82,7 @@ public class NoteViewModelTest {
 
     @Test
     public void testValidation() {
-        NoteModel model = viewModel.initAndResume(new NoteModel("123"), view);
+        NoteModel model = viewModel.initAndResume(new NoteModel("123"));
 
         model.getTitle().set("");
         model.getText().set("");
@@ -95,12 +93,12 @@ public class NoteViewModelTest {
         assertThat(model.getTextError().get()).isEqualTo(R.string.mandatory_field);
 
         verify(noteSaverService, never()).save(anyString(), anyString(), anyString());
-        verify(view, never()).showMessage(anyInt());
+        verify(messageManager, never()).showMessage(anyInt());
     }
 
     @Test
     public void testSaveData() {
-        NoteModel model = viewModel.initAndResume(new NoteModel("123"), view);
+        NoteModel model = viewModel.initAndResume(new NoteModel("123"));
 
         model.getTitle().set("newTitle");
         model.getText().set("newText");
@@ -117,7 +115,7 @@ public class NoteViewModelTest {
         when(noteSaverService.save(eq("123"), eq("newTitle"), eq("newText")))
                 .thenThrow(RetrofitError.networkError("url", new IOException()));
 
-        NoteModel model = viewModel.initAndResume(new NoteModel("123"), view);
+        NoteModel model = viewModel.initAndResume(new NoteModel("123"));
 
         model.getTitle().set("newTitle");
         model.getText().set("newText");

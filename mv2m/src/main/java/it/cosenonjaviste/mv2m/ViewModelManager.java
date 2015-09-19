@@ -8,29 +8,29 @@ import android.support.v7.app.AppCompatActivity;
 public class ViewModelManager {
     public static final String MODEL = "model";
 
-    public static <VM extends ViewModel<?, ?>> VM getOrCreate(AppCompatActivity activity, Bundle state, String fragmentTag, ViewModelManager.Factory<VM> factory) {
+    public static <VM extends ViewModel<?>> VM getOrCreate(AppCompatActivity activity, Bundle state, String fragmentTag, ViewModelManager.Factory<VM> factory) {
         VM viewModel = ViewModelRetainedFragment.getOrCreate(activity, state, fragmentTag, factory);
         viewModel.attachActivity(activity);
         return viewModel;
     }
 
-    public static void resume(Object view, ViewModel<?, ?> viewModel) {
-        ((ViewModel) viewModel).resume(view);
+    public static void resume(Object view, ViewModel<?> viewModel) {
+        viewModel.resume();
     }
 
-    public static void pause(ViewModel<?, ?> viewModel) {
+    public static void pause(ViewModel<?> viewModel) {
         viewModel.pause();
     }
 
-    public static void destroy(ViewModel<?, ?> viewModel) {
+    public static void destroy(ViewModel<?> viewModel) {
         viewModel.detachView();
     }
 
-    public static void saveState(final Bundle outState, ViewModel<?, ?> viewModel) {
+    public static void saveState(final Bundle outState, ViewModel<?> viewModel) {
         outState.putParcelable(MODEL, viewModel.getModel());
     }
 
-    @NonNull public static <VM extends ViewModel<?, ?>> VM init(VM viewModel, Bundle state, Bundle args, Factory<VM> factory) {
+    @NonNull public static <VM extends ViewModel<?>> VM init(VM viewModel, Bundle state, Bundle args, Factory<VM> factory) {
         if (viewModel == null) {
             viewModel = factory.create();
         }
@@ -45,7 +45,7 @@ public class ViewModelManager {
         return viewModel;
     }
 
-    public interface Factory<VM extends ViewModel<?, ?>> {
+    public interface Factory<VM extends ViewModel<?>> {
         VM create();
     }
 }

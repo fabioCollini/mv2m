@@ -30,8 +30,6 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class NoteListViewModelTest {
 
-    @Mock NoteListView view;
-
     @Mock NoteLoaderService service;
 
     @Mock Navigator navigator;
@@ -49,7 +47,7 @@ public class NoteListViewModelTest {
         when(service.loadItems())
                 .thenReturn(new NoteListResponse(new Note("1", "a"), new Note("2", "b")));
 
-        NoteListModel model = viewModel.initAndResume(view);
+        NoteListModel model = viewModel.initAndResume();
 
         assertThat(model).isNotNull();
         assertThat(model.getItems()).isNotEmpty().hasSize(2);
@@ -59,7 +57,7 @@ public class NoteListViewModelTest {
     public void testError() {
         when(service.loadItems()).thenThrow(new RuntimeException());
 
-        NoteListModel model = viewModel.initAndResume(view);
+        NoteListModel model = viewModel.initAndResume();
 
         assertThat(model.getError().get()).isTrue();
     }
@@ -70,7 +68,7 @@ public class NoteListViewModelTest {
                 .thenThrow(new RuntimeException())
                 .thenReturn(new NoteListResponse(new Note("1", "a"), new Note("2", "b")));
 
-        NoteListModel model = viewModel.initAndResume(view);
+        NoteListModel model = viewModel.initAndResume();
 
         assertThat(model.getError().get()).isTrue();
 
@@ -85,7 +83,7 @@ public class NoteListViewModelTest {
         when(service.loadItems()).thenReturn(new NoteListResponse(new Note("1", "a"), new Note("2", "b")));
         viewModel.getLoading().addOnPropertyChangedCallback(callback);
 
-        viewModel.initAndResume(view);
+        viewModel.initAndResume();
 
         verify(callback, times(2)).onPropertyChanged(eq(viewModel.getLoading()), anyInt());
     }
@@ -95,7 +93,7 @@ public class NoteListViewModelTest {
         Note note = new Note("1", "a");
         when(service.loadItems()).thenReturn(new NoteListResponse(note, new Note("2", "b")));
 
-        viewModel.initAndResume(view);
+        viewModel.initAndResume();
         viewModel.openDetail(note);
 
         verify(navigator).openDetail(captor.capture());

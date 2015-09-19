@@ -9,18 +9,15 @@ import android.view.ViewGroup;
 
 import it.cosenonjaviste.demomv2m.BR;
 import it.cosenonjaviste.demomv2m.R;
-import it.cosenonjaviste.demomv2m.core.detail.NoteModel;
-import it.cosenonjaviste.demomv2m.core.list.NoteListView;
 import it.cosenonjaviste.demomv2m.core.list.NoteListViewModel;
 import it.cosenonjaviste.demomv2m.databinding.NoteListBinding;
 import it.cosenonjaviste.demomv2m.databinding.NoteListItemBinding;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.ui.ActivityNavigator;
 import it.cosenonjaviste.demomv2m.ui.ObjectFactory;
-import it.cosenonjaviste.demomv2m.ui.detail.NoteActivity;
 import it.cosenonjaviste.mv2m.ViewModelActivity;
 
-public class NoteListActivity extends ViewModelActivity<NoteListViewModel> implements NoteListView {
+public class NoteListActivity extends ViewModelActivity<NoteListViewModel> {
     @Override protected NoteListViewModel createViewModel() {
         return new NoteListViewModel(
                 ObjectFactory.singleton().noteLoaderService(),
@@ -45,9 +42,5 @@ public class NoteListActivity extends ViewModelActivity<NoteListViewModel> imple
                 return new BindableViewHolder<ViewDataBinding, Note>(binding, BR.item);
             }
         });
-    }
-
-    @Override public void openDetail(NoteModel noteModel) {
-        ActivityNavigator.startActivity(this, NoteActivity.class, noteModel);
     }
 }

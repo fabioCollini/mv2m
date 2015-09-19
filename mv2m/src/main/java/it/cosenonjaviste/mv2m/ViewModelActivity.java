@@ -3,7 +3,7 @@ package it.cosenonjaviste.mv2m;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-public abstract class ViewModelActivity<VM extends ViewModel<?, ?>> extends AppCompatActivity {
+public abstract class ViewModelActivity<VM extends ViewModel<?>> extends AppCompatActivity {
 
     protected VM viewModel;
 

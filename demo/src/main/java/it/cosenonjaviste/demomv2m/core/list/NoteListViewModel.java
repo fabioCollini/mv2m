@@ -11,7 +11,7 @@ import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 import it.cosenonjaviste.mv2m.ViewModel;
 
-public class NoteListViewModel extends ViewModel<NoteListModel, NoteListView> {
+public class NoteListViewModel extends ViewModel<NoteListModel> {
 
     private NoteLoaderService service;
 
@@ -28,6 +28,7 @@ public class NoteListViewModel extends ViewModel<NoteListModel, NoteListView> {
         this.backgroundExecutor = backgroundExecutor;
         this.uiExecutor = uiExecutor;
         this.navigator = navigator;
+        registerActivityAware(navigator);
     }
 
     @Override public NoteListModel createDefaultModel() {

@@ -6,9 +6,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewModel<M extends Parcelable, V> {
-
-    private V view;
+public class ViewModel<M extends Parcelable> {
 
     private M model;
 
@@ -16,11 +14,6 @@ public class ViewModel<M extends Parcelable, V> {
 
     protected void registerActivityAware(ActivityAware activityAware) {
         activityAwares.add(activityAware);
-    }
-
-    public final void resume(V view) {
-        this.view = view;
-        resume();
     }
 
     public void pause() {
@@ -33,7 +26,6 @@ public class ViewModel<M extends Parcelable, V> {
     }
 
     public void detachView() {
-        this.view = null;
         for (ActivityAware activityAware : activityAwares) {
             activityAware.setActivity(null);
         }
@@ -53,18 +45,14 @@ public class ViewModel<M extends Parcelable, V> {
         }
     }
 
-    public M initAndResume(V view) {
-        return initAndResume(null, view);
+    public M initAndResume() {
+        return initAndResume(null);
     }
 
-    public M initAndResume(final M newModel, V view) {
+    public M initAndResume(M newModel) {
         initModel(newModel);
-        resume(view);
+        resume();
         return getModel();
-    }
-
-    public final V getView() {
-        return view;
     }
 
     public M getModel() {

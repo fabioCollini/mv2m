@@ -7,7 +7,7 @@ import it.cosenonjaviste.mv2m.ViewModel;
 import rx.Observable;
 import rx.functions.Action1;
 
-public abstract class RxViewModel<M extends Parcelable, V> extends ViewModel<M, V> {
+public abstract class RxViewModel<M extends Parcelable, V> extends ViewModel<M> {
 
     private RxHolder rxHolder;
 

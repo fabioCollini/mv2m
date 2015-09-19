@@ -3,7 +3,7 @@ package it.cosenonjaviste.mv2m;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-public abstract class ViewModelFragment<VM extends ViewModel<?, ?>> extends Fragment {
+public abstract class ViewModelFragment<VM extends ViewModel<?>> extends Fragment {
 
     protected VM viewModel;
 
