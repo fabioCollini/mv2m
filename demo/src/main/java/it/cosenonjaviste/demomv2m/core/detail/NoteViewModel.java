@@ -32,10 +32,6 @@ public class NoteViewModel extends ViewModel<NoteModel, NoteView> {
         this.noteSaverService = noteSaverService;
     }
 
-    @Override public NoteModel createDefaultModel() {
-        return new NoteModel();
-    }
-
     @Override public void resume() {
         if (!loading.get() && !getModel().isLoaded()) {
             reloadData();
@@ -53,7 +49,7 @@ public class NoteViewModel extends ViewModel<NoteModel, NoteView> {
 
     private void executeServerCall() {
         try {
-            final Note note = noteLoaderService.load();
+            final Note note = noteLoaderService.load(getModel().getNoteId());
             uiExecutor.execute(new Runnable() {
                 @Override public void run() {
                     getModel().update(note);

@@ -22,7 +22,8 @@ public class NoteModel implements Parcelable {
 
     private ObservableInt textError = new ObservableInt();
 
-    public NoteModel() {
+    public NoteModel(String noteId) {
+        this.noteId = noteId;
     }
 
     protected NoteModel(Parcel in) {
@@ -54,7 +55,6 @@ public class NoteModel implements Parcelable {
     }
 
     public void update(Note note) {
-        noteId = note.getObjectId();
         title.set(note.getTitle());
         text.set(note.getText());
         error.set(false);
@@ -87,7 +87,7 @@ public class NoteModel implements Parcelable {
     };
 
     public boolean isLoaded() {
-        return noteId != null || error.get();
+        return title.get() != null || error.get();
     }
 
     public String getNoteId() {

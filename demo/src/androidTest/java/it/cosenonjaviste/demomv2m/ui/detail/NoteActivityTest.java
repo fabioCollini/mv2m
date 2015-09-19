@@ -1,5 +1,6 @@
 package it.cosenonjaviste.demomv2m.ui.detail;
 
+import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.Before;
@@ -9,11 +10,13 @@ import org.junit.Test;
 import java.io.IOException;
 
 import it.cosenonjaviste.demomv2m.R;
+import it.cosenonjaviste.demomv2m.core.detail.NoteModel;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 import it.cosenonjaviste.demomv2m.model.NoteSaverService;
 import it.cosenonjaviste.demomv2m.ui.ObjectFactory;
 import it.cosenonjaviste.demomv2m.ui.TestObjectFactory;
+import it.cosenonjaviste.mv2m.ViewModelManager;
 import retrofit.RetrofitError;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -24,6 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,12 +44,12 @@ public class NoteActivityTest {
         noteLoaderService = ObjectFactory.singleton().noteLoaderService();
         noteSaverService = ObjectFactory.singleton().noteSaverService();
 
-        when(noteLoaderService.load()).thenReturn(new Note("123", "title", "text"));
+        when(noteLoaderService.load(anyString())).thenReturn(new Note("123", "title", "text"));
     }
 
     @Test
     public void testLoading() {
-        rule.launchActivity(null);
+        rule.launchActivity(new Intent().putExtra(ViewModelManager.MODEL, new NoteModel("123")));
 
         compileFormAndSave("newTitle", "newText");
 
@@ -54,11 +58,11 @@ public class NoteActivityTest {
 
     @Test
     public void testReloadAfterError() {
-        when(noteLoaderService.load())
+        when(noteLoaderService.load(anyString()))
                 .thenThrow(RetrofitError.networkError("url", new IOException()))
                 .thenReturn(new Note("123", "aaa", "bbb"));
 
-        rule.launchActivity(null);
+        rule.launchActivity(new Intent().putExtra(ViewModelManager.MODEL, new NoteModel("123")));
 
         onView(withText(R.string.retry)).perform(click());
 
@@ -70,7 +74,7 @@ public class NoteActivityTest {
 
     @Test
     public void testTitleValidation() {
-        rule.launchActivity(null);
+        rule.launchActivity(new Intent().putExtra(ViewModelManager.MODEL, new NoteModel("123")));
 
         compileFormAndSave("", "newText");
 
@@ -79,7 +83,7 @@ public class NoteActivityTest {
 
     @Test
     public void testTextValidation() {
-        rule.launchActivity(null);
+        rule.launchActivity(new Intent().putExtra(ViewModelManager.MODEL, new NoteModel("123")));
 
         compileFormAndSave("newTitle", "");
 

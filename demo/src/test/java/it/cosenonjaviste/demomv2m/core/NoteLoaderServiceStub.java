@@ -1,7 +1,5 @@
 package it.cosenonjaviste.demomv2m.core;
 
-import java.util.List;
-
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteListResponse;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
@@ -13,7 +11,7 @@ public class NoteLoaderServiceStub implements NoteLoaderService {
         this.note = note;
     }
 
-    @Override public Note load() {
+    @Override public Note load(String objectId) {
         return note;
     }
 
