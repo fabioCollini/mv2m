@@ -6,6 +6,7 @@
     <string name="app_name">Demo MVVM</string>
     <string name="mandatory_field">Campo obbligatorio</string>
     <string name="note_saved">Nota salvata</string>
+    <string name="error_loading_list">Errore caricamento note</string>
     <string name="error_loading_note">Errore caricamento nota</string>
     <string name="error_saving_note">Errore salvataggio nota</string>
     <string name="save">Save</string>

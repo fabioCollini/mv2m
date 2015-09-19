@@ -12,7 +12,7 @@ public class NoteListModelTest {
     @Test
     public void testParcelable() {
         NoteListModel model = new NoteListModel();
-        model.loadedData(Arrays.asList(new Note(1, "a")));
+        model.loadedData(Arrays.asList(new Note("1", "a")));
         ParcelableTester.check(model, NoteListModel.CREATOR);
     }
 }

@@ -42,7 +42,7 @@ public class NoteViewModelTest {
 
     @Before
     public void setUp() {
-        when(noteLoaderService.load()).thenReturn(new Note(123, "title", "text"));
+        when(noteLoaderService.load()).thenReturn(new Note("123", "title", "text"));
     }
 
     @Test
@@ -68,7 +68,7 @@ public class NoteViewModelTest {
     public void testReloadAfterError() {
         when(noteLoaderService.load())
                 .thenThrow(RetrofitError.networkError("url", new IOException()))
-                .thenReturn(new Note(123, "title", "text"));
+                .thenReturn(new Note("123", "title", "text"));
 
         NoteModel model = viewModel.initAndResume(view);
 
@@ -92,7 +92,7 @@ public class NoteViewModelTest {
         assertThat(model.getTitleError().get()).isEqualTo(R.string.mandatory_field);
         assertThat(model.getTextError().get()).isEqualTo(R.string.mandatory_field);
 
-        verify(noteSaverService, never()).save(anyLong(), anyString(), anyString());
+        verify(noteSaverService, never()).save(anyString(), anyString(), anyString());
         verify(view, never()).showMessage(anyInt());
     }
 
@@ -105,14 +105,14 @@ public class NoteViewModelTest {
 
         viewModel.save();
 
-        verify(noteSaverService).save(eq(123L), eq("newTitle"), eq("newText"));
+        verify(noteSaverService).save(eq("123"), eq("newTitle"), eq("newText"));
 
         verify(view).showMessage(eq(R.string.note_saved));
     }
 
     @Test
     public void testErrorSavingData() {
-        when(noteSaverService.save(eq(123L), eq("newTitle"), eq("newText")))
+        when(noteSaverService.save(eq("123"), eq("newTitle"), eq("newText")))
                 .thenThrow(RetrofitError.networkError("url", new IOException()));
 
         NoteModel model = viewModel.initAndResume(view);

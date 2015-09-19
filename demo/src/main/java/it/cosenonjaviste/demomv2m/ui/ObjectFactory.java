@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 import it.cosenonjaviste.demomv2m.BuildConfig;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 import it.cosenonjaviste.demomv2m.model.NoteSaverService;
+import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 
 public class ObjectFactory {
@@ -52,8 +53,18 @@ public class ObjectFactory {
     }
 
     private static <T> T createService(Class<T> serviceClass) {
+        //    curl -X GET \
+//            -H "Content-Type: application/json" \
+//    https://api.parse.com/1/classes/Note
+
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("https://raw.githubusercontent.com/fabioCollini/DemoMVVM/master/")
+                .setRequestInterceptor(new RequestInterceptor() {
+                    @Override public void intercept(RequestFacade request) {
+                        request.addHeader("X-Parse-Application-Id", "kRXsTF3e1IijVicMEUNDce2rmpafKfigrwzKRBwF");
+                        request.addHeader("X-Parse-REST-API-Key", "6hcfLUihLi68T0SqD2KeIBfmv6ILs8VeEegxS02X");
+                    }
+                })
+                .setEndpoint("https://api.parse.com/1/classes/")
                 .build();
         if (BuildConfig.DEBUG) {
             restAdapter.setLogLevel(RestAdapter.LogLevel.FULL);

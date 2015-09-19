@@ -5,11 +5,11 @@ import retrofit.client.Response;
 
 public class NoteSaverServiceSpy implements NoteSaverService {
 
-    public long id;
+    public String id;
     public String title;
     public String text;
 
-    @Override public Response save(long id, String title, String text) {
+    @Override public Response save(String id, String title, String text) {
         this.id = id;
         this.title = title;
         this.text = text;

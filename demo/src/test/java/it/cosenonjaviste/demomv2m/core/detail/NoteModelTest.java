@@ -9,7 +9,7 @@ public class NoteModelTest {
     @Test
     public void testParcelable() {
         NoteModel model = new NoteModel();
-        model.update(new Note(123L, "a", "b"));
+        model.update(new Note("aaa", "a", "b"));
         ParcelableTester.check(model, NoteModel.CREATOR);
     }
 }

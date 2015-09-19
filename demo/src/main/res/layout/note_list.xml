@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="it.cosenonjaviste.demomv2m.core.list.NoteListViewModel"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/progress_root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:visibleOrGone="@{viewModel.loading}">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="false"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/loading"
+                android:textColor="#666"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:visibleOrGone="@{!viewModel.model.error &amp;&amp; !viewModel.loading}"/>
+
+        <LinearLayout
+            android:id="@+id/error_root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:visibleOrGone="@{viewModel.model.error &amp;&amp; !viewModel.loading}"
+            tools:visibility="gone">
+
+            <TextView
+                android:id="@+id/error_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="10dp"
+                android:drawableTop="@drawable/ic_launcher"
+                android:text="@string/error_loading_list"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <Button
+                android:id="@+id/error_retry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="@string/retry"
+                app:onClick="@{viewModel.reloadData}"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

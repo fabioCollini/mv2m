@@ -3,6 +3,7 @@ package it.cosenonjaviste.demomv2m.core;
 import java.util.List;
 
 import it.cosenonjaviste.demomv2m.model.Note;
+import it.cosenonjaviste.demomv2m.model.NoteListResponse;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 
 public class NoteLoaderServiceStub implements NoteLoaderService {
@@ -16,7 +17,7 @@ public class NoteLoaderServiceStub implements NoteLoaderService {
         return note;
     }
 
-    @Override public List<Note> loadItems() {
+    @Override public NoteListResponse loadItems() {
         return null;
     }
 }

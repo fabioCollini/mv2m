@@ -7,6 +7,6 @@ import it.cosenonjaviste.demomv2m.core.ParcelableTester;
 public class NoteTest {
     @Test
     public void testParcelable() {
-        ParcelableTester.check(new Note(123L, "a", "b"), Note.CREATOR);
+        ParcelableTester.check(new Note("123", "a", "b"), Note.CREATOR);
     }
 }

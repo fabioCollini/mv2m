@@ -40,7 +40,7 @@ public class NoteActivityTest {
         noteLoaderService = ObjectFactory.singleton().noteLoaderService();
         noteSaverService = ObjectFactory.singleton().noteSaverService();
 
-        when(noteLoaderService.load()).thenReturn(new Note(123, "title", "text"));
+        when(noteLoaderService.load()).thenReturn(new Note("123", "title", "text"));
     }
 
     @Test
@@ -49,14 +49,14 @@ public class NoteActivityTest {
 
         compileFormAndSave("newTitle", "newText");
 
-        verify(noteSaverService).save(eq(123L), eq("newTitle"), eq("newText"));
+        verify(noteSaverService).save(eq("123"), eq("newTitle"), eq("newText"));
     }
 
     @Test
     public void testReloadAfterError() {
         when(noteLoaderService.load())
                 .thenThrow(RetrofitError.networkError("url", new IOException()))
-                .thenReturn(new Note(123, "aaa", "bbb"));
+                .thenReturn(new Note("123", "aaa", "bbb"));
 
         rule.launchActivity(null);
 

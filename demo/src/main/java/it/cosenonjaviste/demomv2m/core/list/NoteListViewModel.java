@@ -1,5 +1,7 @@
 package it.cosenonjaviste.demomv2m.core.list;
 
+import android.databinding.ObservableBoolean;
+
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -10,6 +12,8 @@ import it.cosenonjaviste.mv2m.ViewModel;
 public class NoteListViewModel extends ViewModel<NoteListModel, NoteListView> {
 
     private NoteLoaderService service;
+
+    private ObservableBoolean loading = new ObservableBoolean();
 
     private final Executor backgroundExecutor;
 
@@ -26,28 +30,36 @@ public class NoteListViewModel extends ViewModel<NoteListModel, NoteListView> {
     }
 
     @Override public void resume() {
-        reloadData();
+        if (!loading.get() && !getModel().isLoaded()) {
+            reloadData();
+        }
     }
 
     public void reloadData() {
-        getModel().getLoading().set(true);
+        loading.set(true);
         backgroundExecutor.execute(new Runnable() {
             @Override public void run() {
                 try {
-                    final List<Note> notes = service.loadItems();
+                    final List<Note> notes = service.loadItems().getResults();
                     uiExecutor.execute(new Runnable() {
                         @Override public void run() {
-                            NoteListViewModel.this.getModel().loadedData(notes);
+                            loading.set(false);
+                            getModel().loadedData(notes);
                         }
                     });
                 } catch (Exception e) {
                     uiExecutor.execute(new Runnable() {
                         @Override public void run() {
-                            getModel().getError().set(true);
+                            loading.set(false);
+                            getModel().loadedWithError();
                         }
                     });
                 }
             }
         });
+    }
+
+    public ObservableBoolean getLoading() {
+        return loading;
     }
 }

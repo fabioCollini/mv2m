@@ -13,24 +13,24 @@ public class NoteListModel implements Parcelable {
 
     private ObservableArrayList<Note> items = new ObservableArrayList<>();
 
-    private ObservableBoolean loading = new ObservableBoolean();
-
     private ObservableBoolean error = new ObservableBoolean();
+
+    private boolean loaded;
 
     public NoteListModel() {
     }
 
     protected NoteListModel(Parcel in) {
-        loading = in.readParcelable(ObservableBoolean.class.getClassLoader());
         error = in.readParcelable(ObservableBoolean.class.getClassLoader());
         in.readList(items, getClass().getClassLoader());
+        loaded = in.readByte() != 0;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(loading, flags);
         dest.writeParcelable(error, flags);
         dest.writeList(items);
+        dest.writeByte((byte) (loaded ? 1 : 0));
     }
 
     @Override
@@ -54,17 +54,22 @@ public class NoteListModel implements Parcelable {
         return items;
     }
 
-    public ObservableBoolean getLoading() {
-        return loading;
-    }
-
     public ObservableBoolean getError() {
         return error;
     }
 
     public void loadedData(List<Note> notes) {
         items.addAll(notes);
-        loading.set(false);
         error.set(false);
+        loaded = true;
+    }
+
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    public void loadedWithError() {
+        error.set(true);
+        loaded = true;
     }
 }

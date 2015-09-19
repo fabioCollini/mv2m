@@ -9,11 +9,11 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Arrays;
 import java.util.concurrent.Executor;
 
 import it.cosenonjaviste.demomv2m.core.TestExecutor;
 import it.cosenonjaviste.demomv2m.model.Note;
+import it.cosenonjaviste.demomv2m.model.NoteListResponse;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,7 +39,7 @@ public class NoteListViewModelTest {
     @Test
     public void testLoad() {
         when(service.loadItems())
-                .thenReturn(Arrays.asList(new Note(1, "a"), new Note(2, "b")));
+                .thenReturn(new NoteListResponse(new Note("1", "a"), new Note("2", "b")));
 
         NoteListModel model = viewModel.initAndResume(view);
 
@@ -60,7 +60,7 @@ public class NoteListViewModelTest {
     public void testReloadAfterError() {
         when(service.loadItems())
                 .thenThrow(new RuntimeException())
-                .thenReturn(Arrays.asList(new Note(1, "a"), new Note(2, "b")));
+                .thenReturn(new NoteListResponse(new Note("1", "a"), new Note("2", "b")));
 
         NoteListModel model = viewModel.initAndResume(view);
 
@@ -74,12 +74,12 @@ public class NoteListViewModelTest {
 
     @Test
     public void testLoadingIndicator() {
-        when(service.loadItems()).thenReturn(Arrays.asList(new Note(1, "a"), new Note(2, "b")));
+        when(service.loadItems()).thenReturn(new NoteListResponse(new Note("1", "a"), new Note("2", "b")));
         NoteListModel model = new NoteListModel();
-        model.getLoading().addOnPropertyChangedCallback(callback);
+        viewModel.getLoading().addOnPropertyChangedCallback(callback);
 
         viewModel.initAndResume(model, view);
 
-        verify(callback, times(2)).onPropertyChanged(eq(model.getLoading()), anyInt());
+        verify(callback, times(2)).onPropertyChanged(eq(viewModel.getLoading()), anyInt());
     }
 }

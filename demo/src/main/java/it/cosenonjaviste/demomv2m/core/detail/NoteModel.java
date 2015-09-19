@@ -10,7 +10,7 @@ import it.cosenonjaviste.demomv2m.model.Note;
 
 public class NoteModel implements Parcelable {
 
-    private long noteId;
+    private String noteId;
 
     private ObservableBoolean error = new ObservableBoolean();
 
@@ -26,7 +26,7 @@ public class NoteModel implements Parcelable {
     }
 
     protected NoteModel(Parcel in) {
-        noteId = in.readLong();
+        noteId = in.readString();
         title = in.readParcelable(ObservableString.class.getClassLoader());
         text = in.readParcelable(ObservableString.class.getClassLoader());
         titleError = in.readParcelable(ObservableInt.class.getClassLoader());
@@ -54,7 +54,7 @@ public class NoteModel implements Parcelable {
     }
 
     public void update(Note note) {
-        noteId = note.getId();
+        noteId = note.getObjectId();
         title.set(note.getTitle());
         text.set(note.getText());
         error.set(false);
@@ -62,7 +62,7 @@ public class NoteModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(noteId);
+        dest.writeString(noteId);
         dest.writeParcelable(title, flags);
         dest.writeParcelable(text, flags);
         dest.writeParcelable(titleError, flags);
@@ -87,10 +87,10 @@ public class NoteModel implements Parcelable {
     };
 
     public boolean isLoaded() {
-        return noteId != 0 || error.get();
+        return noteId != null || error.get();
     }
 
-    public long getNoteId() {
+    public String getNoteId() {
         return noteId;
     }
 }

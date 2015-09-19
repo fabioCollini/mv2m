@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Note implements Parcelable {
-    private long id;
+    private String objectId;
 
     private String title;
 
@@ -13,25 +13,25 @@ public class Note implements Parcelable {
     Note() {
     }
 
-    public Note(long id, String title) {
-        this.id = id;
+    public Note(String objectId, String title) {
+        this.objectId = objectId;
         this.title = title;
     }
 
-    public Note(long id, String title, String text) {
-        this.id = id;
+    public Note(String objectId, String title, String text) {
+        this.objectId = objectId;
         this.title = title;
         this.text = text;
     }
 
     protected Note(Parcel in) {
-        id = in.readLong();
+        objectId = in.readString();
         title = in.readString();
         text = in.readString();
     }
 
-    public long getId() {
-        return id;
+    public String getObjectId() {
+        return objectId;
     }
 
     public String getTitle() {
@@ -44,7 +44,7 @@ public class Note implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
+        dest.writeString(objectId);
         dest.writeString(title);
         dest.writeString(text);
     }
