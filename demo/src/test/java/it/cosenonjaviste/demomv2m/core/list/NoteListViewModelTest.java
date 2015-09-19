@@ -13,6 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.concurrent.Executor;
 
+import it.cosenonjaviste.demomv2m.core.Navigator;
 import it.cosenonjaviste.demomv2m.core.TestExecutor;
 import it.cosenonjaviste.demomv2m.core.detail.NoteModel;
 import it.cosenonjaviste.demomv2m.model.Note;
@@ -32,6 +33,8 @@ public class NoteListViewModelTest {
     @Mock NoteListView view;
 
     @Mock NoteLoaderService service;
+
+    @Mock Navigator navigator;
 
     @Mock Observable.OnPropertyChangedCallback callback;
 
@@ -95,7 +98,7 @@ public class NoteListViewModelTest {
         viewModel.initAndResume(view);
         viewModel.openDetail(note);
 
-        verify(view).openDetail(captor.capture());
+        verify(navigator).openDetail(captor.capture());
         assertThat(captor.getValue().getNoteId()).isEqualTo("1");
     }
 }

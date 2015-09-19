@@ -5,6 +5,7 @@ import android.databinding.ObservableBoolean;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import it.cosenonjaviste.demomv2m.core.Navigator;
 import it.cosenonjaviste.demomv2m.core.detail.NoteModel;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
@@ -20,10 +21,13 @@ public class NoteListViewModel extends ViewModel<NoteListModel, NoteListView> {
 
     private final Executor uiExecutor;
 
-    public NoteListViewModel(NoteLoaderService service, Executor backgroundExecutor, Executor uiExecutor) {
+    private Navigator navigator;
+
+    public NoteListViewModel(NoteLoaderService service, Executor backgroundExecutor, Executor uiExecutor, Navigator navigator) {
         this.service = service;
         this.backgroundExecutor = backgroundExecutor;
         this.uiExecutor = uiExecutor;
+        this.navigator = navigator;
     }
 
     @Override public NoteListModel createDefaultModel() {
@@ -65,6 +69,6 @@ public class NoteListViewModel extends ViewModel<NoteListModel, NoteListView> {
     }
 
     public void openDetail(Note note) {
-        getView().openDetail(new NoteModel(note.getObjectId()));
+        navigator.openDetail(new NoteModel(note.getObjectId()));
     }
 }

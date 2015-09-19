@@ -6,6 +6,7 @@ import android.databinding.ObservableInt;
 import java.util.concurrent.Executor;
 
 import it.cosenonjaviste.demomv2m.R;
+import it.cosenonjaviste.demomv2m.core.MessageManager;
 import it.cosenonjaviste.demomv2m.core.utils.ObservableString;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
@@ -21,15 +22,18 @@ public class NoteViewModel extends ViewModel<NoteModel, NoteView> {
 
     private NoteSaverService noteSaverService;
 
+    private MessageManager messageManager;
+
     public final ObservableBoolean loading = new ObservableBoolean();
 
     public final ObservableBoolean sending = new ObservableBoolean();
 
-    public NoteViewModel(Executor backgroundExecutor, Executor uiExecutor, NoteLoaderService noteLoaderService, NoteSaverService noteSaverService) {
+    public NoteViewModel(Executor backgroundExecutor, Executor uiExecutor, NoteLoaderService noteLoaderService, NoteSaverService noteSaverService, MessageManager messageManager) {
         this.backgroundExecutor = backgroundExecutor;
         this.uiExecutor = uiExecutor;
         this.noteLoaderService = noteLoaderService;
         this.noteSaverService = noteSaverService;
+        this.messageManager = messageManager;
     }
 
     @Override public void resume() {
@@ -87,7 +91,7 @@ public class NoteViewModel extends ViewModel<NoteModel, NoteView> {
     private void hideSendProgressAndShoMessage(final int message) {
         uiExecutor.execute(new Runnable() {
             @Override public void run() {
-                getView().showMessage(message);
+                messageManager.showMessage(message);
                 sending.set(false);
             }
         });

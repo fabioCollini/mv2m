@@ -9,6 +9,7 @@ import it.cosenonjaviste.demomv2m.core.detail.NoteView;
 import it.cosenonjaviste.demomv2m.core.detail.NoteViewModel;
 import it.cosenonjaviste.demomv2m.databinding.NoteDetailBinding;
 import it.cosenonjaviste.demomv2m.ui.ObjectFactory;
+import it.cosenonjaviste.demomv2m.ui.SnackbarMessageManager;
 import it.cosenonjaviste.mv2m.ViewModelActivity;
 
 public class NoteActivity extends ViewModelActivity<NoteViewModel> implements NoteView {
@@ -20,7 +21,8 @@ public class NoteActivity extends ViewModelActivity<NoteViewModel> implements No
                 ObjectFactory.singleton().backgroundExecutor(),
                 ObjectFactory.singleton().uiExecutor(),
                 ObjectFactory.singleton().noteLoaderService(),
-                ObjectFactory.singleton().noteSaverService());
+                ObjectFactory.singleton().noteSaverService(),
+                new SnackbarMessageManager());
     }
 
     @Override protected void onCreate(Bundle state) {

@@ -11,14 +11,14 @@ public class ViewModelRetainedFragment<VM extends ViewModel<?, ?>> extends Fragm
 
     private VM viewModel;
 
-    public static <P extends ViewModel<?, ?>> P getOrCreate(Fragment fragment, Bundle state, String fragmentTag, ViewModelManager.Factory<P> factory) {
-        ViewModelRetainedFragment<P> retainedFragment = getOrCreateFragment(fragment.getFragmentManager(), TAG + fragmentTag);
+    public static <VM extends ViewModel<?, ?>> VM getOrCreate(Fragment fragment, Bundle state, String fragmentTag, ViewModelManager.Factory<VM> factory) {
+        ViewModelRetainedFragment<VM> retainedFragment = getOrCreateFragment(fragment.getFragmentManager(), TAG + fragmentTag);
         retainedFragment.viewModel = ViewModelManager.init(retainedFragment.viewModel, state, fragment.getArguments(), factory);
         return retainedFragment.viewModel;
     }
 
-    public static <P extends ViewModel<?, ?>> P getOrCreate(AppCompatActivity activity, Bundle state, String fragmentTag, ViewModelManager.Factory<P> factory) {
-        ViewModelRetainedFragment<P> retainedFragment = getOrCreateFragment(activity.getSupportFragmentManager(), TAG + fragmentTag);
+    public static <VM extends ViewModel<?, ?>> VM getOrCreate(AppCompatActivity activity, Bundle state, String fragmentTag, ViewModelManager.Factory<VM> factory) {
+        ViewModelRetainedFragment<VM> retainedFragment = getOrCreateFragment(activity.getSupportFragmentManager(), TAG + fragmentTag);
         retainedFragment.viewModel = ViewModelManager.init(retainedFragment.viewModel, state, activity.getIntent().getExtras(), factory);
         return retainedFragment.viewModel;
     }

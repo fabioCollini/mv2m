@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.concurrent.Executor;
 
 import it.cosenonjaviste.demomv2m.R;
+import it.cosenonjaviste.demomv2m.core.MessageManager;
 import it.cosenonjaviste.demomv2m.core.TestExecutor;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
@@ -34,6 +35,8 @@ public class NoteViewModelTest {
     @Mock NoteLoaderService noteLoaderService;
 
     @Mock NoteSaverService noteSaverService;
+
+    @Mock MessageManager messageManager;
 
     @Spy Executor executor = new TestExecutor();
 
@@ -106,7 +109,7 @@ public class NoteViewModelTest {
 
         verify(noteSaverService).save(eq("123"), eq("newTitle"), eq("newText"));
 
-        verify(view).showMessage(eq(R.string.note_saved));
+        verify(messageManager).showMessage(eq(R.string.note_saved));
     }
 
     @Test
@@ -121,6 +124,6 @@ public class NoteViewModelTest {
 
         viewModel.save();
 
-        verify(view).showMessage(eq(R.string.error_saving_note));
+        verify(messageManager).showMessage(eq(R.string.error_saving_note));
     }
 }

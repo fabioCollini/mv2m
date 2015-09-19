@@ -1,12 +1,22 @@
 package it.cosenonjaviste.mv2m;
 
+import android.app.Activity;
 import android.os.Parcelable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ViewModel<M extends Parcelable, V> {
 
     private V view;
 
     private M model;
+
+    private List<ActivityAware> activityAwares = new ArrayList<>();
+
+    protected void registerActivityAware(ActivityAware activityAware) {
+        activityAwares.add(activityAware);
+    }
 
     public final void resume(V view) {
         this.view = view;
@@ -24,6 +34,9 @@ public class ViewModel<M extends Parcelable, V> {
 
     public void detachView() {
         this.view = null;
+        for (ActivityAware activityAware : activityAwares) {
+            activityAware.setActivity(null);
+        }
     }
 
     public M createDefaultModel() {
@@ -56,5 +69,11 @@ public class ViewModel<M extends Parcelable, V> {
 
     public M getModel() {
         return model;
+    }
+
+    public final void attachActivity(Activity activity) {
+        for (ActivityAware activityAware : activityAwares) {
+            activityAware.setActivity(activity);
+        }
     }
 }
