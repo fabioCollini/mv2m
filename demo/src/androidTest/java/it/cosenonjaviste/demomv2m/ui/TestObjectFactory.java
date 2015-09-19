@@ -11,6 +11,7 @@ public class TestObjectFactory extends ObjectFactory {
     public TestObjectFactory() {
         noteLoaderService = Mockito.mock(NoteLoaderService.class);
         noteSaverService = Mockito.mock(NoteSaverService.class);
+        navigator = Mockito.mock(ActivityNavigator.class);
 
         backgroundExecutor = new Executor() {
             @Override public void execute(Runnable command) {

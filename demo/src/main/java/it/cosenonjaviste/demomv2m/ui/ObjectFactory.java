@@ -9,12 +9,15 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import it.cosenonjaviste.demomv2m.BuildConfig;
+import it.cosenonjaviste.demomv2m.core.Navigator;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 import it.cosenonjaviste.demomv2m.model.NoteSaverService;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 
 public class ObjectFactory {
+
+    protected Navigator navigator;
 
     protected NoteLoaderService noteLoaderService;
 
@@ -36,6 +39,13 @@ public class ObjectFactory {
     @VisibleForTesting
     public static void setSingleton(ObjectFactory singleton) {
         ObjectFactory.singleton = singleton;
+    }
+
+    @NonNull public Navigator navigator() {
+        if (navigator == null) {
+            navigator = new ActivityNavigator();
+        }
+        return navigator;
     }
 
     @NonNull public NoteSaverService noteSaverService() {

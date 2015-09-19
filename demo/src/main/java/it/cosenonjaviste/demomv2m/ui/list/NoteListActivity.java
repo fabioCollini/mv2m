@@ -13,7 +13,6 @@ import it.cosenonjaviste.demomv2m.core.list.NoteListViewModel;
 import it.cosenonjaviste.demomv2m.databinding.NoteListBinding;
 import it.cosenonjaviste.demomv2m.databinding.NoteListItemBinding;
 import it.cosenonjaviste.demomv2m.model.Note;
-import it.cosenonjaviste.demomv2m.ui.ActivityNavigator;
 import it.cosenonjaviste.demomv2m.ui.ObjectFactory;
 import it.cosenonjaviste.mv2m.ViewModelActivity;
 
@@ -23,7 +22,7 @@ public class NoteListActivity extends ViewModelActivity<NoteListViewModel> {
                 ObjectFactory.singleton().noteLoaderService(),
                 ObjectFactory.singleton().backgroundExecutor(),
                 ObjectFactory.singleton().uiExecutor(),
-                new ActivityNavigator());
+                ObjectFactory.singleton().navigator());
     }
 
     @Override protected void onCreate(Bundle state) {
