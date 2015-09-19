@@ -6,7 +6,7 @@ import java.util.List;
 public class NoteListResponse {
     private List<Note> results;
 
-    public NoteListResponse() {
+    NoteListResponse() {
     }
 
     public NoteListResponse(Note... results) {

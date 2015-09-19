@@ -11,6 +11,7 @@ import it.cosenonjaviste.demomv2m.core.utils.ObservableString;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 import it.cosenonjaviste.demomv2m.model.NoteSaverService;
+import it.cosenonjaviste.mv2m.ActivityResult;
 import it.cosenonjaviste.mv2m.ViewModel;
 import retrofit.RetrofitError;
 
@@ -79,7 +80,14 @@ public class NoteViewModel extends ViewModel<NoteModel> {
             backgroundExecutor.execute(new Runnable() {
                 @Override public void run() {
                     try {
-                        noteSaverService.save(getModel().getNoteId(), getModel().getTitle().get(), getModel().getText().get());
+                        Note note = new Note(null, getModel().getTitle().get(), getModel().getText().get());
+                        String noteId = getModel().getNoteId();
+                        if (noteId == null) {
+                            noteId = noteSaverService.createNewNote(note).getObjectId();
+                            getModel().setNoteId(noteId);
+                        } else {
+                            noteSaverService.save(noteId, note);
+                        }
                         hideSendProgressAndShoMessage(R.string.note_saved);
                     } catch (RetrofitError e) {
                         hideSendProgressAndShoMessage(R.string.error_saving_note);
@@ -102,5 +110,10 @@ public class NoteViewModel extends ViewModel<NoteModel> {
         boolean empty = bindableString.isEmpty();
         error.set(empty ? R.string.mandatory_field : 0);
         return !empty;
+    }
+
+    @Override public ActivityResult onBackPressed() {
+        NoteModel model = getModel();
+        return new ActivityResult(true, new Note(model.getNoteId(), model.getTitle().get(), model.getText().get()));
     }
 }

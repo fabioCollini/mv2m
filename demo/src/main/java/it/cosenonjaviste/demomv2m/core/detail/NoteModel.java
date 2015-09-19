@@ -22,6 +22,9 @@ public class NoteModel implements Parcelable {
 
     private ObservableInt textError = new ObservableInt();
 
+    public NoteModel() {
+    }
+
     public NoteModel(String noteId) {
         this.noteId = noteId;
     }
@@ -92,5 +95,9 @@ public class NoteModel implements Parcelable {
 
     public String getNoteId() {
         return noteId;
+    }
+
+    public void setNoteId(String noteId) {
+        this.noteId = noteId;
     }
 }

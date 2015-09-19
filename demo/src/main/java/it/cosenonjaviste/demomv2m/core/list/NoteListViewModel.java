@@ -9,6 +9,7 @@ import it.cosenonjaviste.demomv2m.core.Navigator;
 import it.cosenonjaviste.demomv2m.core.detail.NoteModel;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
+import it.cosenonjaviste.mv2m.ActivityResult;
 import it.cosenonjaviste.mv2m.ViewModel;
 
 public class NoteListViewModel extends ViewModel<NoteListModel> {
@@ -71,5 +72,13 @@ public class NoteListViewModel extends ViewModel<NoteListModel> {
 
     public void openDetail(Note note) {
         navigator.openDetail(new NoteModel(note.getObjectId()));
+    }
+
+    public void openCreateNewNote() {
+        navigator.openDetail(new NoteModel());
+    }
+
+    public void onResult(int requestCode, ActivityResult activityResult) {
+        getModel().updateItem((Note) activityResult.getData());
     }
 }

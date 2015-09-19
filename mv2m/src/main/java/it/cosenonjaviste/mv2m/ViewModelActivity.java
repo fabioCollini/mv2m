@@ -1,5 +1,6 @@
 package it.cosenonjaviste.mv2m;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -40,5 +41,15 @@ public abstract class ViewModelActivity<VM extends ViewModel<?>> extends AppComp
     @Override protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         ViewModelManager.saveState(outState, viewModel);
+    }
+
+    @Override public void onBackPressed() {
+        ViewModelManager.onBackPressed(this, viewModel);
+        super.onBackPressed();
+    }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ViewModelManager.onActivityResult(viewModel, requestCode, resultCode, data);
     }
 }

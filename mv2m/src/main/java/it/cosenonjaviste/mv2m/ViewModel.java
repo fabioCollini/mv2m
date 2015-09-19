@@ -64,4 +64,11 @@ public class ViewModel<M extends Parcelable> {
             activityAware.setActivity(activity);
         }
     }
+
+    public ActivityResult onBackPressed() {
+        return null;
+    }
+
+    public void onResult(int requestCode, ActivityResult activityResult) {
+    }
 }

@@ -10,6 +10,7 @@ import it.cosenonjaviste.demomv2m.ui.detail.NoteActivity;
 import it.cosenonjaviste.mv2m.ViewModelManager;
 
 public class ActivityNavigator implements Navigator {
+
     private Activity activity;
 
     public static void startActivity(Activity activity, Class<?> cls, Parcelable noteModel) {
@@ -18,8 +19,14 @@ public class ActivityNavigator implements Navigator {
         }
     }
 
+    public static void startActivityForResult(Activity activity, Class<?> cls, int requestCode, Parcelable noteModel) {
+        if (activity != null) {
+            activity.startActivityForResult(new Intent(activity, cls).putExtra(ViewModelManager.MODEL, noteModel), requestCode);
+        }
+    }
+
     @Override public void openDetail(NoteModel model) {
-        startActivity(activity, NoteActivity.class, model);
+        startActivityForResult(activity, NoteActivity.class, OPEN_DETAIL, model);
     }
 
     @Override public void setActivity(Activity activity) {

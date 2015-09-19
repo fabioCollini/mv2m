@@ -19,6 +19,7 @@ import it.cosenonjaviste.demomv2m.core.detail.NoteModel;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteListResponse;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
+import it.cosenonjaviste.mv2m.ActivityResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyInt;
@@ -98,5 +99,39 @@ public class NoteListViewModelTest {
 
         verify(navigator).openDetail(captor.capture());
         assertThat(captor.getValue().getNoteId()).isEqualTo("1");
+    }
+
+    @Test
+    public void testReturnFromDetail() {
+        Note note = new Note("1", "a");
+        when(service.loadItems()).thenReturn(new NoteListResponse(note, new Note("2", "b")));
+
+        NoteListModel model = viewModel.initAndResume();
+        viewModel.openDetail(note);
+        viewModel.onResult(Navigator.OPEN_DETAIL, new ActivityResult(true, new Note("1", "abc", "a")));
+        assertThat(model.getItems().get(0).getTitle()).isEqualTo("abc");
+    }
+
+    @Test
+    public void testReturnFromDetailAfterCreation() {
+        Note note = new Note("1", "a");
+        when(service.loadItems()).thenReturn(new NoteListResponse(note, new Note("2", "b")));
+
+        NoteListModel model = viewModel.initAndResume();
+        viewModel.openCreateNewNote();
+        viewModel.onResult(Navigator.OPEN_DETAIL, new ActivityResult(true, new Note("3", "abc", "a")));
+
+        assertThat(model.getItems().get(2).getTitle()).isEqualTo("abc");
+    }
+
+    @Test
+    public void testCreateNewNote() {
+        when(service.loadItems()).thenReturn(new NoteListResponse());
+
+        viewModel.initAndResume();
+        viewModel.openCreateNewNote();
+
+        verify(navigator).openDetail(captor.capture());
+        assertThat(captor.getValue().getNoteId()).isNull();
     }
 }

@@ -3,6 +3,8 @@ package it.cosenonjaviste.demomv2m.core.detail;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -17,9 +19,12 @@ import it.cosenonjaviste.demomv2m.core.TestExecutor;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 import it.cosenonjaviste.demomv2m.model.NoteSaverService;
+import it.cosenonjaviste.demomv2m.model.SaveResponse;
+import it.cosenonjaviste.mv2m.ActivityResult;
 import retrofit.RetrofitError;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -35,6 +40,8 @@ public class NoteViewModelTest {
     @Mock NoteSaverService noteSaverService;
 
     @Mock MessageManager messageManager;
+
+    @Captor ArgumentCaptor<Note> captor;
 
     @Spy Executor executor = new TestExecutor();
 
@@ -92,7 +99,7 @@ public class NoteViewModelTest {
         assertThat(model.getTitleError().get()).isEqualTo(R.string.mandatory_field);
         assertThat(model.getTextError().get()).isEqualTo(R.string.mandatory_field);
 
-        verify(noteSaverService, never()).save(anyString(), anyString(), anyString());
+        verify(noteSaverService, never()).save(anyString(), any(Note.class));
         verify(messageManager, never()).showMessage(anyInt());
     }
 
@@ -105,14 +112,17 @@ public class NoteViewModelTest {
 
         viewModel.save();
 
-        verify(noteSaverService).save(eq("123"), eq("newTitle"), eq("newText"));
+        verify(noteSaverService).save(eq("123"), captor.capture());
+
+        assertThat(captor.getValue())
+                .isEqualToComparingFieldByField(new Note(null, "newTitle", "newText"));
 
         verify(messageManager).showMessage(eq(R.string.note_saved));
     }
 
     @Test
     public void testErrorSavingData() {
-        when(noteSaverService.save(eq("123"), eq("newTitle"), eq("newText")))
+        when(noteSaverService.save(anyString(), any(Note.class)))
                 .thenThrow(RetrofitError.networkError("url", new IOException()));
 
         NoteModel model = viewModel.initAndResume(new NoteModel("123"));
@@ -123,5 +133,43 @@ public class NoteViewModelTest {
         viewModel.save();
 
         verify(messageManager).showMessage(eq(R.string.error_saving_note));
+    }
+
+    @Test
+    public void testCreateNewNote() {
+        when(noteSaverService.createNewNote(any(Note.class)))
+                .thenReturn(new SaveResponse("newId"));
+
+        NoteModel model = viewModel.initAndResume(new NoteModel());
+
+        model.getTitle().set("newTitle");
+        model.getText().set("newText");
+
+        viewModel.save();
+
+        verify(noteSaverService).createNewNote(captor.capture());
+
+        assertThat(captor.getValue())
+                .isEqualToComparingFieldByField(new Note(null, "newTitle", "newText"));
+        assertThat(model.getNoteId()).isEqualTo("newId");
+    }
+
+    @Test
+    public void testOnBack() {
+        when(noteSaverService.createNewNote(any(Note.class)))
+                .thenReturn(new SaveResponse("newId"));
+
+        NoteModel model = viewModel.initAndResume(new NoteModel());
+
+        model.getTitle().set("newTitle");
+        model.getText().set("newText");
+
+        viewModel.save();
+        ActivityResult result = viewModel.onBackPressed();
+
+        assertThat(result).isNotNull();
+        assertThat(result.getData())
+                .isEqualToComparingFieldByField(new Note("newId", "newTitle", "newText"));
+        assertThat(result.isResultOk()).isTrue();
     }
 }

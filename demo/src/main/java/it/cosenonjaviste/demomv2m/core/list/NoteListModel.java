@@ -72,4 +72,16 @@ public class NoteListModel implements Parcelable {
         error.set(true);
         loaded = true;
     }
+
+    public void updateItem(Note newNote) {
+        int pos = 0;
+        for (Note note : items) {
+            if (note.getObjectId().equals(newNote.getObjectId())) {
+                items.set(pos, newNote);
+                return;
+            }
+            pos++;
+        }
+        items.add(newNote);
+    }
 }
