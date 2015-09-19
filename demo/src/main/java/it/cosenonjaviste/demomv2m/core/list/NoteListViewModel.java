@@ -5,6 +5,7 @@ import android.databinding.ObservableBoolean;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import it.cosenonjaviste.demomv2m.core.detail.NoteModel;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 import it.cosenonjaviste.mv2m.ViewModel;
@@ -61,5 +62,9 @@ public class NoteListViewModel extends ViewModel<NoteListModel, NoteListView> {
 
     public ObservableBoolean getLoading() {
         return loading;
+    }
+
+    public void openDetail(Note note) {
+        getView().openDetail(new NoteModel(note.getObjectId()));
     }
 }

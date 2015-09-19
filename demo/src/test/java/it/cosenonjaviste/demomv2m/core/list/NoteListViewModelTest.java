@@ -4,6 +4,8 @@ import android.databinding.Observable;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -12,6 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.concurrent.Executor;
 
 import it.cosenonjaviste.demomv2m.core.TestExecutor;
+import it.cosenonjaviste.demomv2m.core.detail.NoteModel;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteListResponse;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
@@ -35,6 +38,8 @@ public class NoteListViewModelTest {
     @Spy Executor executor = new TestExecutor();
 
     @InjectMocks NoteListViewModel viewModel;
+
+    @Captor ArgumentCaptor<NoteModel> captor;
 
     @Test
     public void testLoad() {
@@ -75,11 +80,22 @@ public class NoteListViewModelTest {
     @Test
     public void testLoadingIndicator() {
         when(service.loadItems()).thenReturn(new NoteListResponse(new Note("1", "a"), new Note("2", "b")));
-        NoteListModel model = new NoteListModel();
         viewModel.getLoading().addOnPropertyChangedCallback(callback);
 
-        viewModel.initAndResume(model, view);
+        viewModel.initAndResume(view);
 
         verify(callback, times(2)).onPropertyChanged(eq(viewModel.getLoading()), anyInt());
+    }
+
+    @Test
+    public void testOpenDetail() {
+        Note note = new Note("1", "a");
+        when(service.loadItems()).thenReturn(new NoteListResponse(note, new Note("2", "b")));
+
+        viewModel.initAndResume(view);
+        viewModel.openDetail(note);
+
+        verify(view).openDetail(captor.capture());
+        assertThat(captor.getValue().getNoteId()).isEqualTo("1");
     }
 }

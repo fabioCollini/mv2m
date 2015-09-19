@@ -4,16 +4,20 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 import android.view.ViewGroup;
 
 import it.cosenonjaviste.demomv2m.BR;
 import it.cosenonjaviste.demomv2m.R;
+import it.cosenonjaviste.demomv2m.core.detail.NoteModel;
 import it.cosenonjaviste.demomv2m.core.list.NoteListView;
 import it.cosenonjaviste.demomv2m.core.list.NoteListViewModel;
 import it.cosenonjaviste.demomv2m.databinding.NoteListBinding;
 import it.cosenonjaviste.demomv2m.databinding.NoteListItemBinding;
 import it.cosenonjaviste.demomv2m.model.Note;
+import it.cosenonjaviste.demomv2m.ui.Navigator;
 import it.cosenonjaviste.demomv2m.ui.ObjectFactory;
+import it.cosenonjaviste.demomv2m.ui.detail.NoteActivity;
 import it.cosenonjaviste.mv2m.ViewModelActivity;
 
 public class NoteListActivity extends ViewModelActivity<NoteListViewModel> implements NoteListView {
@@ -31,9 +35,18 @@ public class NoteListActivity extends ViewModelActivity<NoteListViewModel> imple
         binding.list.setLayoutManager(new LinearLayoutManager(this));
         binding.list.setAdapter(new BindableAdapter<Note>(viewModel.getModel().getItems()) {
             @Override public BindableViewHolder<ViewDataBinding, Note> onCreateViewHolder(ViewGroup parent, int viewType) {
-                NoteListItemBinding binding = NoteListItemBinding.inflate(getLayoutInflater(), parent, false);
+                final NoteListItemBinding binding = NoteListItemBinding.inflate(getLayoutInflater(), parent, false);
+                binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        viewModel.openDetail(binding.getItem());
+                    }
+                });
                 return new BindableViewHolder<ViewDataBinding, Note>(binding, BR.item);
             }
         });
+    }
+
+    @Override public void openDetail(NoteModel noteModel) {
+        Navigator.startActivity(this, NoteActivity.class, noteModel);
     }
 }
