@@ -71,4 +71,12 @@ public class ViewModel<M extends Parcelable> {
 
     public void onResult(int requestCode, ActivityResult activityResult) {
     }
+
+    public int getOptionMenuId() {
+        return -1;
+    }
+
+    public boolean onOptionsItemSelected(int itemId) {
+        return false;
+    }
 }

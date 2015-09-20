@@ -141,6 +141,8 @@ public class NoteViewModelTest {
 
         NoteModel model = viewModel.initAndResume(new NoteModel());
 
+        verify(noteLoaderService, never()).load(anyString());
+
         model.getTitle().set(TestData.NEW_TITLE);
         model.getText().set(TestData.NEW_TEXT);
 

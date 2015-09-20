@@ -14,5 +14,6 @@
     <string name="text">Text</string>
     <string name="loading">Caricamento in corso...</string>
     <string name="retry">Riprova</string>
+    <string name="new_note">New note</string>
 
 </resources>

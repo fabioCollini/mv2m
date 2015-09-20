@@ -13,6 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.concurrent.Executor;
 
+import it.cosenonjaviste.demomv2m.R;
 import it.cosenonjaviste.demomv2m.TestData;
 import it.cosenonjaviste.demomv2m.core.Navigator;
 import it.cosenonjaviste.demomv2m.core.TestExecutor;
@@ -126,7 +127,7 @@ public class NoteListViewModelTest {
         when(service.loadItems()).thenReturn(new NoteListResponse());
 
         viewModel.initAndResume();
-        viewModel.openCreateNewNote();
+        viewModel.onOptionsItemSelected(R.id.new_note);
 
         verify(navigator).openDetail(captor.capture());
         assertThat(captor.getValue().getNoteId()).isNull();

@@ -5,6 +5,7 @@ import android.databinding.ObservableBoolean;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import it.cosenonjaviste.demomv2m.R;
 import it.cosenonjaviste.demomv2m.core.Navigator;
 import it.cosenonjaviste.demomv2m.core.detail.NoteModel;
 import it.cosenonjaviste.demomv2m.model.Note;
@@ -80,5 +81,18 @@ public class NoteListViewModel extends ViewModel<NoteListModel> {
 
     public void onResult(int requestCode, ActivityResult activityResult) {
         getModel().updateItem((Note) activityResult.getData());
+    }
+
+    @Override public int getOptionMenuId() {
+        return R.menu.list_menu;
+    }
+
+    @Override public boolean onOptionsItemSelected(int itemId) {
+        if (itemId == R.id.new_note) {
+            openCreateNewNote();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(itemId);
+        }
     }
 }

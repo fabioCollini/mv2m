@@ -3,6 +3,8 @@ package it.cosenonjaviste.mv2m;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public abstract class ViewModelActivity<VM extends ViewModel<?>> extends AppCompatActivity {
 
@@ -51,5 +53,13 @@ public abstract class ViewModelActivity<VM extends ViewModel<?>> extends AppComp
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         ViewModelManager.onActivityResult(viewModel, requestCode, resultCode, data);
+    }
+
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
+        return ViewModelManager.onCreateOptionsMenu(viewModel, menu, getMenuInflater()) || super.onCreateOptionsMenu(menu);
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        return ViewModelManager.onOptionsItemSelected(viewModel, item) || super.onOptionsItemSelected(item);
     }
 }

@@ -39,7 +39,7 @@ public class NoteViewModel extends ViewModel<NoteModel> {
     }
 
     @Override public void resume() {
-        if (!loading.get() && !getModel().isLoaded()) {
+        if (!loading.get() && !getModel().isLoaded() && getModel().getNoteId() != null) {
             reloadData();
         }
     }
