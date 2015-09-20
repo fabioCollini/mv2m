@@ -8,7 +8,7 @@ public class ViewModelRetainedFragment<VM extends ViewModel<?>> extends Fragment
 
     public static final String TAG = ViewModelRetainedFragment.class.getName();
 
-    VM viewModel;
+    private VM viewModel;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
