@@ -12,7 +12,7 @@ import it.cosenonjaviste.mv2m.ViewModelActivity;
 
 public class NoteActivity extends ViewModelActivity<NoteViewModel> {
 
-    @Override protected NoteViewModel createViewModel() {
+    @Override public NoteViewModel createViewModel() {
         return new NoteViewModel(
                 ObjectFactory.singleton().backgroundExecutor(),
                 ObjectFactory.singleton().uiExecutor(),

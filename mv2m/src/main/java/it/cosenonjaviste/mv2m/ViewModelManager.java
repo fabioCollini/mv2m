@@ -4,42 +4,57 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-public class ViewModelManager {
+class ViewModelManager<VM extends ViewModel<?>> {
     public static final String MODEL = "model";
     public static final String RESULT_DATA = "RESULT_DATA";
 
-    public static <VM extends ViewModel<?>> VM getOrCreate(AppCompatActivity activity, Bundle state, String fragmentTag, ViewModelManager.Factory<VM> factory) {
-        VM viewModel = ViewModelRetainedFragment.getOrCreate(activity, state, fragmentTag, factory);
+    private VM viewModel;
+
+    public <A extends AppCompatActivity & ViewModelContainer<VM>> VM getOrCreate(A activity, Bundle state) {
+        Parcelable model = readModel(state, activity.getIntent().getExtras());
+        return getOrCreate(activity, activity, activity.getSupportFragmentManager(), model);
+    }
+
+    public <F extends Fragment & ViewModelContainer<VM>> VM getOrCreate(F fragment, Bundle state) {
+        Parcelable model = readModel(state, fragment.getArguments());
+        return getOrCreate(fragment.getActivity(), fragment, fragment.getFragmentManager(), model);
+    }
+
+    private VM getOrCreate(Activity activity, final ViewModelContainer<VM> container, FragmentManager fragmentManager, Parcelable model) {
+        viewModel = ViewModelRetainedFragment.getOrCreate(container.getFragmentTag(model), container, fragmentManager);
+
+        ((ViewModel) viewModel).initModel(model);
+
         viewModel.attachActivity(activity);
+
         return viewModel;
     }
 
-    public static void resume(Object view, ViewModel<?> viewModel) {
+    public void resume() {
         viewModel.resume();
     }
 
-    public static void pause(ViewModel<?> viewModel) {
+    public void pause() {
         viewModel.pause();
     }
 
-    public static void destroy(ViewModel<?> viewModel) {
-        viewModel.detachView();
+    public void destroy() {
+        this.viewModel.detachView();
     }
 
-    public static void saveState(final Bundle outState, ViewModel<?> viewModel) {
+    public void saveState(final Bundle outState) {
         outState.putParcelable(MODEL, viewModel.getModel());
     }
 
-    @NonNull public static <M extends Parcelable, VM extends ViewModel<M>> VM init(VM viewModel, Bundle state, Bundle args, Factory<VM> factory) {
-        if (viewModel == null) {
-            viewModel = factory.create();
-        }
+    @Nullable private <M extends Parcelable> M readModel(Bundle state, Bundle args) {
         M model = null;
         if (state != null) {
             model = state.getParcelable(MODEL);
@@ -47,11 +62,10 @@ public class ViewModelManager {
         if (model == null && args != null) {
             model = args.getParcelable(MODEL);
         }
-        viewModel.initModel(model);
-        return viewModel;
+        return model;
     }
 
-    public static void onBackPressed(Activity activity, ViewModel<?> viewModel) {
+    public void onBackPressed(Activity activity) {
         ActivityResult result = viewModel.onBackPressed();
         if (result != null) {
             Intent intent = new Intent();
@@ -60,11 +74,11 @@ public class ViewModelManager {
         }
     }
 
-    public static void onActivityResult(ViewModel<?> viewModel, int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         viewModel.onResult(requestCode, new ActivityResult(resultCode == Activity.RESULT_OK, data.getParcelableExtra(RESULT_DATA)));
     }
 
-    public static boolean onCreateOptionsMenu(ViewModel<?> viewModel, Menu menu, MenuInflater menuInflater) {
+    public boolean onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         int menuId = viewModel.getOptionMenuId();
         if (menuId > 0) {
             menuInflater.inflate(menuId, menu);
@@ -74,15 +88,11 @@ public class ViewModelManager {
         }
     }
 
-    public static boolean onOptionsItemSelected(ViewModel<?> viewModel, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (viewModel.onOptionsItemSelected(item.getItemId())) {
             return true;
         } else {
             return false;
         }
-    }
-
-    public interface Factory<VM extends ViewModel<?>> {
-        VM create();
     }
 }

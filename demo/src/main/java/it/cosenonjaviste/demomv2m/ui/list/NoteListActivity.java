@@ -17,7 +17,7 @@ import it.cosenonjaviste.demomv2m.ui.ObjectFactory;
 import it.cosenonjaviste.mv2m.ViewModelActivity;
 
 public class NoteListActivity extends ViewModelActivity<NoteListViewModel> {
-    @Override protected NoteListViewModel createViewModel() {
+    @Override public NoteListViewModel createViewModel() {
         return new NoteListViewModel(
                 ObjectFactory.singleton().noteLoaderService(),
                 ObjectFactory.singleton().backgroundExecutor(),
