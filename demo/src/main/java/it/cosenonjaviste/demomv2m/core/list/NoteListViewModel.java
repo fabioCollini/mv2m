@@ -70,8 +70,8 @@ public class NoteListViewModel extends ViewModel<NoteListModel> {
         return loading;
     }
 
-    public void openDetail(Note note) {
-        navigator.openDetail(new NoteModel(note.getObjectId()));
+    public void openDetail(String objectId) {
+        navigator.openDetail(new NoteModel(objectId));
     }
 
     public void openCreateNewNote() {

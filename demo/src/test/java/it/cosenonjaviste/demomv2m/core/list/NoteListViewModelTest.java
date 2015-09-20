@@ -13,10 +13,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.concurrent.Executor;
 
+import it.cosenonjaviste.demomv2m.TestData;
 import it.cosenonjaviste.demomv2m.core.Navigator;
 import it.cosenonjaviste.demomv2m.core.TestExecutor;
 import it.cosenonjaviste.demomv2m.core.detail.NoteModel;
-import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteListResponse;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 import it.cosenonjaviste.mv2m.ActivityResult;
@@ -46,7 +46,7 @@ public class NoteListViewModelTest {
     @Test
     public void testLoad() {
         when(service.loadItems())
-                .thenReturn(new NoteListResponse(new Note("1", "a"), new Note("2", "b")));
+                .thenReturn(TestData.response());
 
         NoteListModel model = viewModel.initAndResume();
 
@@ -67,7 +67,7 @@ public class NoteListViewModelTest {
     public void testReloadAfterError() {
         when(service.loadItems())
                 .thenThrow(new RuntimeException())
-                .thenReturn(new NoteListResponse(new Note("1", "a"), new Note("2", "b")));
+                .thenReturn(TestData.response());
 
         NoteListModel model = viewModel.initAndResume();
 
@@ -81,7 +81,7 @@ public class NoteListViewModelTest {
 
     @Test
     public void testLoadingIndicator() {
-        when(service.loadItems()).thenReturn(new NoteListResponse(new Note("1", "a"), new Note("2", "b")));
+        when(service.loadItems()).thenReturn(TestData.response());
         viewModel.getLoading().addOnPropertyChangedCallback(callback);
 
         viewModel.initAndResume();
@@ -91,37 +91,34 @@ public class NoteListViewModelTest {
 
     @Test
     public void testOpenDetail() {
-        Note note = new Note("1", "a");
-        when(service.loadItems()).thenReturn(new NoteListResponse(note, new Note("2", "b")));
+        when(service.loadItems()).thenReturn(TestData.response());
 
         viewModel.initAndResume();
-        viewModel.openDetail(note);
+        viewModel.openDetail(TestData.ID_1);
 
         verify(navigator).openDetail(captor.capture());
-        assertThat(captor.getValue().getNoteId()).isEqualTo("1");
+        assertThat(captor.getValue().getNoteId()).isEqualTo(TestData.ID_1);
     }
 
     @Test
     public void testReturnFromDetail() {
-        Note note = new Note("1", "a");
-        when(service.loadItems()).thenReturn(new NoteListResponse(note, new Note("2", "b")));
+        when(service.loadItems()).thenReturn(TestData.response());
 
         NoteListModel model = viewModel.initAndResume();
-        viewModel.openDetail(note);
-        viewModel.onResult(Navigator.OPEN_DETAIL, new ActivityResult(true, new Note("1", "abc", "a")));
+        viewModel.openDetail(TestData.ID_1);
+        viewModel.onResult(Navigator.OPEN_DETAIL, new ActivityResult(true, TestData.note1("abc")));
         assertThat(model.getItems().get(0).getTitle()).isEqualTo("abc");
     }
 
     @Test
     public void testReturnFromDetailAfterCreation() {
-        Note note = new Note("1", "a");
-        when(service.loadItems()).thenReturn(new NoteListResponse(note, new Note("2", "b")));
+        when(service.loadItems()).thenReturn(TestData.response());
 
         NoteListModel model = viewModel.initAndResume();
         viewModel.openCreateNewNote();
-        viewModel.onResult(Navigator.OPEN_DETAIL, new ActivityResult(true, new Note("3", "abc", "a")));
+        viewModel.onResult(Navigator.OPEN_DETAIL, new ActivityResult(true, TestData.note3()));
 
-        assertThat(model.getItems().get(2).getTitle()).isEqualTo("abc");
+        assertThat(model.getItems().get(2).getTitle()).isEqualTo("c");
     }
 
     @Test

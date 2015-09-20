@@ -35,7 +35,7 @@ public class NoteListActivity extends ViewModelActivity<NoteListViewModel> {
                 final NoteListItemBinding binding = NoteListItemBinding.inflate(getLayoutInflater(), parent, false);
                 binding.getRoot().setOnClickListener(new View.OnClickListener() {
                     @Override public void onClick(View v) {
-                        viewModel.openDetail(binding.getItem());
+                        viewModel.openDetail(binding.getItem().getObjectId());
                     }
                 });
                 return new BindableViewHolder<ViewDataBinding, Note>(binding, BR.item);

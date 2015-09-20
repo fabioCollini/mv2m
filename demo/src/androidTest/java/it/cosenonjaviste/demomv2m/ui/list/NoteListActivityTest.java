@@ -7,9 +7,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import it.cosenonjaviste.demomv2m.R;
+import it.cosenonjaviste.demomv2m.TestData;
 import it.cosenonjaviste.demomv2m.core.detail.NoteModel;
-import it.cosenonjaviste.demomv2m.model.Note;
-import it.cosenonjaviste.demomv2m.model.NoteListResponse;
 import it.cosenonjaviste.demomv2m.ui.ObjectFactory;
 import it.cosenonjaviste.demomv2m.ui.TestObjectFactory;
 
@@ -37,18 +36,18 @@ public class NoteListActivityTest {
     @Test
     public void testLoadList() {
         when(objectFactory.noteLoaderService().loadItems())
-                .thenReturn(new NoteListResponse(new Note("1", "abcdef"), new Note("2", "b")));
+                .thenReturn(TestData.response());
 
         rule.launchActivity(null);
 
-        onView(withText("abcdef")).check(matches(isDisplayed()));
+        onView(withText(TestData.TITLE_1)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testReloadAfterError() {
         when(objectFactory.noteLoaderService().loadItems())
                 .thenThrow(new RuntimeException())
-                .thenReturn(new NoteListResponse(new Note("1", "abcdef"), new Note("2", "b")));
+                .thenReturn(TestData.response());
 
         rule.launchActivity(null);
 
@@ -56,16 +55,16 @@ public class NoteListActivityTest {
 
         onView(withText(R.string.retry)).perform(click());
 
-        onView(withText("abcdef")).check(matches(isDisplayed()));
+        onView(withText(TestData.TITLE_1)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testOpenDetail() {
         when(objectFactory.noteLoaderService().loadItems())
-                .thenReturn(new NoteListResponse(new Note("1", "abcdef"), new Note("2", "b")));
+                .thenReturn(TestData.response());
 
         rule.launchActivity(null);
-        onView(withText("abcdef")).perform(click());
+        onView(withText(TestData.TITLE_1)).perform(click());
 
         verify(objectFactory.singleton().navigator())
                 .openDetail(any(NoteModel.class));

@@ -71,6 +71,10 @@ android {
     lintOptions {
         abortOnError false
     }
+    sourceSets {
+        androidTest.java.srcDirs = ['src/androidTest/java', 'src/sharedTest/java']
+        test.java.srcDirs = ['src/test/java', 'src/sharedTest/java']
+    }
 }
 
 dependencies {

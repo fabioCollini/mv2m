@@ -4,15 +4,15 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
+import it.cosenonjaviste.demomv2m.TestData;
 import it.cosenonjaviste.demomv2m.core.ParcelableTester;
-import it.cosenonjaviste.demomv2m.model.Note;
 
 public class NoteListModelTest {
 
     @Test
     public void testParcelable() {
         NoteListModel model = new NoteListModel();
-        model.loadedData(Arrays.asList(new Note("1", "a")));
+        model.loadedData(Arrays.asList(TestData.note1()));
         ParcelableTester.check(model, NoteListModel.CREATOR);
     }
 }
