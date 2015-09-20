@@ -46,7 +46,7 @@ class ViewModelManager<VM extends ViewModel<?>> {
     }
 
     public void destroy() {
-        this.viewModel.detachView();
+        viewModel.detachView();
     }
 
     public void saveState(final Bundle outState) {
@@ -88,10 +88,6 @@ class ViewModelManager<VM extends ViewModel<?>> {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (viewModel.onOptionsItemSelected(item.getItemId())) {
-            return true;
-        } else {
-            return false;
-        }
+        return viewModel.onOptionsItemSelected(item.getItemId());
     }
 }
