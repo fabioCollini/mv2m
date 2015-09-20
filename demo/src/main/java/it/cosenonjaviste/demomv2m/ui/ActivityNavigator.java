@@ -7,7 +7,7 @@ import android.os.Parcelable;
 import it.cosenonjaviste.demomv2m.core.Navigator;
 import it.cosenonjaviste.demomv2m.core.detail.NoteModel;
 import it.cosenonjaviste.demomv2m.ui.detail.NoteActivity;
-import it.cosenonjaviste.mv2m.ViewModelManager;
+import it.cosenonjaviste.mv2m.ViewModel;
 
 public class ActivityNavigator implements Navigator {
 
@@ -15,13 +15,13 @@ public class ActivityNavigator implements Navigator {
 
     public static void startActivity(Activity activity, Class<?> cls, Parcelable noteModel) {
         if (activity != null) {
-            activity.startActivity(new Intent(activity, cls).putExtra(ViewModelManager.MODEL, noteModel));
+            activity.startActivity(new Intent(activity, cls).putExtra(ViewModel.MODEL, noteModel));
         }
     }
 
     public static void startActivityForResult(Activity activity, Class<?> cls, int requestCode, Parcelable noteModel) {
         if (activity != null) {
-            activity.startActivityForResult(new Intent(activity, cls).putExtra(ViewModelManager.MODEL, noteModel), requestCode);
+            activity.startActivityForResult(new Intent(activity, cls).putExtra(ViewModel.MODEL, noteModel), requestCode);
         }
     }
 

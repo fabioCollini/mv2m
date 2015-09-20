@@ -17,7 +17,7 @@ import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 import it.cosenonjaviste.demomv2m.model.NoteSaverService;
 import it.cosenonjaviste.demomv2m.ui.ObjectFactory;
 import it.cosenonjaviste.demomv2m.ui.TestObjectFactory;
-import it.cosenonjaviste.mv2m.ViewModelManager;
+import it.cosenonjaviste.mv2m.ViewModel;
 import retrofit.RetrofitError;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -51,7 +51,7 @@ public class NoteActivityTest {
 
     @Test
     public void testLoading() {
-        rule.launchActivity(new Intent().putExtra(ViewModelManager.MODEL, new NoteModel(TestData.ID_A)));
+        rule.launchActivity(new Intent().putExtra(ViewModel.MODEL, new NoteModel(TestData.ID_A)));
 
         compileFormAndSave(TestData.NEW_TITLE, TestData.NEW_TEXT);
 
@@ -64,7 +64,7 @@ public class NoteActivityTest {
                 .thenThrow(RetrofitError.networkError("url", new IOException()))
                 .thenReturn(TestData.noteA());
 
-        rule.launchActivity(new Intent().putExtra(ViewModelManager.MODEL, new NoteModel(TestData.ID_A)));
+        rule.launchActivity(new Intent().putExtra(ViewModel.MODEL, new NoteModel(TestData.ID_A)));
 
         onView(withText(R.string.retry)).perform(click());
 
@@ -76,7 +76,7 @@ public class NoteActivityTest {
 
     @Test
     public void testTitleValidation() {
-        rule.launchActivity(new Intent().putExtra(ViewModelManager.MODEL, new NoteModel(TestData.ID_A)));
+        rule.launchActivity(new Intent().putExtra(ViewModel.MODEL, new NoteModel(TestData.ID_A)));
 
         compileFormAndSave("", TestData.NEW_TEXT);
 
@@ -85,7 +85,7 @@ public class NoteActivityTest {
 
     @Test
     public void testTextValidation() {
-        rule.launchActivity(new Intent().putExtra(ViewModelManager.MODEL, new NoteModel(TestData.ID_A)));
+        rule.launchActivity(new Intent().putExtra(ViewModel.MODEL, new NoteModel(TestData.ID_A)));
 
         compileFormAndSave(TestData.NEW_TITLE, "");
 

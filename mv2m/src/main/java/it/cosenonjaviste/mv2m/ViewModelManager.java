@@ -13,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 class ViewModelManager<VM extends ViewModel<?>> {
-    public static final String MODEL = "model";
     public static final String RESULT_DATA = "RESULT_DATA";
 
     private VM viewModel;
@@ -51,16 +50,16 @@ class ViewModelManager<VM extends ViewModel<?>> {
     }
 
     public void saveState(final Bundle outState) {
-        outState.putParcelable(MODEL, viewModel.getModel());
+        outState.putParcelable(ViewModel.MODEL, viewModel.getModel());
     }
 
     @Nullable private <M extends Parcelable> M readModel(Bundle state, Bundle args) {
         M model = null;
         if (state != null) {
-            model = state.getParcelable(MODEL);
+            model = state.getParcelable(ViewModel.MODEL);
         }
         if (model == null && args != null) {
-            model = args.getParcelable(MODEL);
+            model = args.getParcelable(ViewModel.MODEL);
         }
         return model;
     }

@@ -8,6 +8,8 @@ import java.util.List;
 
 public class ViewModel<M extends Parcelable> {
 
+    public static final String MODEL = "model";
+
     private M model;
 
     private List<ActivityAware> activityAwares = new ArrayList<>();
