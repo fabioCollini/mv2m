@@ -16,13 +16,12 @@
 package it.cosenonjaviste.mv2m.rx;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-public interface SchedulerManager {
-    <T> Observable<T> bindObservable(Observable<T> observable);
+public class AndroidSchedulerManager implements SchedulerManager {
 
-    SchedulerManager IDENTITY = new SchedulerManager() {
-        @Override public <T> Observable<T> bindObservable(Observable<T> observable) {
-            return observable;
-        }
-    };
+    public <T> Observable<T> bindObservable(Observable<T> observable) {
+        return observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
 }
