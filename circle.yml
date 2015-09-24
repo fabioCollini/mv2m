@@ -9,6 +9,7 @@ dependencies:
 
 test:
   override:
+    - ./gradlew :demo:test :demo:jacocoUnitTestReport
     # start the emulator
     - emulator -avd circleci-android21 -no-audio -no-window:
         background: true
