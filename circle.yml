@@ -1,33 +1,14 @@
-# Build configuration file for Circle CI
-# needs to be named `circle.yml` and should be in the top level dir of the repo
-
-general:
-  artifacts:
-    - "/home/ubuntu/**mv2m**/build/outputs/reports/**testFolderName**/connected"
-
-machine:
-  environment:
-    ANDROID_HOME: /home/ubuntu/android
-  java:
-    version: oraclejdk8
-
-dependencies:
-  cache_directories:
-    - ~/.android
-    - ~/android
-  override:
-    - (echo "Downloading Android SDK v19 now!")
-    - (source scripts/environmentSetup.sh && getAndroidSDK)
-
 test:
-  pre:
-    - $ANDROID_HOME/tools/emulator -avd testAVD -no-skin -no-audio -no-window:
-      background: true
-    - ("./gradlew assembleDebug"):
-      timeout: 1200
-    - ("./gradlew assembleDebugTest"):
-      timeout: 1200
-    - ("source scripts/environmentSetup.sh && waitForAVD")
   override:
-    - (echo "Running JUnit tests!")
-    - (./gradlew connectedAndroidTest)
+    # start the emulator
+    - emulator -avd circleci-android22 -no-audio -no-window:
+        background: true
+        parallel: true
+    # wait for it to have booted
+    - circle-android wait-for-boot
+    # run tests  against the emulator.
+    - ./gradlew connectedAndroidTest
+    # copy the build outputs to artifacts
+    - cp -r mv2m/build/outputs $CIRCLE_ARTIFACTS
+    # copy the test results to the test results directory.
+    - cp -r mv2m/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
