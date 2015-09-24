@@ -3,7 +3,7 @@
 
 general:
   artifacts:
-    -/home/ubuntu/**mv2m**/build/outputs/reports/**testFolderName**/connected
+    -"/home/ubuntu/**mv2m**/build/outputs/reports/**testFolderName**/connected"
 
 machine:
   environment:
