@@ -19,7 +19,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -27,25 +26,35 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-class ViewModelManager<VM extends ViewModel<?>> {
+class ViewModelManager<VM extends ViewModel<?, ?>> {
     public static final String RESULT_DATA = "RESULT_DATA";
 
     private VM viewModel;
 
     public <A extends AppCompatActivity & ViewModelContainer<VM>> VM getOrCreate(A activity, Bundle state) {
-        Parcelable model = readModel(state, activity.getIntent().getExtras());
-        return getOrCreate(activity, activity, activity.getSupportFragmentManager(), model);
+        return getOrCreate(activity, activity, activity.getSupportFragmentManager(), state, activity.getIntent().getExtras());
     }
 
     public <F extends Fragment & ViewModelContainer<VM>> VM getOrCreate(F fragment, Bundle state) {
-        Parcelable model = readModel(state, fragment.getArguments());
-        return getOrCreate(fragment.getActivity(), fragment, fragment.getFragmentManager(), model);
+        return getOrCreate(fragment.getActivity(), fragment, fragment.getFragmentManager(), state, fragment.getArguments());
     }
 
-    private VM getOrCreate(Activity activity, final ViewModelContainer<VM> container, FragmentManager fragmentManager, Parcelable model) {
-        viewModel = ViewModelRetainedFragment.getOrCreate(container.getFragmentTag(model), container, fragmentManager);
-
-        ((ViewModel) viewModel).initModel(model);
+    private VM getOrCreate(Activity activity, final ViewModelContainer<VM> container, FragmentManager fragmentManager, Bundle state, Bundle arguments) {
+        Object args = null;
+        if (arguments != null) {
+            args = ArgumentManager.readArgument(arguments);
+        }
+        ViewModelRetainedFragment<VM> retainedFragment = ViewModelRetainedFragment.getOrCreateFragment(fragmentManager, ViewModelRetainedFragment.TAG + container.getFragmentTag(args));
+        viewModel = retainedFragment.viewModel;
+        if (viewModel == null) {
+            viewModel = container.createViewModel();
+            retainedFragment.viewModel = viewModel;
+            Parcelable model = null;
+            if (state != null) {
+                model = state.getParcelable(ViewModel.MODEL);
+            }
+            ((ViewModel) viewModel).initArgumentAndModel(args, model);
+        }
 
         viewModel.attachActivity(activity);
 
@@ -66,17 +75,6 @@ class ViewModelManager<VM extends ViewModel<?>> {
 
     public void saveState(final Bundle outState) {
         outState.putParcelable(ViewModel.MODEL, viewModel.getModel());
-    }
-
-    @Nullable private <M extends Parcelable> M readModel(Bundle state, Bundle args) {
-        M model = null;
-        if (state != null) {
-            model = state.getParcelable(ViewModel.MODEL);
-        }
-        if (model == null && args != null) {
-            model = args.getParcelable(ViewModel.MODEL);
-        }
-        return model;
     }
 
     public void onBackPressed(Activity activity) {

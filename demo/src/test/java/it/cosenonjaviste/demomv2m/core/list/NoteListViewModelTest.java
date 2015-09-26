@@ -32,7 +32,6 @@ import it.cosenonjaviste.demomv2m.R;
 import it.cosenonjaviste.demomv2m.TestData;
 import it.cosenonjaviste.demomv2m.core.Navigator;
 import it.cosenonjaviste.demomv2m.core.TestExecutor;
-import it.cosenonjaviste.demomv2m.core.detail.NoteModel;
 import it.cosenonjaviste.demomv2m.model.NoteListResponse;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 import it.cosenonjaviste.mv2m.ActivityResult;
@@ -57,7 +56,7 @@ public class NoteListViewModelTest {
 
     @InjectMocks NoteListViewModel viewModel;
 
-    @Captor ArgumentCaptor<NoteModel> captor;
+    @Captor ArgumentCaptor<String> captor;
 
     @Test
     public void testLoad() {
@@ -113,7 +112,7 @@ public class NoteListViewModelTest {
         viewModel.openDetail(TestData.ID_1);
 
         verify(navigator).openDetail(captor.capture());
-        assertThat(captor.getValue().getNoteId()).isEqualTo(TestData.ID_1);
+        assertThat(captor.getValue()).isEqualTo(TestData.ID_1);
     }
 
     @Test
@@ -145,6 +144,6 @@ public class NoteListViewModelTest {
         viewModel.onOptionsItemSelected(R.id.new_note);
 
         verify(navigator).openDetail(captor.capture());
-        assertThat(captor.getValue().getNoteId()).isNull();
+        assertThat(captor.getValue()).isNull();
     }
 }

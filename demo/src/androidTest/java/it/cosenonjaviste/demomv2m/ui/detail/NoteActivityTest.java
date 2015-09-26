@@ -1,8 +1,5 @@
 package it.cosenonjaviste.demomv2m.ui.detail;
 
-import android.content.Intent;
-import android.support.test.rule.ActivityTestRule;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,13 +8,12 @@ import java.io.IOException;
 
 import it.cosenonjaviste.demomv2m.R;
 import it.cosenonjaviste.demomv2m.TestData;
-import it.cosenonjaviste.demomv2m.core.detail.NoteModel;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 import it.cosenonjaviste.demomv2m.model.NoteSaverService;
 import it.cosenonjaviste.demomv2m.ui.ObjectFactory;
 import it.cosenonjaviste.demomv2m.ui.TestObjectFactory;
-import it.cosenonjaviste.mv2m.ViewModel;
+import it.cosenonjaviste.demomv2m.utils.ViewModelActivityTestRule;
 import retrofit.RetrofitError;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -35,7 +31,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class NoteActivityTest {
-    @Rule public ActivityTestRule<NoteActivity> rule = new ActivityTestRule<>(NoteActivity.class, false, false);
+    @Rule public ViewModelActivityTestRule<String> rule = new ViewModelActivityTestRule<>(NoteActivity.class);
 
     private NoteLoaderService noteLoaderService;
     private NoteSaverService noteSaverService;
@@ -51,7 +47,7 @@ public class NoteActivityTest {
 
     @Test
     public void testLoading() {
-        rule.launchActivity(new Intent().putExtra(ViewModel.MODEL, new NoteModel(TestData.ID_A)));
+        rule.launchActivity(TestData.ID_A);
 
         compileFormAndSave(TestData.NEW_TITLE, TestData.NEW_TEXT);
 
@@ -64,7 +60,7 @@ public class NoteActivityTest {
                 .thenThrow(RetrofitError.networkError("url", new IOException()))
                 .thenReturn(TestData.noteA());
 
-        rule.launchActivity(new Intent().putExtra(ViewModel.MODEL, new NoteModel(TestData.ID_A)));
+        rule.launchActivity(TestData.ID_A);
 
         onView(withText(R.string.retry)).perform(click());
 
@@ -76,7 +72,7 @@ public class NoteActivityTest {
 
     @Test
     public void testTitleValidation() {
-        rule.launchActivity(new Intent().putExtra(ViewModel.MODEL, new NoteModel(TestData.ID_A)));
+        rule.launchActivity(TestData.ID_A);
 
         compileFormAndSave("", TestData.NEW_TEXT);
 
@@ -85,7 +81,7 @@ public class NoteActivityTest {
 
     @Test
     public void testTextValidation() {
-        rule.launchActivity(new Intent().putExtra(ViewModel.MODEL, new NoteModel(TestData.ID_A)));
+        rule.launchActivity(TestData.ID_A);
 
         compileFormAndSave(TestData.NEW_TITLE, "");
 

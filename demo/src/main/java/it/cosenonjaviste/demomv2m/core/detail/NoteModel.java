@@ -40,10 +40,6 @@ public class NoteModel implements Parcelable {
     public NoteModel() {
     }
 
-    public NoteModel(String noteId) {
-        this.noteId = noteId;
-    }
-
     protected NoteModel(Parcel in) {
         noteId = in.readString();
         title = in.readParcelable(ObservableString.class.getClassLoader());
@@ -73,6 +69,7 @@ public class NoteModel implements Parcelable {
     }
 
     public void update(Note note) {
+        noteId = note.getObjectId();
         title.set(note.getTitle());
         text.set(note.getText());
         error.set(false);

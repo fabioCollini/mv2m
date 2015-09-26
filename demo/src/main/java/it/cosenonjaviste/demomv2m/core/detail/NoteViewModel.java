@@ -17,6 +17,7 @@ package it.cosenonjaviste.demomv2m.core.detail;
 
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableInt;
+import android.support.annotation.NonNull;
 
 import java.util.concurrent.Executor;
 
@@ -30,7 +31,7 @@ import it.cosenonjaviste.mv2m.ActivityResult;
 import it.cosenonjaviste.mv2m.ViewModel;
 import retrofit.RetrofitError;
 
-public class NoteViewModel extends ViewModel<NoteModel> {
+public class NoteViewModel extends ViewModel<String, NoteModel> {
 
     private final Executor backgroundExecutor;
     private final Executor uiExecutor;
@@ -53,8 +54,12 @@ public class NoteViewModel extends ViewModel<NoteModel> {
         registerActivityAware(messageManager);
     }
 
+    @NonNull @Override public NoteModel createModel() {
+        return new NoteModel();
+    }
+
     @Override public void resume() {
-        if (!loading.get() && !getModel().isLoaded() && getModel().getNoteId() != null) {
+        if (!loading.get() && !getModel().isLoaded() && getArgument() != null) {
             reloadData();
         }
     }
@@ -70,7 +75,7 @@ public class NoteViewModel extends ViewModel<NoteModel> {
 
     private void executeServerCall() {
         try {
-            final Note note = noteLoaderService.load(getModel().getNoteId());
+            final Note note = noteLoaderService.load(getArgument());
             uiExecutor.execute(new Runnable() {
                 @Override public void run() {
                     getModel().update(note);

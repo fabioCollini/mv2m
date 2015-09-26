@@ -17,12 +17,11 @@ package it.cosenonjaviste.mv2m;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public abstract class ViewModelActivity<VM extends ViewModel<?>> extends AppCompatActivity implements ViewModelContainer<VM> {
+public abstract class ViewModelActivity<VM extends ViewModel<?, ?>> extends AppCompatActivity implements ViewModelContainer<VM> {
 
     private ViewModelManager<VM> vmManager;
 
@@ -34,7 +33,7 @@ public abstract class ViewModelActivity<VM extends ViewModel<?>> extends AppComp
         viewModel = vmManager.getOrCreate(this, state);
     }
 
-    @Override public String getFragmentTag(Parcelable model) {
+    @Override public String getFragmentTag(Object args) {
         return getClass().getName();
     }
 

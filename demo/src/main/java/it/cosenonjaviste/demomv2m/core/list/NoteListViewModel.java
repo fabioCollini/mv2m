@@ -16,19 +16,19 @@
 package it.cosenonjaviste.demomv2m.core.list;
 
 import android.databinding.ObservableBoolean;
+import android.support.annotation.NonNull;
 
 import java.util.List;
 import java.util.concurrent.Executor;
 
 import it.cosenonjaviste.demomv2m.R;
 import it.cosenonjaviste.demomv2m.core.Navigator;
-import it.cosenonjaviste.demomv2m.core.detail.NoteModel;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
 import it.cosenonjaviste.mv2m.ActivityResult;
 import it.cosenonjaviste.mv2m.ViewModel;
 
-public class NoteListViewModel extends ViewModel<NoteListModel> {
+public class NoteListViewModel extends ViewModel<Void, NoteListModel> {
 
     private NoteLoaderService service;
 
@@ -48,7 +48,7 @@ public class NoteListViewModel extends ViewModel<NoteListModel> {
         registerActivityAware(navigator);
     }
 
-    @Override public NoteListModel createDefaultModel() {
+    @NonNull @Override public NoteListModel createModel() {
         return new NoteListModel();
     }
 
@@ -87,11 +87,11 @@ public class NoteListViewModel extends ViewModel<NoteListModel> {
     }
 
     public void openDetail(String objectId) {
-        navigator.openDetail(new NoteModel(objectId));
+        navigator.openDetail(objectId);
     }
 
     public void openCreateNewNote() {
-        navigator.openDetail(new NoteModel());
+        navigator.openDetail(null);
     }
 
     public void onResult(int requestCode, ActivityResult activityResult) {

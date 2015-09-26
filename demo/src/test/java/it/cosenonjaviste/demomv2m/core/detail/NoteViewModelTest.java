@@ -63,12 +63,12 @@ public class NoteViewModelTest {
 
     @Before
     public void setUp() {
-        when(noteLoaderService.load(anyString())).thenReturn(TestData.noteA());
+        when(noteLoaderService.load(eq(TestData.ID_A))).thenReturn(TestData.noteA());
     }
 
     @Test
     public void testLoadData() {
-        NoteModel model = viewModel.initAndResume(new NoteModel(TestData.ID_A));
+        NoteModel model = viewModel.initAndResume(TestData.ID_A);
 
         assertThat(model.getTitle().get()).isEqualTo(TestData.TITLE_A);
         assertThat(model.getText().get()).isEqualTo(TestData.TEXT_A);
@@ -79,7 +79,7 @@ public class NoteViewModelTest {
         when(noteLoaderService.load(anyString()))
                 .thenThrow(TestData.networkError());
 
-        NoteModel model = viewModel.initAndResume(new NoteModel(TestData.ID_A));
+        NoteModel model = viewModel.initAndResume(TestData.ID_A);
 
         verify(messageManager, never()).showMessage(anyInt());
         assertThat(model.getError().get()).isTrue();
@@ -91,7 +91,7 @@ public class NoteViewModelTest {
                 .thenThrow(TestData.networkError())
                 .thenReturn(TestData.noteA());
 
-        NoteModel model = viewModel.initAndResume(new NoteModel(TestData.ID_A));
+        NoteModel model = viewModel.initAndResume(TestData.ID_A);
 
         assertThat(model.getError().get()).isTrue();
 
@@ -103,7 +103,7 @@ public class NoteViewModelTest {
 
     @Test
     public void testValidation() {
-        NoteModel model = viewModel.initAndResume(new NoteModel(TestData.ID_A));
+        NoteModel model = viewModel.initAndResume(TestData.ID_A);
 
         model.getTitle().set("");
         model.getText().set("");
@@ -119,7 +119,7 @@ public class NoteViewModelTest {
 
     @Test
     public void testSaveData() {
-        NoteModel model = viewModel.initAndResume(new NoteModel(TestData.ID_A));
+        NoteModel model = viewModel.initAndResume(TestData.ID_A);
 
         model.getTitle().set(TestData.NEW_TITLE);
         model.getText().set(TestData.NEW_TEXT);
@@ -139,7 +139,7 @@ public class NoteViewModelTest {
         when(noteSaverService.save(anyString(), any(Note.class)))
                 .thenThrow(TestData.networkError());
 
-        NoteModel model = viewModel.initAndResume(new NoteModel(TestData.ID_A));
+        NoteModel model = viewModel.initAndResume(TestData.ID_A);
 
         model.getTitle().set(TestData.NEW_TITLE);
         model.getText().set(TestData.NEW_TEXT);
@@ -154,7 +154,7 @@ public class NoteViewModelTest {
         when(noteSaverService.createNewNote(any(Note.class)))
                 .thenReturn(new SaveResponse(TestData.NEW_ID));
 
-        NoteModel model = viewModel.initAndResume(new NoteModel());
+        NoteModel model = viewModel.initAndResume();
 
         verify(noteLoaderService, never()).load(anyString());
 
@@ -175,7 +175,7 @@ public class NoteViewModelTest {
         when(noteSaverService.createNewNote(any(Note.class)))
                 .thenReturn(new SaveResponse(TestData.NEW_ID));
 
-        NoteModel model = viewModel.initAndResume(new NoteModel());
+        NoteModel model = viewModel.initAndResume();
 
         model.getTitle().set(TestData.NEW_TITLE);
         model.getText().set(TestData.NEW_TEXT);

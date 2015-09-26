@@ -17,15 +17,18 @@ package it.cosenonjaviste.mv2m;
 
 import android.app.Activity;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewModel<M extends Parcelable> {
+public abstract class ViewModel<A, M extends Parcelable> {
 
     public static final String MODEL = "model";
 
     private M model;
+
+    private A argument;
 
     private List<ActivityAware> activityAwares = new ArrayList<>();
 
@@ -48,32 +51,29 @@ public class ViewModel<M extends Parcelable> {
         }
     }
 
-    public M createDefaultModel() {
-        return null;
-    }
+    @NonNull protected abstract M createModel();
 
-    public void initModel(M model) {
-        this.model = model;
-        if (this.model == null) {
-            this.model = createDefaultModel();
-            if (this.model == null) {
-                throw new RuntimeException("createDefaultModel not implemented in " + getClass().getName());
-            }
-        }
+    public void initArgumentAndModel(A arguments, M model) {
+        this.argument = arguments;
+        this.model = model != null ? model : createModel();
     }
 
     public M initAndResume() {
         return initAndResume(null);
     }
 
-    public M initAndResume(M newModel) {
-        initModel(newModel);
+    public M initAndResume(A arguments) {
+        initArgumentAndModel(arguments, null);
         resume();
         return getModel();
     }
 
     public M getModel() {
         return model;
+    }
+
+    public A getArgument() {
+        return argument;
     }
 
     public final void attachActivity(Activity activity) {

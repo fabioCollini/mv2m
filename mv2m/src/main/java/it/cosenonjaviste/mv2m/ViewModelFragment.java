@@ -16,10 +16,9 @@
 package it.cosenonjaviste.mv2m;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 
-public abstract class ViewModelFragment<VM extends ViewModel<?>> extends Fragment implements ViewModelContainer<VM> {
+public abstract class ViewModelFragment<VM extends ViewModel<?, ?>> extends Fragment implements ViewModelContainer<VM> {
 
     private ViewModelManager<VM> vmManager;
 
@@ -31,7 +30,7 @@ public abstract class ViewModelFragment<VM extends ViewModel<?>> extends Fragmen
         viewModel = vmManager.getOrCreate(this, state);
     }
 
-    public String getFragmentTag(Parcelable model) {
+    public String getFragmentTag(Object args) {
         return getClass().getName();
     }
 

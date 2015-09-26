@@ -13,23 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.cosenonjaviste.demomv2m.ui;
+package it.cosenonjaviste.demomv2m.utils;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.support.test.rule.ActivityTestRule;
 
-import it.cosenonjaviste.demomv2m.core.Navigator;
-import it.cosenonjaviste.demomv2m.ui.detail.NoteActivity;
 import it.cosenonjaviste.mv2m.ArgumentManager;
+import it.cosenonjaviste.mv2m.ViewModel;
+import it.cosenonjaviste.mv2m.ViewModelActivity;
 
-public class ActivityNavigator implements Navigator {
-
-    private Activity activity;
-
-    @Override public void openDetail(String noteId) {
-        ArgumentManager.startActivityForResult(activity, NoteActivity.class, OPEN_DETAIL, noteId);
+public class ViewModelActivityTestRule<A> extends ActivityTestRule<Activity> {
+    public ViewModelActivityTestRule(Class<? extends ViewModelActivity<? extends ViewModel<A, ?>>> activityClass) {
+        super((Class) activityClass, false, false);
     }
 
-    @Override public void setActivity(Activity activity) {
-        this.activity = activity;
+    public void launchActivity(A arg) {
+        launchActivity(ArgumentManager.writeArgument(new Intent(), arg));
+    }
+
+    public void launchActivity() {
+        launchActivity(ArgumentManager.writeArgument(new Intent(), null));
     }
 }
