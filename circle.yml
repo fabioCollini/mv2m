@@ -30,3 +30,4 @@ test:
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
     - find . -type f -regex ".*/build/test-results/debug/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+    - find . -type f -regex ".*/outputs/androidTest-results/connected/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
