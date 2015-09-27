@@ -19,8 +19,8 @@ test:
     # wait for it to have booted
     - circle-android wait-for-boot
     # run tests  against the emulator.
-    - ./gradlew :demo:connectedAndroidTest
+    - ./gradlew :demo:connectedAndroidTest --stacktrace
     # copy the build outputs to artifacts
     - cp -r mv2m/build/outputs $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
-    - cp -r mv2m/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+    - cp -r /home/ubuntu/mv2m/demo/build/reports/* $CIRCLE_TEST_REPORTS
