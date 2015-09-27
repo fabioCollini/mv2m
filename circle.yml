@@ -3,6 +3,7 @@ machine:
     version: oraclejdk8
   environment:
     GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+    ADB_INSTALL_TIMEOUT: 8
 dependencies:
   pre:
     - echo y | android update sdk --no-ui --all --filter "android-23"
