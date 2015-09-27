@@ -2,7 +2,7 @@ machine:
   java:
     version: oraclejdk8
   environment:
-    GRADLE_OPTS: -Xmx512m -XX:MaxPermSize=512m
+    GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
 dependencies:
   pre:
     - echo y | android update sdk --no-ui --all --filter "android-23"
