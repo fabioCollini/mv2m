@@ -22,8 +22,11 @@ test:
     - sleep 30
     - adb shell input keyevent 82
     # run tests  against the emulator.
-    - ./gradlew :demo:test :demo:jacocoUnitTestReport :demo:connectedAndroidTest :demo:jacocoTestReport --stacktrace
+    - ./gradlew :demo:testDebugUnitTest :demo:jacocoUnitTestReport :demo:connectedAndroidTest :demo:jacocoTestReport --stacktrace
     # copy the build outputs to artifacts
     - cp -r mv2m/build/outputs $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
     - cp -r /home/ubuntu/mv2m/demo/build/reports/* $CIRCLE_TEST_REPORTS
+  post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/build/test-results/debug/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
