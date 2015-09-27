@@ -26,9 +26,9 @@ public abstract class ViewModel<A, M extends Parcelable> {
 
     public static final String MODEL = "model";
 
-    private M model;
+    protected M model;
 
-    private A argument;
+    protected A argument;
 
     private List<ActivityAware> activityAwares = new ArrayList<>();
 
