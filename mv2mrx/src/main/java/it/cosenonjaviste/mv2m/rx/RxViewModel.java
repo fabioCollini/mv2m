@@ -42,6 +42,10 @@ public abstract class RxViewModel<A, M extends Parcelable> extends ViewModel<A, 
         rxHolder.destroy();
     }
 
+    public <T> void subscribe(Action1<Boolean> loadingAction, Observable<T> observable, Action1<? super T> onNext, Action1<Throwable> onError) {
+        rxHolder.subscribe(loadingAction, observable, onNext, onError);
+    }
+
     public <T> void subscribe(Observable<T> observable, Action1<? super T> onNext, Action1<Throwable> onError) {
         rxHolder.subscribe(observable, onNext, onError);
     }

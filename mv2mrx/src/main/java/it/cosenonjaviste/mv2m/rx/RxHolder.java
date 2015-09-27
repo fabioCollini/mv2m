@@ -38,11 +38,22 @@ public class RxHolder {
         this.schedulerManager = schedulerManager;
     }
 
+    public <T> void subscribe(final Action1<Boolean> loadingAction, Observable<T> observable, Action1<? super T> onNext, Action1<Throwable> onError) {
+        subscribe(loadingAction, observable, onNext, onError, null);
+    }
+
     public <T> void subscribe(Observable<T> observable, Action1<? super T> onNext, Action1<Throwable> onError) {
         subscribe(observable, onNext, onError, null);
     }
 
     public <T> void subscribe(Observable<T> observable, final Action1<? super T> onNext, final Action1<Throwable> onError, final Action0 onCompleted) {
+        subscribe(null, observable, onNext, onError, onCompleted);
+    }
+
+    public <T> void subscribe(final Action1<Boolean> loadingAction, Observable<T> observable, final Action1<? super T> onNext, final Action1<Throwable> onError, final Action0 onCompleted) {
+        if (loadingAction != null) {
+            loadingAction.call(true);
+        }
         ConnectableObservable<T> replay = observable.compose(new Observable.Transformer<T, T>() {
             @Override public Observable<T> call(Observable<T> observable1) {
                 return schedulerManager.bindObservable(observable1);
@@ -54,11 +65,17 @@ public class RxHolder {
                 if (onCompleted != null) {
                     onCompleted.call();
                 }
+                if (loadingAction != null) {
+                    loadingAction.call(false);
+                }
             }
 
             @Override public void onError(Throwable e) {
                 if (onError != null) {
                     onError.call(e);
+                }
+                if (loadingAction != null) {
+                    loadingAction.call(false);
                 }
             }
 
