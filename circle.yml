@@ -1,7 +1,8 @@
 machine:
   java:
     version: oraclejdk8
-
+  environment:
+    GRADLE_OPTS: -Xmx512m -XX:MaxPermSize=512m
 dependencies:
   pre:
     - echo y | android update sdk --no-ui --all --filter "android-23"
