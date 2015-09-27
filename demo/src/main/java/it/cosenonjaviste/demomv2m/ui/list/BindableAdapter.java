@@ -21,11 +21,14 @@ import android.support.v7.widget.RecyclerView;
 
 public abstract class BindableAdapter<T> extends RecyclerView.Adapter<BindableViewHolder<?, T>> {
 
+    private final ObservableList.OnListChangedCallback<ObservableList<T>> onListChangedCallback;
+
     private ObservableArrayList<T> items;
 
     public BindableAdapter(ObservableArrayList<T> items) {
         this.items = items;
-        items.addOnListChangedCallback(new WeakOnListChangedCallback<>(new ObservableList.OnListChangedCallback<ObservableList<T>>() {
+        //saved as field to avoid gargabe collector
+        onListChangedCallback = new ObservableList.OnListChangedCallback<ObservableList<T>>() {
             @Override public void onChanged(ObservableList<T> sender) {
                 notifyDataSetChanged();
             }
@@ -45,7 +48,8 @@ public abstract class BindableAdapter<T> extends RecyclerView.Adapter<BindableVi
             @Override public void onItemRangeRemoved(ObservableList<T> sender, int positionStart, int itemCount) {
                 notifyItemRangeRemoved(positionStart, itemCount);
             }
-        }));
+        };
+        items.addOnListChangedCallback(new WeakOnListChangedCallback<>(onListChangedCallback));
     }
 
     @Override public void onBindViewHolder(BindableViewHolder<?, T> viewHolder, int i) {
