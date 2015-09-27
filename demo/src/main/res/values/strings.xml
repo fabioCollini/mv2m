@@ -20,16 +20,16 @@
     <item name="binded" type="id" />
 
     <string name="app_name">Demo MVVM</string>
-    <string name="mandatory_field">Campo obbligatorio</string>
-    <string name="note_saved">Nota salvata</string>
-    <string name="error_loading_list">Errore caricamento note</string>
-    <string name="error_loading_note">Errore caricamento nota</string>
-    <string name="error_saving_note">Errore salvataggio nota</string>
+    <string name="mandatory_field">Mandatory field</string>
+    <string name="note_saved">Note saved</string>
+    <string name="error_loading_list">Error loading notes</string>
+    <string name="error_loading_note">Error loading note</string>
+    <string name="error_saving_note">error saving note</string>
     <string name="save">Save</string>
     <string name="title">Title</string>
     <string name="text">Text</string>
-    <string name="loading">Caricamento in corso...</string>
-    <string name="retry">Riprova</string>
+    <string name="loading">Loading...</string>
+    <string name="retry">Retry</string>
     <string name="new_note">New note</string>
 
 </resources>
