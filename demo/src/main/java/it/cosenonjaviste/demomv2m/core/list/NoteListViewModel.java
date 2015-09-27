@@ -95,7 +95,10 @@ public class NoteListViewModel extends ViewModel<Void, NoteListModel> {
     }
 
     public void onResult(int requestCode, ActivityResult activityResult) {
-        getModel().updateItem((Note) activityResult.getData());
+        Note data = (Note) activityResult.getData();
+        if (data != null) {
+            getModel().updateItem(data);
+        }
     }
 
     @Override public int getOptionMenuId() {
