@@ -1,0 +1,78 @@
+language: java
+jdk: openjdk7
+
+env:
+  matrix:
+    - ANDROID_TARGET=android-19  ANDROID_ABI=default/armeabi-v7a TEST_RESULT_FILE="TEST-test(AVD) - 4.4.4-app-.xml"
+    - ANDROID_TARGET=android-22  ANDROID_ABI=default/armeabi-v7a TEST_RESULT_FILE="TEST-test(AVD) - 5.1.1-app-.xml"
+
+branches:
+  only:
+    - master
+
+before_install:
+  - mkdir -p shippable/testresults
+  - mkdir -p build/test-results
+
+  - chmod +x gradlew
+
+  - sudo apt-get update
+  - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch > /dev/null; fi
+  - sudo apt-get install -y lib32stdc++6 lib32z1
+  - wget http://dl.google.com/android/android-sdk_r24.3.1-linux.tgz
+  - tar xzf android-sdk_r24.3.1-linux.tgz
+  - export ANDROID_HOME=$PWD/android-sdk-linux
+  - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
+  # install android build tools
+  #- wget https://dl-ssl.google.com/android/repository/build-tools_r22.0.1-linux.zip
+  #- unzip build-tools_r22.0.1-linux.zip -d $ANDROID_HOME
+  #- mkdir -p $ANDROID_HOME/build-tools/
+  #- mv $ANDROID_HOME/android-5.1 $ANDROID_HOME/build-tools/22.0.1
+
+  # Install required components.
+  # For a full list, run `android list sdk -a --extended`
+  # Note that sysimg-22 downloads the ARM, x86 and MIPS images (we should optimize this).
+  # Other relevant API's
+  - echo yes | android update sdk -a --filter build-tools-23.0.1 --no-ui --force > /dev/null
+  - echo yes | android update sdk -a --filter platform-tools --no-ui --force > /dev/null
+  #- echo yes | android update sdk --filter extra --no-ui --force > /dev/null
+  - echo yes | android update sdk -a --filter $ANDROID_TARGET --no-ui --force > /dev/null
+  ##- echo yes | android update sdk -a -u -t sys-img-armeabi-v7a-$ANDROID_TARGET
+  - echo yes | android update sdk -a -u -t sys-img-armeabi-v7a-$ANDROID_TARGET
+  #- echo yes | android update sdk --filter extra-android-support --no-ui --force > /dev/null
+  - echo yes | android update sdk -a --filter extra-android-m2repository --no-ui --force > /dev/null
+  - android list sdk -a -e
+
+  # Create and start emulator
+  - android list targets
+  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+  - echo yes | emulator -avd test -no-skin -no-audio -no-window -force-32bit &
+  #- curl http://is.gd/android_wait_for_emulator > android-wait-for-emulator
+  - chmod u+x android-wait-for-emulator
+  - ./android-wait-for-emulator
+  - adb shell input keyevent 82 &
+
+install:
+  - ./gradlew clean assemble
+  #- true
+
+script:
+  #- ./gradlew build
+  #- ./gradlew clean check
+  #- ./gradlew build connectedCheck
+  #- ./gradlew clean connectedCheck build
+  - ./gradlew :demo:testDebugUnitTest :demo:jacocoUnitTestReport :demo:connectedAndroidTest :demo:jacocoTestReport --stacktrace
+
+after_script:
+  #- cp -r app/build/reports/androidTests/connected/* shippable/testresults
+  - ls -R app/build
+  - cp "app/build/outputs/androidTest-results/connected/$TEST_RESULT_FILE" shippable/testresults
+  #- cp app/build/test-results/*.xml shippable/testresults
+  - sed -i -e 's/\r$//' ./cover2cover.py
+  - ./cover2cover.py app/build/reports/coverage/debug/report.xml src/main/java > shippable/codecoverage/coverage.xml
+  #- cp app/build/reports/coverage/debug/report.xml shippable/codecoverage
+  #- cp app/build/test-report shippable
+  #- cp app/build/outputs/apk shippable
+  #- cp app/build/outputs/lint-results-debug_files shippable/lint
+  #- cp app/build/outputs/lint-results-debug.html shippable/lint
+  #- cp app/build/outputs/lint-results-debug.xml shippable/lint
