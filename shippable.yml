@@ -5,6 +5,7 @@ env:
   matrix:
     - ANDROID_TARGET=android-19  ANDROID_ABI=default/armeabi-v7a TEST_RESULT_FILE="TEST-test(AVD) - 4.4.4-app-.xml"
     - ANDROID_TARGET=android-22  ANDROID_ABI=default/armeabi-v7a TEST_RESULT_FILE="TEST-test(AVD) - 5.1.1-app-.xml"
+    - ANDROID_TARGET=android-23  ANDROID_ABI=default/armeabi-v7a TEST_RESULT_FILE="TEST-test(AVD) - 6.0.0-app-.xml"
 
 branches:
   only:
