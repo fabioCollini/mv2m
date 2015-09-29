@@ -21,7 +21,7 @@ import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Path;
 
-public interface NoteSaverService {
+public interface NoteSaver {
     @POST("/Note/") SaveResponse createNewNote(@Body Note note);
 
     @PUT("/Note/{objectId}") Response save(@Path("objectId") String objectId, @Body Note note);

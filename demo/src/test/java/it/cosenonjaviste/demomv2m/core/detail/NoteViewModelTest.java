@@ -32,8 +32,8 @@ import it.cosenonjaviste.demomv2m.TestData;
 import it.cosenonjaviste.demomv2m.core.MessageManager;
 import it.cosenonjaviste.demomv2m.core.TestExecutor;
 import it.cosenonjaviste.demomv2m.model.Note;
-import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
-import it.cosenonjaviste.demomv2m.model.NoteSaverService;
+import it.cosenonjaviste.demomv2m.model.NoteLoader;
+import it.cosenonjaviste.demomv2m.model.NoteSaver;
 import it.cosenonjaviste.demomv2m.model.SaveResponse;
 import it.cosenonjaviste.mv2m.ActivityResult;
 
@@ -49,9 +49,9 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class NoteViewModelTest {
 
-    @Mock NoteLoaderService noteLoaderService;
+    @Mock NoteLoader noteLoader;
 
-    @Mock NoteSaverService noteSaverService;
+    @Mock NoteSaver noteSaver;
 
     @Mock MessageManager messageManager;
 
@@ -63,7 +63,7 @@ public class NoteViewModelTest {
 
     @Before
     public void setUp() {
-        when(noteLoaderService.load(eq(TestData.ID_A))).thenReturn(TestData.noteA());
+        when(noteLoader.load(eq(TestData.ID_A))).thenReturn(TestData.noteA());
     }
 
     @Test
@@ -76,7 +76,7 @@ public class NoteViewModelTest {
 
     @Test
     public void testErrorLoadingData() {
-        when(noteLoaderService.load(anyString()))
+        when(noteLoader.load(anyString()))
                 .thenThrow(TestData.networkError());
 
         NoteModel model = viewModel.initAndResume(TestData.ID_A);
@@ -87,7 +87,7 @@ public class NoteViewModelTest {
 
     @Test
     public void testReloadAfterError() {
-        when(noteLoaderService.load(anyString()))
+        when(noteLoader.load(anyString()))
                 .thenThrow(TestData.networkError())
                 .thenReturn(TestData.noteA());
 
@@ -113,7 +113,7 @@ public class NoteViewModelTest {
         assertThat(model.getTitleError().get()).isEqualTo(R.string.mandatory_field);
         assertThat(model.getTextError().get()).isEqualTo(R.string.mandatory_field);
 
-        verify(noteSaverService, never()).save(anyString(), any(Note.class));
+        verify(noteSaver, never()).save(anyString(), any(Note.class));
         verify(messageManager, never()).showMessage(anyInt());
     }
 
@@ -126,7 +126,7 @@ public class NoteViewModelTest {
 
         viewModel.save();
 
-        verify(noteSaverService).save(eq(TestData.ID_A), captor.capture());
+        verify(noteSaver).save(eq(TestData.ID_A), captor.capture());
 
         assertThat(captor.getValue())
                 .isEqualToComparingFieldByField(new Note(null, TestData.NEW_TITLE, TestData.NEW_TEXT));
@@ -136,7 +136,7 @@ public class NoteViewModelTest {
 
     @Test
     public void testErrorSavingData() {
-        when(noteSaverService.save(anyString(), any(Note.class)))
+        when(noteSaver.save(anyString(), any(Note.class)))
                 .thenThrow(TestData.networkError());
 
         NoteModel model = viewModel.initAndResume(TestData.ID_A);
@@ -151,19 +151,19 @@ public class NoteViewModelTest {
 
     @Test
     public void testCreateNewNote() {
-        when(noteSaverService.createNewNote(any(Note.class)))
+        when(noteSaver.createNewNote(any(Note.class)))
                 .thenReturn(new SaveResponse(TestData.NEW_ID));
 
         NoteModel model = viewModel.initAndResume();
 
-        verify(noteLoaderService, never()).load(anyString());
+        verify(noteLoader, never()).load(anyString());
 
         model.getTitle().set(TestData.NEW_TITLE);
         model.getText().set(TestData.NEW_TEXT);
 
         viewModel.save();
 
-        verify(noteSaverService).createNewNote(captor.capture());
+        verify(noteSaver).createNewNote(captor.capture());
 
         assertThat(captor.getValue())
                 .isEqualToComparingFieldByField(new Note(null, TestData.NEW_TITLE, TestData.NEW_TEXT));
@@ -172,7 +172,7 @@ public class NoteViewModelTest {
 
     @Test
     public void testOnBack() {
-        when(noteSaverService.createNewNote(any(Note.class)))
+        when(noteSaver.createNewNote(any(Note.class)))
                 .thenReturn(new SaveResponse(TestData.NEW_ID));
 
         NoteModel model = viewModel.initAndResume();

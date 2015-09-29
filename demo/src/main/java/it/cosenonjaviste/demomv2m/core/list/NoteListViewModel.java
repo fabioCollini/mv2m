@@ -24,13 +24,13 @@ import java.util.concurrent.Executor;
 import it.cosenonjaviste.demomv2m.R;
 import it.cosenonjaviste.demomv2m.core.Navigator;
 import it.cosenonjaviste.demomv2m.model.Note;
-import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
+import it.cosenonjaviste.demomv2m.model.NoteLoader;
 import it.cosenonjaviste.mv2m.ActivityResult;
 import it.cosenonjaviste.mv2m.ViewModel;
 
 public class NoteListViewModel extends ViewModel<Void, NoteListModel> {
 
-    private NoteLoaderService service;
+    private NoteLoader service;
 
     private ObservableBoolean loading = new ObservableBoolean();
 
@@ -40,7 +40,7 @@ public class NoteListViewModel extends ViewModel<Void, NoteListModel> {
 
     private Navigator navigator;
 
-    public NoteListViewModel(NoteLoaderService service, Executor backgroundExecutor, Executor uiExecutor, Navigator navigator) {
+    public NoteListViewModel(NoteLoader service, Executor backgroundExecutor, Executor uiExecutor, Navigator navigator) {
         this.service = service;
         this.backgroundExecutor = backgroundExecutor;
         this.uiExecutor = uiExecutor;

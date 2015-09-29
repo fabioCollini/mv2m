@@ -25,8 +25,8 @@ import it.cosenonjaviste.demomv2m.R;
 import it.cosenonjaviste.demomv2m.core.MessageManager;
 import it.cosenonjaviste.demomv2m.core.utils.ObservableString;
 import it.cosenonjaviste.demomv2m.model.Note;
-import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
-import it.cosenonjaviste.demomv2m.model.NoteSaverService;
+import it.cosenonjaviste.demomv2m.model.NoteLoader;
+import it.cosenonjaviste.demomv2m.model.NoteSaver;
 import it.cosenonjaviste.mv2m.ActivityResult;
 import it.cosenonjaviste.mv2m.ViewModel;
 import retrofit.RetrofitError;
@@ -35,9 +35,9 @@ public class NoteViewModel extends ViewModel<String, NoteModel> {
 
     private final Executor backgroundExecutor;
     private final Executor uiExecutor;
-    private NoteLoaderService noteLoaderService;
+    private NoteLoader noteLoader;
 
-    private NoteSaverService noteSaverService;
+    private NoteSaver noteSaver;
 
     private MessageManager messageManager;
 
@@ -45,11 +45,11 @@ public class NoteViewModel extends ViewModel<String, NoteModel> {
 
     public final ObservableBoolean sending = new ObservableBoolean();
 
-    public NoteViewModel(Executor backgroundExecutor, Executor uiExecutor, NoteLoaderService noteLoaderService, NoteSaverService noteSaverService, MessageManager messageManager) {
+    public NoteViewModel(Executor backgroundExecutor, Executor uiExecutor, NoteLoader noteLoader, NoteSaver noteSaver, MessageManager messageManager) {
         this.backgroundExecutor = backgroundExecutor;
         this.uiExecutor = uiExecutor;
-        this.noteLoaderService = noteLoaderService;
-        this.noteSaverService = noteSaverService;
+        this.noteLoader = noteLoader;
+        this.noteSaver = noteSaver;
         this.messageManager = messageManager;
         registerActivityAware(messageManager);
     }
@@ -75,7 +75,7 @@ public class NoteViewModel extends ViewModel<String, NoteModel> {
 
     private void executeServerCall() {
         try {
-            final Note note = noteLoaderService.load(getArgument());
+            final Note note = noteLoader.load(getArgument());
             uiExecutor.execute(new Runnable() {
                 @Override public void run() {
                     getModel().update(note);
@@ -103,10 +103,10 @@ public class NoteViewModel extends ViewModel<String, NoteModel> {
                         Note note = new Note(null, getModel().getTitle().get(), getModel().getText().get());
                         String noteId = getModel().getNoteId();
                         if (noteId == null) {
-                            noteId = noteSaverService.createNewNote(note).getObjectId();
+                            noteId = noteSaver.createNewNote(note).getObjectId();
                             getModel().setNoteId(noteId);
                         } else {
-                            noteSaverService.save(noteId, note);
+                            noteSaver.save(noteId, note);
                         }
                         hideSendProgressAndShoMessage(R.string.note_saved);
                     } catch (RetrofitError e) {

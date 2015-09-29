@@ -25,8 +25,8 @@ import java.util.concurrent.Executors;
 
 import it.cosenonjaviste.demomv2m.BuildConfig;
 import it.cosenonjaviste.demomv2m.core.Navigator;
-import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
-import it.cosenonjaviste.demomv2m.model.NoteSaverService;
+import it.cosenonjaviste.demomv2m.model.NoteLoader;
+import it.cosenonjaviste.demomv2m.model.NoteSaver;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 
@@ -34,9 +34,9 @@ public class ObjectFactory {
 
     protected Navigator navigator;
 
-    protected NoteLoaderService noteLoaderService;
+    protected NoteLoader noteLoader;
 
-    protected NoteSaverService noteSaverService;
+    protected NoteSaver noteSaver;
 
     protected Executor backgroundExecutor;
 
@@ -63,18 +63,18 @@ public class ObjectFactory {
         return navigator;
     }
 
-    @NonNull public NoteSaverService noteSaverService() {
-        if (noteSaverService == null) {
-            noteSaverService = createService(NoteSaverService.class);
+    @NonNull public NoteSaver noteSaverService() {
+        if (noteSaver == null) {
+            noteSaver = createService(NoteSaver.class);
         }
-        return noteSaverService;
+        return noteSaver;
     }
 
-    @NonNull public NoteLoaderService noteLoaderService() {
-        if (noteLoaderService == null) {
-            noteLoaderService = createService(NoteLoaderService.class);
+    @NonNull public NoteLoader noteLoaderService() {
+        if (noteLoader == null) {
+            noteLoader = createService(NoteLoader.class);
         }
-        return noteLoaderService;
+        return noteLoader;
     }
 
     private static <T> T createService(Class<T> serviceClass) {

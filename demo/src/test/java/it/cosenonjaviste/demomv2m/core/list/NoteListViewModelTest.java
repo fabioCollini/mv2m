@@ -33,7 +33,7 @@ import it.cosenonjaviste.demomv2m.TestData;
 import it.cosenonjaviste.demomv2m.core.Navigator;
 import it.cosenonjaviste.demomv2m.core.TestExecutor;
 import it.cosenonjaviste.demomv2m.model.NoteListResponse;
-import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
+import it.cosenonjaviste.demomv2m.model.NoteLoader;
 import it.cosenonjaviste.mv2m.ActivityResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,7 +46,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class NoteListViewModelTest {
 
-    @Mock NoteLoaderService service;
+    @Mock NoteLoader service;
 
     @Mock Navigator navigator;
 

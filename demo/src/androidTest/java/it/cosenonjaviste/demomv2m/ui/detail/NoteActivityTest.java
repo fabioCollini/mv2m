@@ -9,8 +9,8 @@ import java.io.IOException;
 import it.cosenonjaviste.demomv2m.R;
 import it.cosenonjaviste.demomv2m.TestData;
 import it.cosenonjaviste.demomv2m.model.Note;
-import it.cosenonjaviste.demomv2m.model.NoteLoaderService;
-import it.cosenonjaviste.demomv2m.model.NoteSaverService;
+import it.cosenonjaviste.demomv2m.model.NoteLoader;
+import it.cosenonjaviste.demomv2m.model.NoteSaver;
 import it.cosenonjaviste.demomv2m.ui.ObjectFactory;
 import it.cosenonjaviste.demomv2m.ui.TestObjectFactory;
 import it.cosenonjaviste.demomv2m.utils.ViewModelActivityTestRule;
@@ -34,16 +34,16 @@ import static org.mockito.Mockito.when;
 public class NoteActivityTest {
     @Rule public ViewModelActivityTestRule<String> rule = new ViewModelActivityTestRule<>(NoteActivity.class);
 
-    private NoteLoaderService noteLoaderService;
-    private NoteSaverService noteSaverService;
+    private NoteLoader noteLoader;
+    private NoteSaver noteSaver;
 
     @Before
     public void setUp() throws Exception {
         ObjectFactory.setSingleton(new TestObjectFactory());
-        noteLoaderService = ObjectFactory.singleton().noteLoaderService();
-        noteSaverService = ObjectFactory.singleton().noteSaverService();
+        noteLoader = ObjectFactory.singleton().noteLoaderService();
+        noteSaver = ObjectFactory.singleton().noteSaverService();
 
-        when(noteLoaderService.load(anyString())).thenReturn(TestData.noteA());
+        when(noteLoader.load(anyString())).thenReturn(TestData.noteA());
     }
 
     @Test
@@ -52,12 +52,12 @@ public class NoteActivityTest {
 
         compileFormAndSave(TestData.NEW_TITLE, TestData.NEW_TEXT);
 
-        verify(noteSaverService).save(eq(TestData.ID_A), any(Note.class));
+        verify(noteSaver).save(eq(TestData.ID_A), any(Note.class));
     }
 
     @Test
     public void testReloadAfterError() {
-        when(noteLoaderService.load(anyString()))
+        when(noteLoader.load(anyString()))
                 .thenThrow(RetrofitError.networkError("url", new IOException()))
                 .thenReturn(TestData.noteA());
 
