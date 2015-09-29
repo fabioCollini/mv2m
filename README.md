@@ -6,6 +6,8 @@ Android MVVM lightweight library based on Android Data Binding
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-mv2m-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2524)
 
 The goal of mv<sup>2</sup>m is to simplify JVM testing of an Android application.
+The [demo module](/demo) contains a simple example of usage of mv<sup>2</sup>m library.
+The [official app](https://github.com/commit-non-javisti/CoseNonJavisteAndroidApp) of the Italian blog [cosenonjaviste.it](http://cosenonjaviste.it) is a more complex example (built using Dagger and RxJava).
  
 ## Components of mv<sup>2</sup>m
 
@@ -22,8 +24,12 @@ It manages the background tasks and all the business logic of the application.
 
 ![mv2m class diagram](/mv2m-class-diagram.png)
 
-## JUnit test
+## JUnit tests
 The ViewModel is not connected to the View, for this reason it's easily testable using a JVM test.
+The demo module contains 
+[some](https://github.com/fabioCollini/mv2m/blob/master/demo/src/test/java/it/cosenonjaviste/demomv2m/core/detail/NoteViewModelTest.java)
+[JUnit tests](https://github.com/fabioCollini/mv2m/blob/master/demo/src/test/java/it/cosenonjaviste/demomv2m/core/list/NoteListViewModelTest.java)
+ for ViewModel classes.
 
 <!--
 ## ActivityAware
