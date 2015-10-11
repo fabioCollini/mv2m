@@ -15,10 +15,10 @@
  */
 package it.cosenonjaviste.demomv2m.core;
 
-import it.cosenonjaviste.mv2m.ActivityAware;
+import android.app.Activity;
 
-public interface Navigator extends ActivityAware {
+public interface Navigator {
     int OPEN_DETAIL = 123;
 
-    void openDetail(String noteId);
+    void openDetail(Activity activity, String noteId);
 }

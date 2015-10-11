@@ -23,13 +23,7 @@ import it.cosenonjaviste.mv2m.ArgumentManager;
 
 public class ActivityNavigator implements Navigator {
 
-    private Activity activity;
-
-    @Override public void openDetail(String noteId) {
+    @Override public void openDetail(Activity activity, String noteId) {
         ArgumentManager.startActivityForResult(activity, NoteActivity.class, OPEN_DETAIL, noteId);
-    }
-
-    @Override public void setActivity(Activity activity) {
-        this.activity = activity;
     }
 }

@@ -19,9 +19,6 @@ import android.app.Activity;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class ViewModel<A, M extends Parcelable> {
 
     public static final String MODEL = "model";
@@ -30,11 +27,7 @@ public abstract class ViewModel<A, M extends Parcelable> {
 
     protected A argument;
 
-    private List<ActivityAware> activityAwares = new ArrayList<>();
-
-    protected void registerActivityAware(ActivityAware activityAware) {
-        activityAwares.add(activityAware);
-    }
+    protected Activity activity;
 
     public void pause() {
     }
@@ -46,9 +39,7 @@ public abstract class ViewModel<A, M extends Parcelable> {
     }
 
     public void detachView() {
-        for (ActivityAware activityAware : activityAwares) {
-            activityAware.setActivity(null);
-        }
+        activity = null;
     }
 
     @NonNull protected abstract M createModel();
@@ -77,9 +68,7 @@ public abstract class ViewModel<A, M extends Parcelable> {
     }
 
     public final void attachActivity(Activity activity) {
-        for (ActivityAware activityAware : activityAwares) {
-            activityAware.setActivity(activity);
-        }
+        this.activity = activity;
     }
 
     public ActivityResult onBackPressed() {

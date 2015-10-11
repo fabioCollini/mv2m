@@ -15,8 +15,8 @@
  */
 package it.cosenonjaviste.demomv2m.core;
 
-import it.cosenonjaviste.mv2m.ActivityAware;
+import android.app.Activity;
 
-public interface MessageManager extends ActivityAware {
-    void showMessage(int message);
+public interface MessageManager {
+    void showMessage(Activity activity, int message);
 }

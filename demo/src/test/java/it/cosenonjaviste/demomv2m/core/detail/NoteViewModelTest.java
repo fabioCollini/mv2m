@@ -15,6 +15,8 @@
  */
 package it.cosenonjaviste.demomv2m.core.detail;
 
+import android.app.Activity;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -81,7 +83,7 @@ public class NoteViewModelTest {
 
         NoteModel model = viewModel.initAndResume(TestData.ID_A);
 
-        verify(messageManager, never()).showMessage(anyInt());
+        verify(messageManager, never()).showMessage(any(Activity.class), anyInt());
         assertThat(model.getError().get()).isTrue();
     }
 
@@ -114,7 +116,7 @@ public class NoteViewModelTest {
         assertThat(model.getTextError().get()).isEqualTo(R.string.mandatory_field);
 
         verify(noteSaver, never()).save(anyString(), any(Note.class));
-        verify(messageManager, never()).showMessage(anyInt());
+        verify(messageManager, never()).showMessage(any(Activity.class), anyInt());
     }
 
     @Test
@@ -131,7 +133,7 @@ public class NoteViewModelTest {
         assertThat(captor.getValue())
                 .isEqualToComparingFieldByField(new Note(null, TestData.NEW_TITLE, TestData.NEW_TEXT));
 
-        verify(messageManager).showMessage(eq(R.string.note_saved));
+        verify(messageManager).showMessage(any(Activity.class), eq(R.string.note_saved));
     }
 
     @Test
@@ -146,7 +148,7 @@ public class NoteViewModelTest {
 
         viewModel.save();
 
-        verify(messageManager).showMessage(eq(R.string.error_saving_note));
+        verify(messageManager).showMessage(any(Activity.class), eq(R.string.error_saving_note));
     }
 
     @Test

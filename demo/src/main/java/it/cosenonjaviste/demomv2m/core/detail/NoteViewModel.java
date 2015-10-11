@@ -51,7 +51,6 @@ public class NoteViewModel extends ViewModel<String, NoteModel> {
         this.noteLoader = noteLoader;
         this.noteSaver = noteSaver;
         this.messageManager = messageManager;
-        registerActivityAware(messageManager);
     }
 
     @NonNull @Override public NoteModel createModel() {
@@ -120,7 +119,7 @@ public class NoteViewModel extends ViewModel<String, NoteModel> {
     private void hideSendProgressAndShoMessage(final int message) {
         uiExecutor.execute(new Runnable() {
             @Override public void run() {
-                messageManager.showMessage(message);
+                messageManager.showMessage(activity, message);
                 sending.set(false);
             }
         });

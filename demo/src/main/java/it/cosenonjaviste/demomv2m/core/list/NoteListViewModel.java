@@ -45,7 +45,6 @@ public class NoteListViewModel extends ViewModel<Void, NoteListModel> {
         this.backgroundExecutor = backgroundExecutor;
         this.uiExecutor = uiExecutor;
         this.navigator = navigator;
-        registerActivityAware(navigator);
     }
 
     @NonNull @Override public NoteListModel createModel() {
@@ -87,11 +86,11 @@ public class NoteListViewModel extends ViewModel<Void, NoteListModel> {
     }
 
     public void openDetail(String objectId) {
-        navigator.openDetail(objectId);
+        navigator.openDetail(activity, objectId);
     }
 
     public void openCreateNewNote() {
-        navigator.openDetail(null);
+        navigator.openDetail(activity, null);
     }
 
     public void onResult(int requestCode, ActivityResult activityResult) {

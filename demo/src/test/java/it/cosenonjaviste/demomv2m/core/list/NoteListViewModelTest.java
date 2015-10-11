@@ -15,6 +15,7 @@
  */
 package it.cosenonjaviste.demomv2m.core.list;
 
+import android.app.Activity;
 import android.databinding.Observable;
 
 import org.junit.Test;
@@ -37,6 +38,7 @@ import it.cosenonjaviste.demomv2m.model.NoteLoader;
 import it.cosenonjaviste.mv2m.ActivityResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
@@ -111,7 +113,7 @@ public class NoteListViewModelTest {
         viewModel.initAndResume();
         viewModel.openDetail(TestData.ID_1);
 
-        verify(navigator).openDetail(captor.capture());
+        verify(navigator).openDetail(any(Activity.class), captor.capture());
         assertThat(captor.getValue()).isEqualTo(TestData.ID_1);
     }
 
@@ -143,7 +145,7 @@ public class NoteListViewModelTest {
         viewModel.initAndResume();
         viewModel.onOptionsItemSelected(R.id.new_note);
 
-        verify(navigator).openDetail(captor.capture());
+        verify(navigator).openDetail(any(Activity.class), captor.capture());
         assertThat(captor.getValue()).isNull();
     }
 }
