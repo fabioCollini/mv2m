@@ -65,7 +65,7 @@ public abstract class ViewModel<A, M extends Parcelable> {
     public M initAndResume(A arguments) {
         initArgumentAndModel(arguments, null);
         resume();
-        return getModel();
+        return model;
     }
 
     public M getModel() {

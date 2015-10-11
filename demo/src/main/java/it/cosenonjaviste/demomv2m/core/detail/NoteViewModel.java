@@ -59,7 +59,7 @@ public class NoteViewModel extends ViewModel<String, NoteModel> {
     }
 
     @Override public void resume() {
-        if (!loading.get() && !getModel().isLoaded() && getArgument() != null) {
+        if (!loading.get() && !model.isLoaded() && getArgument() != null) {
             reloadData();
         }
     }
@@ -78,14 +78,14 @@ public class NoteViewModel extends ViewModel<String, NoteModel> {
             final Note note = noteLoader.load(getArgument());
             uiExecutor.execute(new Runnable() {
                 @Override public void run() {
-                    getModel().update(note);
+                    model.update(note);
                     loading.set(false);
                 }
             });
         } catch (Exception e) {
             uiExecutor.execute(new Runnable() {
                 @Override public void run() {
-                    getModel().getError().set(true);
+                    model.getError().set(true);
                     loading.set(false);
                 }
             });
@@ -93,18 +93,18 @@ public class NoteViewModel extends ViewModel<String, NoteModel> {
     }
 
     public void save() {
-        boolean titleValid = checkMandatory(getModel().getTitle(), getModel().getTitleError());
-        boolean textValid = checkMandatory(getModel().getText(), getModel().getTextError());
+        boolean titleValid = checkMandatory(model.getTitle(), model.getTitleError());
+        boolean textValid = checkMandatory(model.getText(), model.getTextError());
         if (titleValid && textValid) {
             sending.set(true);
             backgroundExecutor.execute(new Runnable() {
                 @Override public void run() {
                     try {
-                        Note note = new Note(null, getModel().getTitle().get(), getModel().getText().get());
-                        String noteId = getModel().getNoteId();
+                        Note note = new Note(null, model.getTitle().get(), model.getText().get());
+                        String noteId = model.getNoteId();
                         if (noteId == null) {
                             noteId = noteSaver.createNewNote(note).getObjectId();
-                            getModel().setNoteId(noteId);
+                            model.setNoteId(noteId);
                         } else {
                             noteSaver.save(noteId, note);
                         }
@@ -133,7 +133,6 @@ public class NoteViewModel extends ViewModel<String, NoteModel> {
     }
 
     @Override public ActivityResult onBackPressed() {
-        NoteModel model = getModel();
         return new ActivityResult(true, new Note(model.getNoteId(), model.getTitle().get(), model.getText().get()));
     }
 }

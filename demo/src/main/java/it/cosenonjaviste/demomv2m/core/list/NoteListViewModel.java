@@ -53,7 +53,7 @@ public class NoteListViewModel extends ViewModel<Void, NoteListModel> {
     }
 
     @Override public void resume() {
-        if (!loading.get() && !getModel().isLoaded()) {
+        if (!loading.get() && !model.isLoaded()) {
             reloadData();
         }
     }
@@ -67,14 +67,14 @@ public class NoteListViewModel extends ViewModel<Void, NoteListModel> {
                     uiExecutor.execute(new Runnable() {
                         @Override public void run() {
                             loading.set(false);
-                            getModel().loadedData(notes);
+                            model.loadedData(notes);
                         }
                     });
                 } catch (Exception e) {
                     uiExecutor.execute(new Runnable() {
                         @Override public void run() {
                             loading.set(false);
-                            getModel().loadedWithError();
+                            model.loadedWithError();
                         }
                     });
                 }
@@ -95,9 +95,9 @@ public class NoteListViewModel extends ViewModel<Void, NoteListModel> {
     }
 
     public void onResult(int requestCode, ActivityResult activityResult) {
-        Note data = (Note) activityResult.getData();
+        Note data = activityResult.getData();
         if (data != null) {
-            getModel().updateItem(data);
+            model.updateItem(data);
         }
     }
 
