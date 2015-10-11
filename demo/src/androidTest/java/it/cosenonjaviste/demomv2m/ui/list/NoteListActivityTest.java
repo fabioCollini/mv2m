@@ -1,5 +1,7 @@
 package it.cosenonjaviste.demomv2m.ui.list;
 
+import android.app.Activity;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,6 +17,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -65,6 +68,6 @@ public class NoteListActivityTest {
         onView(withText(TestData.TITLE_1)).perform(click());
 
         verify(objectFactory.navigator())
-                .openDetail(eq(TestData.ID_1));
+                .openDetail(any(Activity.class), eq(TestData.ID_1));
     }
 }
