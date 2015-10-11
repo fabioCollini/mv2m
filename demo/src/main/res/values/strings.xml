@@ -19,7 +19,7 @@
 
     <item name="binded" type="id" />
 
-    <string name="app_name">Demo MVVM</string>
+    <string name="app_name">Demo mv2m</string>
     <string name="mandatory_field">Mandatory field</string>
     <string name="note_saved">Note saved</string>
     <string name="error_loading_list">Error loading notes</string>
@@ -31,5 +31,9 @@
     <string name="loading">Loading...</string>
     <string name="retry">Retry</string>
     <string name="new_note">New note</string>
+
+    <string name="conversion_error">Conversion error</string>
+    <string name="error_loading_rate">Error loading rate</string>
+    <string name="convert">Convert</string>
 
 </resources>

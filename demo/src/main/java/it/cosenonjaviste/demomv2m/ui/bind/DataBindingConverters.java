@@ -16,6 +16,7 @@
 package it.cosenonjaviste.demomv2m.ui.bind;
 
 import android.databinding.BindingAdapter;
+import android.databinding.BindingConversion;
 import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.EditText;
@@ -67,5 +68,10 @@ public class DataBindingConverters {
                 listener.run();
             }
         });
+    }
+
+    @BindingConversion
+    public static String convertObservableStringToString(ObservableString s) {
+        return s.get();
     }
 }

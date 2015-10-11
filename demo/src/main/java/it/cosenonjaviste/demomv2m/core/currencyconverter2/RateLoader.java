@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.cosenonjaviste.mv2m;
+package it.cosenonjaviste.demomv2m.core.currencyconverter2;
 
-import android.app.Activity;
+import java.util.Random;
 
-public interface ActivityAware {
-    void setActivity(Activity activity);
+public class RateLoader {
+    public float loadRate() {
+        return 1 + new Random().nextInt(300) / 1000f;
+    }
 }
