@@ -14,13 +14,16 @@ test:
     #- ./gradlew :demo:assembleDebug :demo:test :demo:jacocoUnitTestReport
     #- echo no | android create avd --force -n emulator_21 -t android-21 --abi armeabi-v7a --skin WVGA800
     # start the emulator
-    - emulator -avd circleci-android22 -no-audio -no-window:
+    - emulator -avd circleci-android19 -no-audio -no-window:
         background: true
         parallel: true
     # wait for it to have booted
     - circle-android wait-for-boot
     - sleep 30
     - adb shell input keyevent 82
+    - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
+    - adb shell stop installd
+    - adb shell start installd
     # run tests  against the emulator.
     - ./gradlew :demo:testDebugUnitTest :demo:jacocoUnitTestReport :demo:connectedAndroidTest :demo:jacocoTestReport :demo:coveralls --stacktrace
     # copy the build outputs to artifacts
