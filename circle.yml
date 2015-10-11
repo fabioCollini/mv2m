@@ -5,6 +5,9 @@ machine:
     ADB_INSTALL_TIMEOUT: 10
     GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
 dependencies:
+  cache_directories:
+    - ~/.android
+    - ~/android
   pre:
     - echo y | android update sdk --no-ui --all --filter "android-23"
     - echo y | android update sdk --no-ui --all --filter "build-tools-23.0.1"
