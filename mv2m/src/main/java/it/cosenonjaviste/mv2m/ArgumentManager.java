@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 
 import java.io.Serializable;
 
@@ -76,6 +77,12 @@ public class ArgumentManager {
         if (activity != null) {
             activity.startActivity(createIntent(activity, cls, argument));
         }
+    }
+
+    public static <ARG, VM extends ViewModel<ARG, ?>, F extends ViewModelFragment<VM>> F instantiateFragment(Activity activity, Class<F> cls, ARG argument) {
+        Bundle args = new Bundle();
+        writeArgument(args, argument);
+        return (F) Fragment.instantiate(activity, cls.getName(), args);
     }
 
     public static <ARG, VM extends ViewModel<ARG, ?>, A extends ViewModelActivity<VM>> void startActivityForResult(Activity activity, Class<A> cls, int requestCode, ARG argument) {
