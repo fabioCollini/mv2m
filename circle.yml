@@ -9,15 +9,16 @@ dependencies:
     - ~/.android
     - ~/android
   pre:
+    - echo y | android update sdk --no-ui --all --filter "android-19"
     - echo y | android update sdk --no-ui --all --filter "android-23"
     - echo y | android update sdk --no-ui --all --filter "build-tools-23.0.1"
 
 test:
   override:
     #- ./gradlew :demo:assembleDebug :demo:test :demo:jacocoUnitTestReport
-    #- echo no | android create avd --force -n emulator_21 -t android-21 --abi armeabi-v7a --skin WVGA800
+    - echo no | android create avd --force -n emulator_19 -t android-19 --abi armeabi-v7a --skin WVGA800
     # start the emulator
-    - emulator -avd circleci-android19 -no-audio -no-window:
+    - emulator -avd emulator_19 -no-audio -no-window:
         background: true
         parallel: true
     # wait for it to have booted
