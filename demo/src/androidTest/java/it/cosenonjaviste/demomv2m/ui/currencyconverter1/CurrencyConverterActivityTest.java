@@ -55,6 +55,6 @@ public class CurrencyConverterActivityTest {
 
         onView(withText(R.string.convert)).perform(click());
 
-        onView(withText("246,00")).check(matches(isDisplayed()));
+        onView(withText("246.00")).check(matches(isDisplayed()));
     }
 }

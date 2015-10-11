@@ -18,6 +18,8 @@ package it.cosenonjaviste.demomv2m.core.currencyconverter1;
 import android.support.annotation.NonNull;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 import it.cosenonjaviste.mv2m.ViewModel;
 
@@ -36,6 +38,7 @@ public class CurrencyConverterViewModel extends ViewModel<Void, CurrencyConverte
     public void calculate() {
         String inputString = model.input.get();
         float input = Float.parseFloat(inputString);
-        model.output.set(new DecimalFormat("0.00").format(input * rateLoader.loadRate()));
+        DecimalFormat decimalFormat = new DecimalFormat("0.00", DecimalFormatSymbols.getInstance(Locale.US));
+        model.output.set(decimalFormat.format(input * rateLoader.loadRate()));
     }
 }

@@ -155,7 +155,7 @@ public class CurrencyConverterViewModelTest {
         model.input.set("123");
         viewModel.calculate();
 
-        assertThat(model.output.get()).isEqualTo("246,00");
+        assertThat(model.output.get()).isEqualTo("246.00");
     }
 }
 ```
@@ -259,7 +259,7 @@ public class CurrencyConverterActivityTest {
 
         onView(withText(R.string.convert)).perform(click());
 
-        onView(withText("246,00")).check(matches(isDisplayed()));
+        onView(withText("246.00")).check(matches(isDisplayed()));
     }
 }
 ```
@@ -452,7 +452,7 @@ public class CurrencyConverterViewModelTest {
         model.input.set("123");
         viewModel.calculate();
 
-        assertThat(model.output.get()).isEqualTo("246,00");
+        assertThat(model.output.get()).isEqualTo("246.00");
     }
 
     @Test

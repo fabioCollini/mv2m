@@ -19,6 +19,8 @@ import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 import java.util.concurrent.Executor;
 
 import it.cosenonjaviste.demomv2m.R;
@@ -56,7 +58,8 @@ public class CurrencyConverterViewModel extends ViewModel<Void, CurrencyConverte
             ioExecutor.execute(new Runnable() {
                 @Override public void run() {
                     try {
-                        model.output.set(new DecimalFormat("0.00").format(input * rateLoader.loadRate()));
+                        DecimalFormat decimalFormat = new DecimalFormat("0.00", DecimalFormatSymbols.getInstance(Locale.US));
+                        model.output.set(decimalFormat.format(input * rateLoader.loadRate()));
                     } catch (Exception e) {
                         uiExecutor.execute(new Runnable() {
                             @Override public void run() {

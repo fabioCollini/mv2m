@@ -49,7 +49,7 @@ public class CurrencyConverterViewModelTest {
         model.input.set("123");
         viewModel.calculate();
 
-        assertThat(model.output.get()).isEqualTo("246,00");
+        assertThat(model.output.get()).isEqualTo("246.00");
     }
 
     @Test
