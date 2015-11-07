@@ -20,9 +20,14 @@ import rx.Observable;
 public interface SchedulerManager {
     <T> Observable<T> bindObservable(Observable<T> observable);
 
+    void logException(Throwable t);
+
     SchedulerManager IDENTITY = new SchedulerManager() {
         @Override public <T> Observable<T> bindObservable(Observable<T> observable) {
             return observable;
+        }
+
+        @Override public void logException(Throwable t) {
         }
     };
 }

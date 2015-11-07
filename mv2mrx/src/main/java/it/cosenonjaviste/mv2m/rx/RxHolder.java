@@ -56,35 +56,59 @@ public class RxHolder {
         }
         ConnectableObservable<T> replay = observable.compose(new Observable.Transformer<T, T>() {
             @Override public Observable<T> call(Observable<T> observable1) {
-                return schedulerManager.bindObservable(observable1);
+                return schedulerManager.bindObservable(observable1).doOnError(new Action1<Throwable>() {
+                    @Override public void call(Throwable t) {
+                        schedulerManager.logException(t);
+                    }
+                });
             }
         }).replay();
         connectableSubscriptions.add(replay.connect());
-        ObservableWithObserver<T> observableWithObserver = new ObservableWithObserver<>(replay, new Observer<T>() {
+        final ObservableWithObserver<T> observableWithObserver = new ObservableWithObserver<>(replay);
+        final Observer<T> observer = new Observer<T>() {
             @Override public void onCompleted() {
-                if (onCompleted != null) {
-                    onCompleted.call();
-                }
-                if (loadingAction != null) {
-                    loadingAction.call(false);
+                try {
+                    if (onCompleted != null) {
+                        onCompleted.call();
+                    }
+                    if (loadingAction != null) {
+                        loadingAction.call(false);
+                    }
+                    observables.remove(observableWithObserver);
+                } catch (RuntimeException e) {
+                    schedulerManager.logException(e);
+                    throw e;
                 }
             }
 
             @Override public void onError(Throwable e) {
-                if (onError != null) {
-                    onError.call(e);
-                }
-                if (loadingAction != null) {
-                    loadingAction.call(false);
+                try {
+                    if (onError != null) {
+                        onError.call(e);
+                    }
+                    if (loadingAction != null) {
+                        loadingAction.call(false);
+                    }
+                } catch (RuntimeException ex) {
+                    schedulerManager.logException(ex);
+                    throw ex;
+                } finally {
+                    observables.remove(observableWithObserver);
                 }
             }
 
             @Override public void onNext(T t) {
-                if (onNext != null) {
-                    onNext.call(t);
+                try {
+                    if (onNext != null) {
+                        onNext.call(t);
+                    }
+                } catch (RuntimeException e) {
+                    schedulerManager.logException(e);
+                    throw e;
                 }
             }
-        });
+        };
+        observableWithObserver.observer = observer;
         observables.add(observableWithObserver);
         subscribe(observableWithObserver);
     }
@@ -93,19 +117,16 @@ public class RxHolder {
     private <T> void subscribe(final ObservableWithObserver<T> observableWithObserver) {
         subscriptions.add(
                 observableWithObserver.observable
-                        .finallyDo(new Action0() {
-                            @Override public void call() {
-                                observables.remove(observableWithObserver);
-                            }
-                        })
                         .subscribe(observableWithObserver.observer)
         );
     }
 
     public void resubscribePendingObservable() {
-        ArrayList<ObservableWithObserver> observableCopy = new ArrayList<>(observables);
-        for (ObservableWithObserver<?> observableWithObserver : observableCopy) {
-            subscribe(observableWithObserver);
+        if (!observables.isEmpty()) {
+            ArrayList<ObservableWithObserver> observableCopy = new ArrayList<>(observables);
+            for (ObservableWithObserver<?> observableWithObserver : observableCopy) {
+                subscribe(observableWithObserver);
+            }
         }
     }
 
@@ -125,11 +146,10 @@ public class RxHolder {
     private static class ObservableWithObserver<T> {
         public final ConnectableObservable<T> observable;
 
-        public final Observer<T> observer;
+        public Observer<T> observer;
 
-        public ObservableWithObserver(ConnectableObservable<T> observable, Observer<T> observer) {
+        public ObservableWithObserver(ConnectableObservable<T> observable) {
             this.observable = observable;
-            this.observer = observer;
         }
     }
 }

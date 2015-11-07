@@ -24,4 +24,7 @@ public class AndroidSchedulerManager implements SchedulerManager {
     public <T> Observable<T> bindObservable(Observable<T> observable) {
         return observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
+
+    @Override public void logException(Throwable t) {
+    }
 }
