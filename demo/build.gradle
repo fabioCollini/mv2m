@@ -8,21 +8,15 @@ buildscript {
     }
     dependencies {
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1x'
+        classpath"org.jacoco:org.jacoco.core:0.7.5.201505241946"
     }
 }
 
 apply plugin: 'com.android.application'
 
-apply plugin: 'com.android.databinding'
-
 apply plugin: "jacoco"
 
 apply plugin: 'com.github.kt3k.coveralls'
-
-jacoco {
-    toolVersion = "0.7.5.201505241946"
-
-}
 
 coveralls.jacocoReportPath = 'build/reports/jacoco/*/*.xml'
 
@@ -70,6 +64,8 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
         exclude 'LICENSE.txt'
+        exclude 'META-INF/maven/com.google.guava/guava/pom.properties'
+        exclude 'META-INF/maven/com.google.guava/guava/pom.xml'
     }
     lintOptions {
         abortOnError false
@@ -77,6 +73,9 @@ android {
     sourceSets {
         androidTest.java.srcDirs = ['src/androidTest/java', 'src/sharedTest/java']
         test.java.srcDirs = ['src/test/java', 'src/sharedTest/java']
+    }
+    dataBinding {
+        enabled = true
     }
 }
 
@@ -111,7 +110,7 @@ dependencies {
         exclude module: 'recyclerview-v7'
     }
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.1'
-    androidTestCompile 'com.android.support.test.espresso:espresso-web:2.2'
+    androidTestCompile 'com.android.support.test.espresso:espresso-web:2.2.1'
 }
 
 // Define coverage source.
