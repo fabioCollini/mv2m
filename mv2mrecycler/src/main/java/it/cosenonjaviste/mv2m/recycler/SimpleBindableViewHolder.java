@@ -13,28 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.cosenonjaviste.demomv2m.ui.list;
+package it.cosenonjaviste.mv2m.recycler;
 
 import android.databinding.ViewDataBinding;
-import android.support.v7.widget.RecyclerView;
 
-public class BindableViewHolder<B extends ViewDataBinding, T> extends RecyclerView.ViewHolder {
+public class SimpleBindableViewHolder<B extends ViewDataBinding, T> extends BindableViewHolder<T> {
 
     protected final B binding;
 
-    private int variableId;
+    private final Binder<B, T> binder;
+
+    private final int variableId;
 
     protected T item;
 
-    public BindableViewHolder(B binding, int variableId) {
+    protected SimpleBindableViewHolder(B binding, Binder<B, T> binder) {
+        super(binding.getRoot());
+        this.binding = binding;
+        this.binder = binder;
+        variableId = 0;
+    }
+
+    protected SimpleBindableViewHolder(B binding, int variableId) {
         super(binding.getRoot());
         this.binding = binding;
         this.variableId = variableId;
+        binder = null;
     }
 
     public void bind(T item) {
         this.item = item;
-        binding.setVariable(variableId, item);
+        if (binder != null) {
+            binder.bind(binding, item);
+        } else {
+            binding.setVariable(variableId, item);
+        }
+        binding.executePendingBindings();
     }
 
     public T getItem() {

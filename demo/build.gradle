@@ -81,10 +81,11 @@ android {
 
 dependencies {
     compile project(':mv2mrx')
+    compile project(':mv2mrecycler')
     compile 'com.squareup.okhttp:okhttp:2.4.0'
-    compile 'com.android.support:cardview-v7:23.0.1'
-    compile 'com.android.support:recyclerview-v7:23.0.1'
-    compile 'com.android.support:design:23.0.1'
+    compile 'com.android.support:cardview-v7:23.1.1'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
 
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.annimon:stream:1.0.3'

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.cosenonjaviste.demomv2m.ui.list;
+package it.cosenonjaviste.mv2m.recycler;
 
 import android.databinding.ObservableList;
 import android.databinding.ObservableList.OnListChangedCallback;
