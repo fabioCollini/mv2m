@@ -15,20 +15,22 @@
   ~ limitations under the License.
   -->
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
-            name="item"
-            type="it.cosenonjaviste.demomv2m.model.Note"/>
+            name="viewHolder"
+            type="it.cosenonjaviste.demomv2m.ui.list.NoteViewHolder"/>
     </data>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:padding="8dp"
-        android:text="@{item.title}"
-        android:textSize="18sp"/>
+        android:text="@{viewHolder.item.title}"
+        android:textSize="18sp"
+        app:onClick="@{viewHolder.openDetail}"/>
 
 </layout>

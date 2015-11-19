@@ -18,10 +18,8 @@ package it.cosenonjaviste.demomv2m.ui.list;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.View;
 import android.view.ViewGroup;
 
-import it.cosenonjaviste.demomv2m.BR;
 import it.cosenonjaviste.demomv2m.R;
 import it.cosenonjaviste.demomv2m.core.list.NoteListViewModel;
 import it.cosenonjaviste.demomv2m.databinding.NoteListBinding;
@@ -48,13 +46,7 @@ public class NoteListActivity extends ViewModelActivity<NoteListViewModel> {
         binding.list.setLayoutManager(new LinearLayoutManager(this));
         BindableAdapter<Note> adapter = new BindableAdapter<>(viewModel.getModel().getItems(), new BindableAdapter.ViewHolderFactory<Note>() {
             @Override public BindableViewHolder<Note> create(ViewGroup viewGroup) {
-                final NoteListItemBinding binding = NoteListItemBinding.inflate(getLayoutInflater(), viewGroup, false);
-                binding.getRoot().setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
-                        viewModel.openDetail(binding.getItem().getObjectId());
-                    }
-                });
-                return BindableViewHolder.create(binding, BR.item);
+                return new NoteViewHolder(NoteListItemBinding.inflate(getLayoutInflater(), viewGroup, false), viewModel);
             }
         });
         binding.list.setAdapter(adapter);

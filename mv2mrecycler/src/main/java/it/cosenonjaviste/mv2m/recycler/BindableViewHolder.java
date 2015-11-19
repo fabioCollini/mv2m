@@ -21,8 +21,6 @@ import android.view.View;
 
 public abstract class BindableViewHolder<T> extends RecyclerView.ViewHolder {
 
-    protected T item;
-
     public BindableViewHolder(View itemView) {
         super(itemView);
     }
@@ -36,8 +34,6 @@ public abstract class BindableViewHolder<T> extends RecyclerView.ViewHolder {
     }
 
     public abstract void bind(T item);
-
-    public abstract T getItem();
 
     public interface Binder<B extends ViewDataBinding, T> {
         void bind(B binding, T item);
