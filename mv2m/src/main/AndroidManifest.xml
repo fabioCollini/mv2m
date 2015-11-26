@@ -1,7 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="it.cosenonjaviste.mv2m">
+<manifest package="it.cosenonjaviste.mv2m">
 
-    <application android:allowBackup="true">
+    <application>
 
     </application>
 
