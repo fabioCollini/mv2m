@@ -64,11 +64,11 @@ public class CurrencyConverterViewModel extends RxViewModel<Void, CurrencyConver
                         }
                     }, new Action1<Throwable>() {
                         @Override public void call(Throwable throwable) {
-                            messageManager.showMessage(activity, R.string.error_loading_rate);
+                            messageManager.showMessage(view, R.string.error_loading_rate);
                         }
                     });
         } catch (NumberFormatException e) {
-            messageManager.showMessage(activity, R.string.conversion_error);
+            messageManager.showMessage(view, R.string.conversion_error);
         }
     }
 }

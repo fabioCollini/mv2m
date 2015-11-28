@@ -86,11 +86,11 @@ public class NoteListViewModel extends ViewModel<Void, NoteListModel> {
     }
 
     public void openDetail(String objectId) {
-        navigator.openDetail(activity, objectId);
+        navigator.openDetail(view, objectId);
     }
 
     public void openCreateNewNote() {
-        navigator.openDetail(activity, null);
+        navigator.openDetail(view, null);
     }
 
     public void onResult(int requestCode, ActivityResult activityResult) {

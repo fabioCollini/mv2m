@@ -15,7 +15,7 @@
  */
 package it.cosenonjaviste.mv2m;
 
-public interface ViewModelContainer<VM extends ViewModel<?, ?>> {
+public interface ViewModelContainer<VM extends ViewModel<?, ?>> extends Mv2mView {
     VM createViewModel();
 
     String getFragmentTag(Object args);

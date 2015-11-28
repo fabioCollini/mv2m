@@ -63,7 +63,7 @@ public class CurrencyConverterViewModel extends ViewModel<Void, CurrencyConverte
                     } catch (Exception e) {
                         uiExecutor.execute(new Runnable() {
                             @Override public void run() {
-                                messageManager.showMessage(activity, R.string.error_loading_rate);
+                                messageManager.showMessage(view, R.string.error_loading_rate);
                             }
                         });
                     } finally {
@@ -72,7 +72,7 @@ public class CurrencyConverterViewModel extends ViewModel<Void, CurrencyConverte
                 }
             });
         } catch (NumberFormatException e) {
-            messageManager.showMessage(activity, R.string.conversion_error);
+            messageManager.showMessage(view, R.string.conversion_error);
         }
     }
 }

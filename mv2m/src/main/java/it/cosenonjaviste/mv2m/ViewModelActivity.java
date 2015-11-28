@@ -15,6 +15,7 @@
  */
 package it.cosenonjaviste.mv2m;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -73,5 +74,9 @@ public abstract class ViewModelActivity<VM extends ViewModel<?, ?>> extends AppC
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         return vmManager.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
+
+    @Override public Activity getActivity() {
+        return this;
     }
 }

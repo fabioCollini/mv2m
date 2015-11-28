@@ -32,14 +32,14 @@ class ViewModelManager<VM extends ViewModel<?, ?>> {
     private VM viewModel;
 
     public <A extends AppCompatActivity & ViewModelContainer<VM>> VM getOrCreate(A activity, Bundle state) {
-        return getOrCreate(activity, activity, activity.getSupportFragmentManager(), state, activity.getIntent().getExtras());
+        return getOrCreate(activity, activity.getSupportFragmentManager(), state, activity.getIntent().getExtras());
     }
 
     public <F extends Fragment & ViewModelContainer<VM>> VM getOrCreate(F fragment, Bundle state) {
-        return getOrCreate(fragment.getActivity(), fragment, fragment.getFragmentManager(), state, fragment.getArguments());
+        return getOrCreate(fragment, fragment.getFragmentManager(), state, fragment.getArguments());
     }
 
-    private VM getOrCreate(Activity activity, final ViewModelContainer<VM> container, FragmentManager fragmentManager, Bundle state, Bundle arguments) {
+    private VM getOrCreate(final ViewModelContainer<VM> container, FragmentManager fragmentManager, Bundle state, Bundle arguments) {
         Object args = null;
         if (arguments != null) {
             args = ArgumentManager.readArgument(arguments);
@@ -56,7 +56,7 @@ class ViewModelManager<VM extends ViewModel<?, ?>> {
             ((ViewModel) viewModel).initArgumentAndModel(args, model);
         }
 
-        viewModel.attachActivity(activity);
+        viewModel.attachActivity(container);
 
         return viewModel;
     }

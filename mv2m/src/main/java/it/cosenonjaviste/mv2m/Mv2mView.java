@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.cosenonjaviste.demomv2m.core;
+package it.cosenonjaviste.mv2m;
 
-import it.cosenonjaviste.mv2m.Mv2mView;
+import android.app.Activity;
+import android.content.Intent;
 
-public interface MessageManager {
-    void showMessage(Mv2mView view, int message);
+public interface Mv2mView {
+    Activity getActivity();
+
+    void startActivity(Intent intent);
+
+    void startActivityForResult(Intent intent, int requestCode);
 }

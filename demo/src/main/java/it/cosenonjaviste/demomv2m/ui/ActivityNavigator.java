@@ -15,15 +15,14 @@
  */
 package it.cosenonjaviste.demomv2m.ui;
 
-import android.app.Activity;
-
 import it.cosenonjaviste.demomv2m.core.Navigator;
 import it.cosenonjaviste.demomv2m.ui.detail.NoteActivity;
 import it.cosenonjaviste.mv2m.ArgumentManager;
+import it.cosenonjaviste.mv2m.Mv2mView;
 
 public class ActivityNavigator implements Navigator {
 
-    @Override public void openDetail(Activity activity, String noteId) {
-        ArgumentManager.startActivityForResult(activity, NoteActivity.class, OPEN_DETAIL, noteId);
+    @Override public void openDetail(Mv2mView view, String noteId) {
+        ArgumentManager.startActivityForResult(view.getActivity(), NoteActivity.class, OPEN_DETAIL, noteId);
     }
 }

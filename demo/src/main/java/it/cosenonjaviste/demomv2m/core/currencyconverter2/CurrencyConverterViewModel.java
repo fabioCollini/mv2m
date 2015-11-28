@@ -47,7 +47,7 @@ public class CurrencyConverterViewModel extends ViewModel<Void, CurrencyConverte
             DecimalFormat decimalFormat = new DecimalFormat("0.00", DecimalFormatSymbols.getInstance(Locale.US));
             model.output.set(decimalFormat.format(input * rateLoader.loadRate()));
         } catch (NumberFormatException e) {
-            messageManager.showMessage(activity, R.string.conversion_error);
+            messageManager.showMessage(view, R.string.conversion_error);
         }
     }
 }

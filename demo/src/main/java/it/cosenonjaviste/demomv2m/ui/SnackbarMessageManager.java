@@ -15,16 +15,16 @@
  */
 package it.cosenonjaviste.demomv2m.ui;
 
-import android.app.Activity;
 import android.support.design.widget.Snackbar;
 
 import it.cosenonjaviste.demomv2m.core.MessageManager;
+import it.cosenonjaviste.mv2m.Mv2mView;
 
 public class SnackbarMessageManager implements MessageManager {
 
-    @Override public void showMessage(Activity activity, int message) {
-        if (activity != null) {
-            Snackbar.make(activity.findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
+    @Override public void showMessage(Mv2mView view, int message) {
+        if (view != null) {
+            Snackbar.make(view.getActivity().findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
         }
     }
 }

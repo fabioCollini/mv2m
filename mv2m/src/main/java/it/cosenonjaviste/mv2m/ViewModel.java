@@ -27,6 +27,12 @@ public abstract class ViewModel<A, M extends Parcelable> {
 
     protected A argument;
 
+    protected Mv2mView view;
+
+    /**
+     * @deprecated Use view.getActivity() instead.
+     */
+    @Deprecated
     protected Activity activity;
 
     public void pause() {
@@ -39,6 +45,7 @@ public abstract class ViewModel<A, M extends Parcelable> {
     }
 
     public void detachView() {
+        view = null;
         activity = null;
     }
 
@@ -67,8 +74,9 @@ public abstract class ViewModel<A, M extends Parcelable> {
         return argument;
     }
 
-    public final void attachActivity(Activity activity) {
-        this.activity = activity;
+    public final void attachActivity(Mv2mView view) {
+        this.view = view;
+        activity = view.getActivity();
     }
 
     public ActivityResult onBackPressed() {
