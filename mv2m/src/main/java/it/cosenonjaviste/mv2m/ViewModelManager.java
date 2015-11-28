@@ -36,7 +36,11 @@ class ViewModelManager<VM extends ViewModel<?, ?>> {
     }
 
     public <F extends Fragment & ViewModelContainer<VM>> VM getOrCreate(F fragment, Bundle state) {
-        return getOrCreate(fragment, fragment.getFragmentManager(), state, fragment.getArguments());
+        VM viewModel = getOrCreate(fragment, fragment.getFragmentManager(), state, fragment.getArguments());
+        if (viewModel.getOptionMenuId() != 0) {
+            fragment.setHasOptionsMenu(true);
+        }
+        return viewModel;
     }
 
     private VM getOrCreate(final ViewModelContainer<VM> container, FragmentManager fragmentManager, Bundle state, Bundle arguments) {

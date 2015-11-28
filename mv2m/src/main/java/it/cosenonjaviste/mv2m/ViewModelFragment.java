@@ -15,8 +15,12 @@
  */
 package it.cosenonjaviste.mv2m;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 public abstract class ViewModelFragment<VM extends ViewModel<?, ?>> extends Fragment implements ViewModelContainer<VM> {
 
@@ -52,5 +56,19 @@ public abstract class ViewModelFragment<VM extends ViewModel<?, ?>> extends Frag
     @Override public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         vmManager.saveState(outState);
+    }
+
+    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        vmManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        vmManager.onCreateOptionsMenu(menu, inflater);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        return vmManager.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 }
