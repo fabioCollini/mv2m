@@ -15,20 +15,26 @@
  */
 package it.cosenonjaviste.mv2m;
 
+import android.app.Activity;
 import android.os.Parcelable;
 
 public class ActivityResult {
-    private boolean resultOk;
+
+    private int resultCode;
 
     private Parcelable data;
 
-    public ActivityResult(boolean resultOk, Parcelable data) {
-        this.resultOk = resultOk;
+    public ActivityResult(int resultCode, Parcelable data) {
+        this.resultCode = resultCode;
         this.data = data;
     }
 
     public boolean isResultOk() {
-        return resultOk;
+        return resultCode == Activity.RESULT_OK;
+    }
+
+    public int getResultCode() {
+        return resultCode;
     }
 
     public <T extends Parcelable> T getData() {

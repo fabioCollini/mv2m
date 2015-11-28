@@ -91,7 +91,8 @@ class ViewModelManager<VM extends ViewModel<?, ?>> {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        viewModel.onResult(requestCode, new ActivityResult(resultCode == Activity.RESULT_OK, data.getParcelableExtra(RESULT_DATA)));
+        Parcelable resultData = data != null ? data.getParcelableExtra(RESULT_DATA) : null;
+        viewModel.onResult(requestCode, new ActivityResult(resultCode, resultData));
     }
 
     public boolean onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
