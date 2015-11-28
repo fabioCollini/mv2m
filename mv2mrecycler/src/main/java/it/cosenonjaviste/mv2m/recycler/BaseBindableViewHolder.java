@@ -28,7 +28,6 @@ public class BaseBindableViewHolder<B extends ViewDataBinding, T> extends Bindab
         super(binding.getRoot());
         this.binding = binding;
         binding.setVariable(variableId, this);
-        binding.executePendingBindings();
     }
 
     public void bind(T item) {
