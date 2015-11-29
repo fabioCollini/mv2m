@@ -15,8 +15,8 @@
  */
 package it.cosenonjaviste.demomv2m.core;
 
-import it.cosenonjaviste.mv2m.Mv2mView;
+import it.cosenonjaviste.mv2m.ActivityHolder;
 
 public interface MessageManager {
-    void showMessage(Mv2mView view, int message);
+    void showMessage(ActivityHolder activityHolder, int message);
 }

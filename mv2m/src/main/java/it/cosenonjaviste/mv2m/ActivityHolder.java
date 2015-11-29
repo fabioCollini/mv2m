@@ -18,7 +18,7 @@ package it.cosenonjaviste.mv2m;
 import android.app.Activity;
 import android.content.Intent;
 
-public interface Mv2mView {
+public interface ActivityHolder {
     Activity getActivity();
 
     void startActivity(Intent intent);

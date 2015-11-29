@@ -15,10 +15,10 @@
  */
 package it.cosenonjaviste.demomv2m.core;
 
-import it.cosenonjaviste.mv2m.Mv2mView;
+import it.cosenonjaviste.mv2m.ActivityHolder;
 
 public interface Navigator {
     int OPEN_DETAIL = 123;
 
-    void openDetail(Mv2mView view, String noteId);
+    void openDetail(ActivityHolder activityHolder, String noteId);
 }

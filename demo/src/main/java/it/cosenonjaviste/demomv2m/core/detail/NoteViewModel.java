@@ -119,7 +119,7 @@ public class NoteViewModel extends ViewModel<String, NoteModel> {
     private void hideSendProgressAndShoMessage(final int message) {
         uiExecutor.execute(new Runnable() {
             @Override public void run() {
-                messageManager.showMessage(view, message);
+                messageManager.showMessage(activityHolder, message);
                 sending.set(false);
             }
         });
