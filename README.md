@@ -7,8 +7,31 @@ Android MVVM lightweight library based on Android Data Binding
 
 The goal of mv<sup>2</sup>m is to simplify JVM testing of an Android application.
 The [demo module](/demo) contains a simple example of usage of mv<sup>2</sup>m library.
-The [official app](https://github.com/commit-non-javisti/CoseNonJavisteAndroidApp) of the Italian blog [cosenonjaviste.it](http://cosenonjaviste.it) is a more complex example (built using Dagger and RxJava).
- 
+The [official app](https://github.com/commit-non-javisti/CoseNonJavisteAndroidApp) of the Italian blog [cosenonjaviste.it](http://cosenonjaviste.it)
+is a more complex example (built using Dagger and RxJava). This [repository](https://github.com/fabioCollini/android-testing/tree/final)
+contains the mv<sup>2</sup>m porting of [android-testing codelab](https://github.com/googlecodelabs/android-testing) repository.
+
+Mv2m is available on [JitPack](https://jitpack.io/#fabioCollini/mv2m/),
+add the JitPack repository in your build.gradle (in top level dir):
+```gradle
+repositories {
+    jcenter()
+    maven { url "https://jitpack.io" }
+}
+```
+and the dependency in the build.gradle of the module:
+
+```gradle
+dependencies {
+    //core module
+    compile 'com.github.fabioCollini.mv2m:mv2m:0.4.1'
+    //RxJava support
+    compile 'com.github.fabioCollini.mv2m:mv2mrx:0.4.1'
+    //RecyclerView support
+    compile 'com.github.fabioCollini.mv2m:mv2mrecycler:0.4.1'
+}
+```
+
 ## Components of mv<sup>2</sup>m
 
 ##### Model
@@ -36,21 +59,21 @@ The demo module contains
 ## Activity
 Sometimes an Activity object is required to perform some operations, for example you need an Activity
 object to show a SnackBar message or to start another Activity. In this case you can create a new class with
-some methods with an Activity parameter:
+some methods with an ActivityHolder parameter:
 
 ```java
 public class SnackbarMessageManager {
 
-    @Override public void showMessage(Activity activity, int message) {
-        if (activity != null) {
-            Snackbar.make(activity.findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
+    @Override public void showMessage(ActivityHolder activityHolder, int message) {
+        if (activityHolder != null) {
+            Snackbar.make(activityHolder.getActivity().findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
         }
     }
 }
 ```
 
-An implementation of this class can be referenced from a ViewModel object, class ViewModel contains
-a protected field containing a reference to the current Activity that can be used as parameter
+An implementation of this class can be referenced from a ViewModel object, ViewModel class contains
+a protected ActivityHolder field containing a reference to the current Activity that can be used as parameter
 (it's automatically updated every configuration change).
 In this way it's easy to show a SnackBar from a ViewModel.
 
@@ -94,7 +117,7 @@ public class CurrencyConverterModel implements Parcelable {
 }
 ```
 
-RateLoader loads the rate from an external source (for example a REST service), in
+Using RateLoader class it's possible to load a rate from an external source (for example a REST service), in
 this first implementation it executes everything synchronously:
 
 ```java
@@ -165,7 +188,8 @@ public class CurrencyConverterViewModelTest {
 }
 ```
 
-In this JUnit test we use Mockito to create a mock of RateLoader object, in this way the test is repeatable.
+In this JUnit test we use Mockito to create a mock of RateLoader object, in this way the test is
+repeatable because it's not dependent on external sources.
 
 Data binding library is used to bind ViewModel object to the layout:
 
@@ -298,7 +322,7 @@ public class CurrencyConverterViewModelTest {
 }
 ```
 
-Running the test it fails, let's add the try/catch block to implement the feature:
+Running the test it fails, let's add the try/catch to implement the feature:
 
 ```java
 public class CurrencyConverterViewModel extends ViewModel<Void, CurrencyConverterModel> {
@@ -363,7 +387,9 @@ public void calculate() {
 }
 ```
 
-The loading field is an ObservableBoolean and can be used to show a loading indicator.
+The loading field is an ObservableBoolean and can be used to show a loading indicator,
+it's saved in ViewModel (and not in Model) to avoid errors when the application is killed
+when the task is running.
 
 In a JVM test it's possible to execute all the code synchronously using an custom Executor:
 
@@ -385,6 +411,8 @@ public class CurrencyConverterViewModelTest {
     //...
 }
 ```
+
+### RxJava support
 
 RxJava support is available in mv2mrv module, it contains RxViewModel class that can be used to
 manage RxJava Observable.
