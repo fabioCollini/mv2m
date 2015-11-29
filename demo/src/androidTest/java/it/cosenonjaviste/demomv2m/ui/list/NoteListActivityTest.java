@@ -1,7 +1,5 @@
 package it.cosenonjaviste.demomv2m.ui.list;
 
-import android.app.Activity;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,6 +9,7 @@ import it.cosenonjaviste.demomv2m.TestData;
 import it.cosenonjaviste.demomv2m.ui.ObjectFactory;
 import it.cosenonjaviste.demomv2m.ui.TestObjectFactory;
 import it.cosenonjaviste.demomv2m.utils.ViewModelActivityTestRule;
+import it.cosenonjaviste.mv2m.ActivityHolder;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -68,6 +67,6 @@ public class NoteListActivityTest {
         onView(withText(TestData.TITLE_1)).perform(click());
 
         verify(objectFactory.navigator())
-                .openDetail(any(Activity.class), eq(TestData.ID_1));
+                .openDetail(any(ActivityHolder.class), eq(TestData.ID_1));
     }
 }
