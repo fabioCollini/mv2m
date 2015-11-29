@@ -29,6 +29,11 @@ public class ActivityResult {
         this.data = data;
     }
 
+    public ActivityResult(boolean resultOk, Parcelable data) {
+        this.resultCode = resultOk ? Activity.RESULT_OK : Activity.RESULT_CANCELED;
+        this.data = data;
+    }
+
     public boolean isResultOk() {
         return resultCode == Activity.RESULT_OK;
     }

@@ -15,7 +15,6 @@
  */
 package it.cosenonjaviste.demomv2m.core.list;
 
-import android.app.Activity;
 import android.databinding.Observable;
 
 import org.junit.Test;
@@ -35,6 +34,7 @@ import it.cosenonjaviste.demomv2m.core.Navigator;
 import it.cosenonjaviste.demomv2m.core.TestExecutor;
 import it.cosenonjaviste.demomv2m.model.NoteListResponse;
 import it.cosenonjaviste.demomv2m.model.NoteLoader;
+import it.cosenonjaviste.mv2m.ActivityHolder;
 import it.cosenonjaviste.mv2m.ActivityResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -113,7 +113,7 @@ public class NoteListViewModelTest {
         viewModel.initAndResume();
         viewModel.openDetail(TestData.ID_1);
 
-        verify(navigator).openDetail(any(Activity.class), captor.capture());
+        verify(navigator).openDetail(any(ActivityHolder.class), captor.capture());
         assertThat(captor.getValue()).isEqualTo(TestData.ID_1);
     }
 
@@ -145,7 +145,7 @@ public class NoteListViewModelTest {
         viewModel.initAndResume();
         viewModel.onOptionsItemSelected(R.id.new_note);
 
-        verify(navigator).openDetail(any(Activity.class), captor.capture());
+        verify(navigator).openDetail(any(ActivityHolder.class), captor.capture());
         assertThat(captor.getValue()).isNull();
     }
 }

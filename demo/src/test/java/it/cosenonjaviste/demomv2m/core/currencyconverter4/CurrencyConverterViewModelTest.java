@@ -15,8 +15,6 @@
  */
 package it.cosenonjaviste.demomv2m.core.currencyconverter4;
 
-import android.app.Activity;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -25,6 +23,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import it.cosenonjaviste.demomv2m.R;
 import it.cosenonjaviste.demomv2m.core.MessageManager;
+import it.cosenonjaviste.mv2m.ActivityHolder;
 import rx.Observable;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,7 +59,7 @@ public class CurrencyConverterViewModelTest {
         model.input.set("123");
         viewModel.calculate();
 
-        verify(messageManager).showMessage(any(Activity.class), eq(R.string.error_loading_rate));
+        verify(messageManager).showMessage(any(ActivityHolder.class), eq(R.string.error_loading_rate));
     }
 
     @Test
@@ -71,6 +70,6 @@ public class CurrencyConverterViewModelTest {
         model.input.set("abc");
         viewModel.calculate();
 
-        verify(messageManager).showMessage(any(Activity.class), eq(R.string.conversion_error));
+        verify(messageManager).showMessage(any(ActivityHolder.class), eq(R.string.conversion_error));
     }
 }
