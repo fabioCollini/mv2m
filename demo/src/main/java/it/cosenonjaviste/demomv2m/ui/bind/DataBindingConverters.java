@@ -37,8 +37,8 @@ public class DataBindingConverters {
 
     @BindingAdapter({"app:binding"})
     public static void bindEditText(EditText view, final ObservableString observableString) {
-        if (view.getTag(R.id.binded) == null) {
-            view.setTag(R.id.binded, true);
+        if (view.getTag(R.id.bound_observable) != observableString) {
+            view.setTag(R.id.bound_observable, observableString);
             view.addTextChangedListener(new TextWatcherAdapter() {
                 @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                     observableString.set(s.toString());

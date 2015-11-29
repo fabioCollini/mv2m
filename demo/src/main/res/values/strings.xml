@@ -17,7 +17,7 @@
 
 <resources>
 
-    <item name="binded" type="id" />
+    <item name="bound_observable" type="id" />
 
     <string name="app_name">Demo mv2m</string>
     <string name="mandatory_field">Mandatory field</string>
