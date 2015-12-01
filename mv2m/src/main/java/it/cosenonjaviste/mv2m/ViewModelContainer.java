@@ -15,8 +15,17 @@
  */
 package it.cosenonjaviste.mv2m;
 
-public interface ViewModelContainer<VM extends ViewModel<?, ?>> extends ActivityHolder {
+import android.app.Activity;
+import android.content.Intent;
+
+public interface ViewModelContainer<VM extends ViewModel<?, ?>> {
     VM createViewModel();
 
     String getFragmentTag(Object args);
+
+    Activity getActivity();
+
+    void startActivity(Intent intent);
+
+    void startActivityForResult(Intent intent, int requestCode);
 }

@@ -27,7 +27,7 @@ public abstract class ViewModel<A, M extends Parcelable> {
 
     protected A argument;
 
-    protected ActivityHolder activityHolder;
+    protected final ActivityHolder activityHolder = new ActivityHolder();
 
     /**
      * @deprecated Use activityHolder.getActivity() instead.
@@ -45,7 +45,7 @@ public abstract class ViewModel<A, M extends Parcelable> {
     }
 
     public void detachView() {
-        activityHolder = null;
+        activityHolder.setViewModelContainer(null);
         activity = null;
     }
 
@@ -74,8 +74,8 @@ public abstract class ViewModel<A, M extends Parcelable> {
         return argument;
     }
 
-    public final void attachActivity(ActivityHolder view) {
-        this.activityHolder = view;
+    public final void attachActivity(ViewModelContainer<?> view) {
+        this.activityHolder.setViewModelContainer(view);
         activity = view.getActivity();
     }
 

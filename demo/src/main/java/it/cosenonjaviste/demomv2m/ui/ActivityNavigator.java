@@ -18,11 +18,10 @@ package it.cosenonjaviste.demomv2m.ui;
 import it.cosenonjaviste.demomv2m.core.Navigator;
 import it.cosenonjaviste.demomv2m.ui.detail.NoteActivity;
 import it.cosenonjaviste.mv2m.ActivityHolder;
-import it.cosenonjaviste.mv2m.ArgumentManager;
 
 public class ActivityNavigator implements Navigator {
 
     @Override public void openDetail(ActivityHolder activityHolder, String noteId) {
-        ArgumentManager.startActivityForResult(activityHolder.getActivity(), NoteActivity.class, OPEN_DETAIL, noteId);
+        activityHolder.startActivityForResult(NoteActivity.class, OPEN_DETAIL, noteId);
     }
 }

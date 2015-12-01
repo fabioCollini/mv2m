@@ -17,11 +17,46 @@ package it.cosenonjaviste.mv2m;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
-public interface ActivityHolder {
-    Activity getActivity();
+public class ActivityHolder {
 
-    void startActivity(Intent intent);
+    private ViewModelContainer<?> viewModelContainer;
 
-    void startActivityForResult(Intent intent, int requestCode);
+    public void setViewModelContainer(ViewModelContainer<?> viewModelContainer) {
+        this.viewModelContainer = viewModelContainer;
+    }
+
+    public Activity getActivity() {
+        return viewModelContainer.getActivity();
+    }
+
+    public void startActivity(Intent intent) {
+        viewModelContainer.startActivity(intent);
+    }
+
+    public void startActivityForResult(Intent intent, int requestCode) {
+        viewModelContainer.startActivityForResult(intent, requestCode);
+    }
+
+    public <ARG, VM extends ViewModel<ARG, ?>, F extends ViewModelFragment<VM>> F instantiateFragment(Class<F> cls, ARG argument) {
+        Bundle args = new Bundle();
+        ArgumentManager.writeArgument(args, argument);
+        return (F) Fragment.instantiate(getActivity(), cls.getName(), args);
+    }
+
+    public <ARG, VM extends ViewModel<ARG, ?>, A extends ViewModelActivity<VM>> void startActivity(Class<A> cls, ARG argument) {
+        Activity activity = getActivity();
+        if (activity != null) {
+            activity.startActivity(ArgumentManager.createIntent(activity, cls, argument));
+        }
+    }
+
+    public <ARG, VM extends ViewModel<ARG, ?>, A extends ViewModelActivity<VM>> void startActivityForResult(Class<A> cls, int requestCode, ARG argument) {
+        Activity activity = getActivity();
+        if (activity != null) {
+            activity.startActivityForResult(ArgumentManager.createIntent(activity, cls, argument), requestCode);
+        }
+    }
 }
