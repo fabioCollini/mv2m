@@ -17,8 +17,6 @@ package it.cosenonjaviste.mv2m;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 
 public class ActivityHolder {
 
@@ -41,9 +39,7 @@ public class ActivityHolder {
     }
 
     public <ARG, VM extends ViewModel<ARG, ?>, F extends ViewModelFragment<VM>> F instantiateFragment(Class<F> cls, ARG argument) {
-        Bundle args = new Bundle();
-        ArgumentManager.writeArgument(args, argument);
-        return (F) Fragment.instantiate(getActivity(), cls.getName(), args);
+        return ArgumentManager.instantiateFragment(getActivity(), cls, argument);
     }
 
     public <ARG, VM extends ViewModel<ARG, ?>, A extends ViewModelActivity<VM>> void startActivity(Class<A> cls, ARG argument) {

@@ -83,10 +83,6 @@ public class ArgumentManager {
         }
     }
 
-    /**
-     * @deprecated Use {@link ActivityHolder#instantiateFragment(Class, Object)} instead.
-     */
-    @Deprecated
     public static <ARG, VM extends ViewModel<ARG, ?>, F extends ViewModelFragment<VM>> F instantiateFragment(Activity activity, Class<F> cls, ARG argument) {
         Bundle args = new Bundle();
         writeArgument(args, argument);
