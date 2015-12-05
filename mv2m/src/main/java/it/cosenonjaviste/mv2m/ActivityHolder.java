@@ -38,6 +38,23 @@ public class ActivityHolder {
         viewModelContainer.startActivityForResult(intent, requestCode);
     }
 
+    public void finishActivity() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            activity.finish();
+        }
+    }
+
+    public void finishActivity(ActivityResult result) {
+        Activity activity = getActivity();
+        if (activity != null) {
+            Intent intent = new Intent();
+            intent.putExtra(ViewModelManager.RESULT_DATA, result.getData());
+            activity.setResult(result.isResultOk() ? Activity.RESULT_OK : Activity.RESULT_CANCELED, intent);
+            activity.finish();
+        }
+    }
+
     public <ARG, VM extends ViewModel<ARG, ?>, F extends ViewModelFragment<VM>> F instantiateFragment(Class<F> cls, ARG argument) {
         return ArgumentManager.instantiateFragment(getActivity(), cls, argument);
     }
