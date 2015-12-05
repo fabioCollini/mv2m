@@ -18,7 +18,7 @@ package it.cosenonjaviste.demomv2m.core.currencyconverter2;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import it.cosenonjaviste.demomv2m.core.utils.ObservableString;
+import it.cosenonjaviste.twowaydatabinding.ObservableString;
 
 public class CurrencyConverterModel implements Parcelable {
 

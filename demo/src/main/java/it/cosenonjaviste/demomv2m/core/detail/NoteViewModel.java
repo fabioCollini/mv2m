@@ -23,12 +23,12 @@ import java.util.concurrent.Executor;
 
 import it.cosenonjaviste.demomv2m.R;
 import it.cosenonjaviste.demomv2m.core.MessageManager;
-import it.cosenonjaviste.demomv2m.core.utils.ObservableString;
 import it.cosenonjaviste.demomv2m.model.Note;
 import it.cosenonjaviste.demomv2m.model.NoteLoader;
 import it.cosenonjaviste.demomv2m.model.NoteSaver;
 import it.cosenonjaviste.mv2m.ActivityResult;
 import it.cosenonjaviste.mv2m.ViewModel;
+import it.cosenonjaviste.twowaydatabinding.ObservableString;
 import retrofit.RetrofitError;
 
 public class NoteViewModel extends ViewModel<String, NoteModel> {

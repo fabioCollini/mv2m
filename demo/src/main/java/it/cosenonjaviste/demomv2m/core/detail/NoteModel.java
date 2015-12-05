@@ -20,8 +20,8 @@ import android.databinding.ObservableInt;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import it.cosenonjaviste.demomv2m.core.utils.ObservableString;
 import it.cosenonjaviste.demomv2m.model.Note;
+import it.cosenonjaviste.twowaydatabinding.ObservableString;
 
 public class NoteModel implements Parcelable {
 
