@@ -72,22 +72,22 @@ public class SnackbarMessageManager {
 }
 ```
 
-An implementation of this class can be referenced from a ViewModel object, ViewModel class contains
+An implementation of this class can be referenced from a ViewModel object. ViewModel class contains
 a protected ActivityHolder field containing a reference to the current Activity that can be used as parameter
 (it's automatically updated every configuration change).
 In this way it's easy to show a SnackBar from a ViewModel.
 
-In a JVM test SnackbarMessageManager objects can be mocked to avoid dependencies on Android framework.
+In a JVM test SnackbarMessageManager object can be mocked to avoid dependencies on Android framework.
 
 ## ViewModel argument
 ViewModel class has two generic parameters: the type of the argument and the type of the Model class.
 The argument can be used when the ViewModel needs an argument, for example in a detail ViewModel the argument
 is the id of the object you have to show. The argument must be an object that can be written in a Bundle
 (a primitive type, a Serializable or a Parcelable).
-Using ArgumentManager class a new Activity can be started passing an argument:
+Using an ActivityHolder object you can start a new Activity passing an argument:
 
 ```java
-ArgumentManager.startActivity(activity, NoteActivity.class, noteId);
+activityHolder.startActivity(NoteActivity.class, noteId);
 ```
 
 ViewModel class contains a protected field argument that can be used to load the model data based on the argument.
@@ -296,8 +296,8 @@ public static void setInstance(RateLoader instance) {
 }
 ```
 
-The CurrencyConverterViewModel class doesn't manage correctly the parsing exceptions, let's modify
-the implementation to add it. First we can write the test, in case of a parsing error we verify
+The CurrencyConverterViewModel class doesn't manage the parsing exceptions, let's modify
+the source code to implement it. First we can write the test, in case of a parsing error we verify
 that a message is shown using a MessageManager object:
 
 ```java
@@ -317,7 +317,7 @@ public class CurrencyConverterViewModelTest {
         model.input.set("abc");
         viewModel.calculate();
 
-        verify(messageManager).showMessage(any(Activity.class), eq(R.string.conversion_error));
+        verify(messageManager).showMessage(any(ActivityHolder.class), eq(R.string.conversion_error));
     }
 }
 ```
@@ -347,17 +347,17 @@ public class CurrencyConverterViewModel extends ViewModel<Void, CurrencyConverte
             DecimalFormat decimalFormat = new DecimalFormat("0.00", DecimalFormatSymbols.getInstance(Locale.US));
             model.output.set(decimalFormat.format(input * rateLoader.loadRate()));
         } catch (NumberFormatException e) {
-            messageManager.showMessage(activity, R.string.conversion_error);
+            messageManager.showMessage(activityHolder, R.string.conversion_error);
         }
     }
 }
 ```
 
-If the RateLoader execute an http request to get the rate we need to manage threads in the right way.
+In a real example the RateLoader execute an HTTP request to get the rate, we need to manage threads in the right way.
 The ViewModel can manage the concurrency in various way, in this example we don't use AsyncTasks or
 Intent Services because we want to test it using a JVM test.
 
-We can execute the http request in a background thread using an Executor and show the message in UI thread
+We can execute the HTTP request in a background thread using an Executor and show the message in UI thread
 using another executor:
 
 ```java
@@ -373,7 +373,7 @@ public void calculate() {
                 } catch (Exception e) {
                     uiExecutor.execute(new Runnable() {
                         @Override public void run() {
-                            messageManager.showMessage(R.string.error_loading_rate);
+                            messageManager.showMessage(activityHolder, R.string.error_loading_rate);
                         }
                     });
                 } finally {
@@ -382,14 +382,14 @@ public void calculate() {
             }
         });
     } catch (NumberFormatException e) {
-        messageManager.showMessage(R.string.conversion_error);
+        messageManager.showMessage(activityHolder, R.string.conversion_error);
     }
 }
 ```
 
 The loading field is an ObservableBoolean and can be used to show a loading indicator,
 it's saved in ViewModel (and not in Model) to avoid errors when the application is killed
-when the task is running.
+while the task is running.
 
 In a JVM test it's possible to execute all the code synchronously using an custom Executor:
 
@@ -414,10 +414,10 @@ public class CurrencyConverterViewModelTest {
 
 ### RxJava support
 
-RxJava support is available in mv2mrv module, it contains RxViewModel class that can be used to
+RxJava support is available in mv2mrx module, it contains RxViewModel class that can be used to
 manage RxJava Observable.
 
-The same method can be written using RxJava:
+The same method of the previous example can be written using RxJava:
 
 ```java
 public void calculate() {
@@ -437,11 +437,11 @@ public void calculate() {
                     }
                 }, new Action1<Throwable>() {
                     @Override public void call(Throwable throwable) {
-                        messageManager.showMessage(R.string.error_loading_rate);
+                        messageManager.showMessage(activityHolder, R.string.error_loading_rate);
                     }
                 });
     } catch (NumberFormatException e) {
-        messageManager.showMessage(R.string.conversion_error);
+        messageManager.showMessage(activityHolder, R.string.conversion_error);
     }
 }
 ```
@@ -461,9 +461,9 @@ public void calculate() {
                 loading::set,
                 rateLoader.loadRate(),
                 rate -> model.output.set(new DecimalFormat("0.00").format(input * rate)),
-                t -> messageManager.showMessage(R.string.error_loading_rate));
+                t -> messageManager.showMessage(activityHolder, R.string.error_loading_rate));
     } catch (NumberFormatException e) {
-        messageManager.showMessage(R.string.conversion_error);
+        messageManager.showMessage(activityHolder, R.string.conversion_error);
     }
 }
 ```
