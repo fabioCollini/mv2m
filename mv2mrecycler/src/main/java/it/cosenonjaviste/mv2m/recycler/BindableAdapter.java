@@ -15,7 +15,6 @@
  */
 package it.cosenonjaviste.mv2m.recycler;
 
-import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
@@ -27,7 +26,7 @@ public class BindableAdapter<T> extends RecyclerView.Adapter<BindableViewHolder<
 
     private final ObservableList.OnListChangedCallback<ObservableList<T>> onListChangedCallback;
 
-    private ObservableArrayList<? extends T> items;
+    private ObservableList<? extends T> items;
 
     private List<ViewHolderFactory<? extends T>> viewHolderFactories = new ArrayList<>();
 
@@ -37,16 +36,16 @@ public class BindableAdapter<T> extends RecyclerView.Adapter<BindableViewHolder<
 
     private BindListener<T> onBindListener;
 
-    public BindableAdapter(ObservableArrayList<? extends T> items) {
+    public BindableAdapter(ObservableList<? extends T> items) {
         this(items, null);
     }
 
-    public BindableAdapter(ObservableArrayList<? extends T> items, ViewHolderFactory<T> defaultViewHolderFactory) {
+    public BindableAdapter(ObservableList<? extends T> items, ViewHolderFactory<T> defaultViewHolderFactory) {
         this.items = items;
         this.defaultViewHolderFactory = defaultViewHolderFactory;
         //saved in a field to maintain a reference and avoid garbage collection
         onListChangedCallback = new AdapterOnListChangedCallback<>(this);
-        items.addOnListChangedCallback(new WeakOnListChangedCallback<>(onListChangedCallback));
+        items.addOnListChangedCallback((ObservableList.OnListChangedCallback) new WeakOnListChangedCallback<>(onListChangedCallback));
         if (!items.isEmpty()) {
             notifyDataSetChanged();
         }
