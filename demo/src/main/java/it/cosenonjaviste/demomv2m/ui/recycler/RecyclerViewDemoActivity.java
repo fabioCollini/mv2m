@@ -16,10 +16,12 @@
 package it.cosenonjaviste.demomv2m.ui.recycler;
 
 import android.databinding.ObservableArrayList;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import it.cosenonjaviste.demomv2m.BR;
@@ -45,11 +47,11 @@ public class RecyclerViewDemoActivity extends AppCompatActivity {
                 return BindableViewHolder.create(NormalListItemBinding.inflate(getLayoutInflater(), viewGroup, false), BR.item);
             }
         }, NormalDemoItem.class);
-        adapter.addViewType(new BindableAdapter.ViewHolderFactory<TitleDemoItem>() {
-            @Override public BindableViewHolder<TitleDemoItem> create(ViewGroup viewGroup) {
-                return BindableViewHolder.create(TitleListItemBinding.inflate(getLayoutInflater(), viewGroup, false), BR.item);
+        adapter.addViewType(BindableViewHolder.<TitleDemoItem>factory(getLayoutInflater(), BR.item, new BindableViewHolder.BindingInflater() {
+            @Override public ViewDataBinding inflate(LayoutInflater layoutInflater, ViewGroup viewGroup, boolean attachToRoot) {
+                return TitleListItemBinding.inflate(layoutInflater, viewGroup, attachToRoot);
             }
-        }, TitleDemoItem.class);
+        }), TitleDemoItem.class);
 
         recyclerView.setAdapter(adapter);
 
@@ -60,4 +62,5 @@ public class RecyclerViewDemoActivity extends AppCompatActivity {
         items.add(new NormalDemoItem("normal4"));
         items.add(new NormalDemoItem("normal5"));
     }
+
 }
