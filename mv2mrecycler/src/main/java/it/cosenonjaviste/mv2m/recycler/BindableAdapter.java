@@ -27,9 +27,9 @@ public class BindableAdapter<T> extends RecyclerView.Adapter<BindableViewHolder<
 
     private final ObservableList.OnListChangedCallback<ObservableList<T>> onListChangedCallback;
 
-    private ObservableArrayList<T> items;
+    private ObservableArrayList<? extends T> items;
 
-    private List<ViewHolderFactory<T>> viewHolderFactories = new ArrayList<>();
+    private List<ViewHolderFactory<? extends T>> viewHolderFactories = new ArrayList<>();
 
     private ViewHolderFactory<T> defaultViewHolderFactory;
 
@@ -37,11 +37,11 @@ public class BindableAdapter<T> extends RecyclerView.Adapter<BindableViewHolder<
 
     private BindListener<T> onBindListener;
 
-    public BindableAdapter(ObservableArrayList<T> items) {
+    public BindableAdapter(ObservableArrayList<? extends T> items) {
         this(items, null);
     }
 
-    public BindableAdapter(ObservableArrayList<T> items, ViewHolderFactory<T> defaultViewHolderFactory) {
+    public BindableAdapter(ObservableArrayList<? extends T> items, ViewHolderFactory<T> defaultViewHolderFactory) {
         this.items = items;
         this.defaultViewHolderFactory = defaultViewHolderFactory;
         //saved in a field to maintain a reference and avoid garbage collection
@@ -52,9 +52,14 @@ public class BindableAdapter<T> extends RecyclerView.Adapter<BindableViewHolder<
         }
     }
 
-    public void addViewType(ViewHolderFactory<T> viewHolderFactory, ViewTypeSelector selector) {
+    public void addViewType(ViewHolderFactory<? extends T> viewHolderFactory, ViewTypeSelector selector) {
         viewHolderFactories.add(viewHolderFactory);
         viewTypeSelectors.add(selector);
+    }
+
+    public <I extends T> void addViewType(ViewHolderFactory<I> viewHolderFactory, final Class<I> itemClass) {
+        viewHolderFactories.add(viewHolderFactory);
+        viewTypeSelectors.add(new ClassViewTypeSelector<>(itemClass));
     }
 
     @Override public int getItemViewType(int position) {
@@ -72,13 +77,13 @@ public class BindableAdapter<T> extends RecyclerView.Adapter<BindableViewHolder<
     }
 
     @Override public BindableViewHolder<T> onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        ViewHolderFactory<T> factory;
+        ViewHolderFactory<? extends T> factory;
         if (viewType != -1) {
             factory = viewHolderFactories.get(viewType);
         } else {
             factory = defaultViewHolderFactory;
         }
-        return factory.create(viewGroup);
+        return (BindableViewHolder) factory.create(viewGroup);
     }
 
     @Override public void onBindViewHolder(BindableViewHolder<T> viewHolder, int position) {
@@ -106,5 +111,18 @@ public class BindableAdapter<T> extends RecyclerView.Adapter<BindableViewHolder<
 
     public interface BindListener<T> {
         void call(BindableViewHolder<T> viewHolder, Integer position);
+    }
+
+    private class ClassViewTypeSelector<I> implements ViewTypeSelector {
+        private final Class<I> itemClass;
+
+        public ClassViewTypeSelector(Class<I> itemClass) {
+            this.itemClass = itemClass;
+        }
+
+        @Override public boolean isOfViewType(int position) {
+            T item = items.get(position);
+            return item != null && item.getClass().isAssignableFrom(itemClass);
+        }
     }
 }
