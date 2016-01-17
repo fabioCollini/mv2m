@@ -35,7 +35,7 @@ public abstract class ViewModelFragment<VM extends ViewModel<?, ?>> extends Frag
     }
 
     public String getFragmentTag(Object args) {
-        return getClass().getName();
+        return getClass().getName() + "_" + args;
     }
 
     @Override public void onResume() {
